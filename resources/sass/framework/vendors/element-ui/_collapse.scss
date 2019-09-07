@@ -1,0 +1,15 @@
+
+.el-collapse-item__header {
+  background-color: #5867dd!important;
+  border-color: #5867dd!important;
+  font-family: #{get-heading-font-family()};
+  font-size: 16px!important;
+  font-weight: 500!important;
+  color: #fff!important;
+  padding: 10px!important;
+}
+
+.el-collapse-item__content{
+  padding: 10px!important;
+  font-size: 14px!important;
+}

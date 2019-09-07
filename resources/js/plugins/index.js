@@ -1,0 +1,9 @@
+import "./axios";
+import "jquery-ui-dist/jquery-ui";
+import "bootstrap";
+import "./util";
+import "./wizard";
+import "./authorization";
+import "./formats";
+import "./element-ui";
+import "~/plugins/autoLogout";

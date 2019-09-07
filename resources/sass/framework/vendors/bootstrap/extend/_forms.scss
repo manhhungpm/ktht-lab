@@ -1,0 +1,48 @@
+//
+//** Forms
+// 
+
+.custom-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.custom-file {
+  width: 100%;
+
+  .custom-file-input {
+    &:focus ~ .custom-file-control {
+      @include shadow(none);
+    }
+  }
+
+  .custom-file-label {
+    text-align: left;
+
+    &:after {
+      float: left;
+    }
+
+    &.selected:after {
+      //content: "" !important;
+    }
+  }
+}
+
+
+.error-repeat-form-wrap {
+  border-color: red !important;
+
+}
+
+.error-repeat-form-title {
+  color: red;
+}
+
+.has-danger label{
+  color: #f4516c!important;
+}
+
+
+

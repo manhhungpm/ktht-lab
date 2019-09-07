@@ -1,0 +1,140 @@
+//
+//** Table Component
+//
+
+//== Component Base
+@mixin m-build-component--table-base() {
+  .table {
+    th {
+      font-weight: get-font-weight(boldest2);
+    }
+
+    td {
+      font-weight: get-font-weight(regular);
+    }
+
+    &.table-striped {
+      thead th {
+        border: 0;
+      }
+
+      tbody {
+        th, td {
+          border1: 0;
+        }
+      }
+    }
+  }
+
+  .m-table {
+    &.m-table--head-no-border {
+      thead th {
+        border-top: 0;
+      }
+    }
+  }
+
+  .table-bordered {
+    border: 1px solid #e7ecf1;
+
+    th, td {
+      border: 1px solid #e7ecf1;
+    }
+  }
+}
+
+//== Component Skin
+@mixin m-build-component--table-skin($skin) {
+  .m-table {
+    // state colors
+    @each $name, $color in $m--state-colors {
+      &.m-table--head-bg-#{$name} {
+        thead th {
+          background: array-get($color, base);
+          color: array-get($color, inverse);
+          border-bottom: 0;
+          border-top: 0;
+        }
+      }
+
+      &.m-table--head-separator-#{$name} {
+        thead th {
+          border-top: 0;
+          border-bottom: 1px solid array-get($color, base);
+        }
+      }
+
+      tr.m-table__row--#{$name} {
+        th, td {
+          background: array-get($color, base);
+          color: array-get($color, inverse);
+          border-bottom: 0;
+          border-top: 0;
+        }
+      }
+
+      &.m-table--border-#{$name} {
+        &,
+        th, td {
+          border-color: array-get($color, base);
+        }
+      }
+    }
+  }
+}
+
+//== Build Component Base
+@include m-build-component--table-base();
+
+//== Build Component - Light Skin
+@include m-build-component--table-skin(light);
+
+//.tb-number {
+//  width: 80px !important;
+//}
+
+td.tb-td-right {
+  text-align: right !important;
+}
+
+.tb-actions {
+  //width: 85px;
+}
+
+.tb-actions-lg {
+  width: 230px;
+}
+
+.tooltip {
+  pointer-events: none;
+}
+
+.wrap-text {
+  white-space: inherit !important;
+}
+
+.table.table-striped thead th{
+  border: 1px solid #e7ecf1;
+}
+
+//.dataTables_scrollHeadInner thead .span-cell {
+//  border-right: 1px solid #ebedf2 !important;
+//  border-bottom: 1px solid #ebedf2 !important;
+//  margin-right: 1px;
+//  //padding-right: 9.6px !important;
+//}
+//
+//.dataTables_scrollHeadInner thead .span-cell {
+//  border-right: 1px solid #ebedf2!important;
+//  border-bottom: 1px solid #ebedf2!important;
+//}
+.dt-body-center .m-checkbox{
+  top: -13px!important;
+  left: 6px!important;
+}
+.selected-count{
+  padding:10px
+}
+
+
+@import "~datatables.net-fixedheader-bs4/css/fixedHeader.bootstrap4.min.css";
