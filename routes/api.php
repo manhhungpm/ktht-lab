@@ -28,12 +28,5 @@ Route::group([
         includeRouteFiles(__DIR__ . '/Admin/');
     });
 
-    Route::group(['namespace' => 'Brandname', 'prefix' => '/brandname', 'as' => 'brandname.','middleware' => []], function () {
-        includeRouteFiles(__DIR__ . '/Brandname/');
-    });
 
-});
-
-Route::group(['namespace' => 'Spam', 'prefix' => '/spam', 'as' => 'spam.', 'middleware' => ['api', 'auth:api']], function () {
-    includeRouteFiles(__DIR__ . '/Spam/');
 });
