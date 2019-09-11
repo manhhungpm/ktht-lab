@@ -76,5 +76,9 @@ export default {
         api: "Quản lý API",
         configs: "Quản lý cấu hình",
         smstopics: "Quản lý Sms Topic"
+    },
+    statistic: {
+        group: "Báo cáo tương quan các nhóm",
+        spam: "Báo cáo cuộc gọi nghi ngờ spam"
     }
 };

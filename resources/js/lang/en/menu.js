@@ -76,5 +76,9 @@ export default {
         api: "Api Management",
         configs: "Config Management",
         smstopics: "Sms Topic Management"
+    },
+    statistic: {
+        group: "Statistic group",
+        spam: "Statistic spam"
     }
 };

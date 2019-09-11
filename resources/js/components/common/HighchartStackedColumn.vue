@@ -5,17 +5,15 @@
 <script>
 import Highcharts from "highcharts";
 import cloneDeep from "lodash";
-import loadDrillDown from "highcharts/modules/drilldown";
 import exporting from "highcharts/modules/exporting";
 import exportLocal from "highcharts/modules/offline-exporting";
 
 var series;
-loadDrillDown(Highcharts);
 exporting(Highcharts);
 exportLocal(Highcharts);
 
 export default {
-    name: "AnotherHighcharts",
+    name: "HighchartStackedColumn",
     props: {
         title: {
             type: String,
@@ -50,16 +48,10 @@ export default {
             type: Array,
             default: () => []
         },
-        drilldown: {
-            type: Array,
-            default: () => []
-        },
-
         chartType: {
             type: String,
             default: "pie"
         },
-
         chartHeight: {
             type: [String, Number],
             default: "500"
@@ -104,9 +96,14 @@ export default {
             type: Boolean,
             default: false
         },
-        exportTitle: {
-            type: String,
-            default: null
+        //
+        dataX: {
+            type: Array,
+            default: () => undefined
+        },
+        inverted: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -115,17 +112,6 @@ export default {
         };
     },
     watch: {
-        exportTitle(val) {
-            this.chart.update({
-                exporting: {
-                    chartOptions: {
-                        title: {
-                            text: val
-                        }
-                    }
-                }
-            });
-        },
         series: {
             handler(newVal, oldVal) {
                 if (newVal.length != oldVal.length) {
@@ -149,12 +135,6 @@ export default {
                 });
             },
             deep: true
-        },
-        drilldown: {
-            handler(val) {
-                this.chart.options.drilldown.series = val;
-            },
-            deep: true
         }
     },
     mounted() {
@@ -169,6 +149,20 @@ export default {
                 lang: { numericSymbols: ["k", "M", "B", "T", "P", "E"] }
             });
 
+            // fix loi font khi export pdf
+            Highcharts.wrap(
+                Highcharts.Chart.prototype,
+                "exportChartLocal",
+                function(proceed, options) {
+                    if (options && options.type === "application/pdf") {
+                        this.exportChart(options);
+                    } else {
+                        proceed.call(this, options);
+                    }
+                }
+            );
+            //
+
             let options = {
                 credits: {
                     enabled: false
@@ -176,11 +170,12 @@ export default {
                 chart: {
                     backgroundColor: "transparent",
                     marginTop: this.marginTop,
-                    marginBottom: this.hasLegend ? 100 : 75,
+                    marginBottom: this.hasLegend ? 200 : 75,
                     marginLeft: this.horizontalMargin,
                     marginRight: this.horizontalMargin,
                     type: this.chartType,
-                    height: this.chartHeight
+                    height: this.chartHeight,
+                    inverted: this.inverted
                 },
                 lang: {
                     drillUpText: "Trở lại",
@@ -203,29 +198,21 @@ export default {
                     pointFormat: this.tooltipFormat
                 },
                 plotOptions: {
+                    column: {
+                        stacking: "normal",
+                        dataLabels: {
+                            enabled: false,
+                            color:
+                                (Highcharts.theme &&
+                                    Highcharts.theme.dataLabelsColor) ||
+                                "white"
+                        }
+                    },
                     series: {
-                        cursor: "pointer",
-                        pointWidth: this.pointWidth,
-                        events: {
-                            click: this.seriesClicked,
-                            legendItemClick: function() {
-                                if ($this.compareSeries) {
-                                    if (this.visible) {
-                                        this.setData([], false);
-                                    } else {
-                                        this.setData(
-                                            [$this.series[this.index].data[0]],
-                                            false
-                                        );
-                                    }
-                                }
-                            }
-                        },
-                        borderWidth: 0
+                        pointWidth: this.pointWidth
                     }
                 },
                 xAxis: {
-                    type: "category",
                     labels: {
                         style: {
                             fontSize: "13px",
@@ -235,37 +222,52 @@ export default {
                     categories: this.categories
                 },
                 yAxis: {
-                    min: this.chartType == "column" ? 0 : undefined,
-                    softMax: 100,
-                    minRange: 1,
+                    min: 0,
                     title: {
-                        text: ""
-                    }
-                },
-                legend: {
-                    enabled: this.hasLegend
-                },
-                series: series,
-                drilldown: {
-                    series: this.drilldown,
-                    allowPointDrilldown: false,
-                    drillUpButton: {
-                        position: {
-                            x: -15,
-                            y: -45
+                        text: this.title
+                    },
+                    stackLabels: {
+                        enabled: true,
+                        style: {
+                            fontWeight: "bold",
+                            color:
+                                (Highcharts.theme &&
+                                    Highcharts.theme.textColor) ||
+                                "gray"
                         }
                     }
                 },
+                legend: {
+                    // enabled: this.hasLegend,
+                    align: "center",
+                    x: 5,
+                    verticalAlign: "bottom",
+                    y: -70,
+                    floating: false,
+                    backgroundColor:
+                        (Highcharts.theme && Highcharts.theme.background2) ||
+                        "white",
+                    borderColor: "#CCC",
+                    borderWidth: 0,
+                    shadow: false
+                },
+                series: series,
                 exporting: {
                     enabled: this.exporting,
                     sourceWidth: 1500,
                     sourceHeight: 500,
                     scale: 1,
                     chartOptions: {
-                        title: {
-                            text: this.exportTitle
+                        chart: {
+                            backgroundColor: "#ffffff"
+                        },
+                        legend: {
+                            itemStyle: {
+                                fontFamily: "Roboto"
+                            }
                         }
-                    }
+                    },
+                    fallbackToExportServer: false
                 }
             };
 
@@ -273,16 +275,16 @@ export default {
 
             this.chart = Highcharts.chart(this.$refs.chart, options);
         },
-        exportChart(filename, title = null) {
+        exportChart(filename) {
             this.chart.exportChartLocal({
                 filename: filename,
                 type: "image/png",
                 sourceWidth: 1500,
                 sourceHeight: 500,
-                // scale: 1,
+                scale: 1,
                 chartOptions: {
                     title: {
-                        text: this.exportTitle
+                        text: "ABC"
                     }
                 }
             });
@@ -290,3 +292,5 @@ export default {
     }
 };
 </script>
+
+<style scoped></style>
