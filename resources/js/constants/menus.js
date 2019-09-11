@@ -195,5 +195,20 @@ export default [
                 route: "/admin/sms-topic"
             }
         ]
+    },
+    {
+        title: "Báo cáo",
+        icon: "flaticon-search",
+        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
+        children: [
+            {
+                title: "Báo cáo tương quan các nhóm",
+                route: "statistic/group"
+            },
+            {
+                title: "Báo cáo cuộc gọi nghi ngờ spam",
+                route: "statistic/spam"
+            }
+        ]
     }
 ];

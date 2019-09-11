@@ -152,6 +152,13 @@ const BrandnameReportWrongTime = () =>
         m => m.default || m
     );
 
+//Highchart
+const StatisticGroup = () =>
+    import("~/pages/statistic/Group.vue").then(m => m.default || m);
+
+const StatisticSpam = () =>
+    import("../pages/statistic/Spam.vue").then(m => m.default || m);
+
 export default {
     dashboard: { path: "/", name: "dashboard", component: Dashboard },
 
@@ -360,5 +367,17 @@ export default {
         path: "/admin/sms-topic",
         name: "admin.smstopics",
         component: SmsTopic
+    },
+
+    //Statistic route
+    statistic_group: {
+        path: "/statistic/group",
+        name: "statistic.group",
+        component: StatisticGroup
+    },
+    statistic_spam: {
+        path: "/statistic/spam",
+        name: "statistic.spam",
+        component: StatisticSpam
     }
 };
