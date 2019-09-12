@@ -1,6 +1,19 @@
 <template>
     <div>
         <div class="row">
+            <div class="col-12">
+                <date-filter-month
+                    :default-time="defaultTime"
+                    :label="$t('label.select_month')"
+                    :placeholder="$t('label.select_month_placeholder')"
+                    :export-url="'/brandname/report-month/alias/export'"
+                    value-format="yyyy-MM"
+                    :exportable="true"
+                    type="month"
+                    :title="'Thông tin tìm kiếm'"
+                    @search="filterTime"
+                ></date-filter-month>
+            </div>
             <div class="col-6">
                 <portlet
                     style="height: 550px; "
@@ -90,6 +103,7 @@
 import Portlet from "../../components/common/Portlet";
 import AnotherHighcharts from "../../components/common/AnotherHighcharts";
 import HighchartStackedColumn from "../../components/common/HighchartStackedColumn";
+import moment from "moment";
 export default {
     name: "Highchart",
     components: { HighchartStackedColumn, AnotherHighcharts, Portlet },
@@ -227,7 +241,22 @@ export default {
                 "Cuộc gọi nghi ngờ spam",
                 "Cuộc gọi nghề nghiệp đặc thù",
                 "Cuộc gọi từ tổng đài,telesale"
-            ]
+            ],
+
+            //Filter
+            defaultTime: moment()
+                .startOf("month")
+                .format("YYYY-MM"),
+            tableFilter: {
+                time: [
+                    moment()
+                        .startOf("month")
+                        .format("YYYY-MM-DD 00:00:00"),
+                    moment()
+                        .endOf("month")
+                        .format("YYYY-MM-DD 23:59:59")
+                ]
+            }
         };
     },
     mounted() {
@@ -245,6 +274,14 @@ export default {
             });
 
             this.barSeries1[0].data = series;
+        },
+        async filterTime(data) {
+            this.tableFilter = data;
+            await this.$nextTick();
+            this.loadData();
+        },
+        async loadData() {
+            this.$refs.table.reload();
         }
     }
 };
