@@ -48,6 +48,7 @@
                         :exporting="true"
                         :inverted="true"
                         :plot-options="stackedPlotOptions1"
+                        :horizontal-margin="92"
                     ></highchart-stacked-column>
                 </portlet>
             </div>
@@ -76,6 +77,7 @@
                         :plot-options="barPlotOption1"
                         :exporting="true"
                         :tooltip-format="'Số lượng:<b> {point.y}%</b>'"
+                        :horizontal-margin="92"
                     >
                     </another-highcharts
                 ></portlet>

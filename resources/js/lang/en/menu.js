@@ -79,6 +79,7 @@ export default {
     },
     statistic: {
         group: "Statistic group",
-        spam: "Statistic spam"
+        spam: "Statistic spam",
+        spam_call_detail: "Spam call detail"
     }
 };

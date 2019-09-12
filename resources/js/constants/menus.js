@@ -30,6 +30,10 @@ export default [
             {
                 title: "Báo cáo cuộc gọi nghi ngờ spam",
                 route: "statistic/spam"
+            },
+            {
+                title: "Báo cáo chi tiết gán nhãn spam các cuộc gọi nghi ngờ",
+                route: "statistic/spam-call-detail"
             }
         ]
     }
