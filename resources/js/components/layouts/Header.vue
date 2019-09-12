@@ -16,7 +16,9 @@
                             <router-link to="/" class="m-brand__logo-wrapper">
                                 <img
                                     alt=""
-                                    :src="require('~assets/img/logo/logoAntiCall.svg')"
+                                    :src="
+                                        require('~assets/img/logo/anticall.svg')
+                                    "
                                 />
                             </router-link>
                         </div>

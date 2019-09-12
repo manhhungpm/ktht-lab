@@ -1,0 +1,12 @@
+<svg width="159" height="17" xmlns="http://www.w3.org/2000/svg">
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <text stroke="null" transform="matrix(0.8659135782679209,0,0,0.9249396868975349,16.942281420427147,1.5539479539309327) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_4" y="15.624978" x="-18.964814" stroke-opacity="null" stroke-width="0" fill="#ffffff">ANTI</text>
+  <text stroke="null" transform="matrix(0.9743723273277282,0,0,0.9052652379843353,1.5840533589944243,0.2023359867979745) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_5" y="17.768582" x="55.942994" stroke-opacity="null" stroke-width="0" fill="#e7505a">CALL</text>
+ </g>
+</svg>

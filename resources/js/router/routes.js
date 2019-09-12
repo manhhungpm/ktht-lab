@@ -21,6 +21,9 @@ const StatisticGroup = () =>
 const StatisticSpam = () =>
     import("../pages/statistic/Spam.vue").then(m => m.default || m);
 
+const StatisticSpamCallDetail = () =>
+    import("../pages/statistic/SpamCallDetail.vue").then(m => m.default || m);
+
 export default {
     dashboard: { path: "/", name: "dashboard", component: Dashboard },
 
@@ -52,5 +55,10 @@ export default {
         path: "/statistic/spam",
         name: "statistic.spam",
         component: StatisticSpam
+    },
+    statistic_spam_call_detail: {
+        path: "/statistic/spam-call-detail",
+        name: "statistic.spam_call_detail",
+        component: StatisticSpamCallDetail
     }
 };
