@@ -35,7 +35,7 @@
                         :chart-type="'column'"
                         :series="columnSeries1"
                         :plot-options="columnPlotOptions1"
-                        :tooltip-format="'Số lượng:<b> {point.y}</b>'"
+                        :tooltip-format="'{series.name}:<b> {point.y}</b>'"
                         :has-legend="true"
                         :point-width="60"
                         :margin-top="20"
@@ -56,7 +56,7 @@
                         :chart-type="'column'"
                         :has-legend="true"
                         :tooltip-format="
-                            'Số lượng:<b> {point.percentage:.1f}%</b>'
+                            '{series.name}: <b>{point.percentage:.1f}%</b>'
                         "
                         :exporting="true"
                         :inverted="true"
@@ -77,7 +77,7 @@
                         :exporting="true"
                         :categories="areaCategories1"
                         :has-legend="true"
-                        :tooltip-format="'Số lượng:<b> {point.y}</b>'"
+                        :tooltip-format="'{series.name}:<b> {point.y}</b>'"
                     ></another-highcharts>
                 </portlet>
             </div>
