@@ -15,11 +15,15 @@ export default [
             {
                 title: "menu.admin.user",
                 route: "/admin/users"
+            },
+            {
+                title: "menu.admin.manager",
+                route: "/admin/managers"
             }
         ]
     },
     {
-        title: "Báo cáo",
+        title: "menu.statistic.title",
         icon: "flaticon-search",
         roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
         children: [
@@ -36,5 +40,11 @@ export default [
                 route: "statistic/spam-call-detail"
             }
         ]
+    },
+    {
+        title: "menu.black_white.list.title",
+        icon: "flaticon-list",
+        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
+        route: "black-white-list"
     }
 ];

@@ -1,0 +1,103 @@
+<?php
+
+namespace App\Http\Controllers\BlackWhite;
+
+use App\Exports\Blackwhite\ListExport;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\ImportRequest;
+use App\Imports\ListImport;
+use App\Repositories\BlackWhite\ListRepository;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Excel;
+
+class ListController extends Controller
+{
+    protected $listRepository;
+    protected $_excel;
+
+    public function __construct(ListRepository $listRepository, Excel $excel)
+    {
+        $this->middleware('auth');
+        $this->listRepository = $listRepository;
+        $this->_excel = $excel;
+    }
+
+    public function listing(Request $request)
+    {
+        $params = getDataTableRequestParams($request);
+        $searchParams = $request->only('type', 'manager', 'provider', 'who_created', 'created_at', 'who_updated', 'updated_at');
+
+        $total = $this->listRepository->getList(
+            $params['keyword'],
+            $searchParams,
+            true
+        );
+
+        $arr = array(
+            'recordsTotal' => $total,
+            'data' => $this->listRepository->getList(
+                $params['keyword'],
+                $searchParams,
+                false,
+                $params['length'],
+                $params['start'],
+                $params['orderBy'],
+                $params['orderType']
+            ),
+            'draw' => $params['draw'],
+            'recordsFiltered' => $total,
+        );
+
+        return response()->json($arr);
+    }
+
+    public function add(Request $request)
+    {
+        $result = $this->listRepository->addAlias($request->only('alias', 'type', 'provider', 'manager', 'description', 'url'));
+
+        return processCommonResponse($result);
+    }
+
+    public function edit(Request $request)
+    {
+        $result = $this->listRepository->editAlias($request->only('id', 'alias', 'type', 'provider', 'manager', 'description', 'url'));
+
+        return processCommonResponse($result);
+    }
+
+    public function active(Request $request)
+    {
+        $result = $this->listRepository->setActive($request->input('id'));
+
+        return processCommonResponse($result);
+    }
+
+    public function disable(Request $request)
+    {
+        $result = $this->listRepository->setDisable($request->input('id'));
+
+        return processCommonResponse($result);
+    }
+
+    public function export(Request $request, Excel $excel)
+    {
+        $searchParams = $request->only('type', 'manager', 'provider', 'who_created', 'created_at', 'who_updated', 'updated_at');
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', '0');
+        $locale = $request->cookie('locale');
+        \Illuminate\Support\Facades\App::setLocale($locale);
+        $export = new ListExport($searchParams);
+        return $excel->download($export, 'Kết quả tìm kiếm'.'.xlsx');
+    }
+
+    public function import(ImportRequest $request)
+    {
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', '0');
+
+        $whiteImport = new ListImport();
+        $path = $request->file('file');
+        $this->_excel->import($whiteImport, $path);
+
+    }
+}

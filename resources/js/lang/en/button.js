@@ -18,5 +18,6 @@ export default {
     add_request: "Add request",
     resend: "Resend request",
     delete: "Delete",
-    show_history: "Show history"
+    show_history: "Show history",
+    import: "Import"
 };

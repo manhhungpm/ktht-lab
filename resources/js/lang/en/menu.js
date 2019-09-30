@@ -75,11 +75,18 @@ export default {
         user: "User Management",
         api: "Api Management",
         configs: "Config Management",
-        smstopics: "Sms Topic Management"
+        smstopics: "Sms Topic Management",
+        manager: "Manager Management"
     },
     statistic: {
+        title: "Statistic",
         group: "Statistic group",
         spam: "Statistic spam",
         spam_call_detail: "Spam call detail"
+    },
+    black_white: {
+        list: {
+            title: "List blacklist/whitelist"
+        }
     }
 };

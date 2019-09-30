@@ -1,0 +1,281 @@
+<template>
+    <modal
+        ref="modal"
+        :title="isEdit ? 'Chỉnh sửa' : 'Thêm mới'"
+        :on-hidden="onModalHidden"
+    >
+        <form
+            class="m-form m-form--state m-form--label-align-right"
+            @submit.prevent="validateForm"
+        >
+            <form-control
+                v-model="form.alias"
+                v-validate="'required|max:15'"
+                name="alias"
+                :label="'Đầu số'"
+                :placeholder="'Nhập đầu số'"
+                :error="errors.first('alias') || form.errors.get('alias')"
+                :required="true"
+                :data-vv-as="'Nhập đầu số'"
+            ></form-control>
+            <form-control
+                v-model="form.typeId"
+                v-validate="'required'"
+                :label="'Loại đầu số'"
+                :data-vv-as="'Nhập loại đầu số'"
+                :required="true"
+                name="typeId"
+                :type="'select'"
+                :select-options="typeOptions"
+                :error="errors.first('typeId') || form.errors.get('typeId')"
+            ></form-control>
+            <form-control
+                v-model="form.providerId"
+                v-validate="'required'"
+                :label="'Nhà mạng'"
+                :data-vv-as="'Nhập nhà mạng'"
+                :required="true"
+                name="providerId"
+                :type="'select'"
+                :select-options="providerOptions"
+                :error="
+                    errors.first('providerId') || form.errors.get('providerId')
+                "
+            ></form-control>
+            <manager-chosen
+                v-model="form.manager_result"
+                v-validate="'required'"
+                :multiple="false"
+                name="manager"
+                :error="errors.first('manager')"
+                :has-all-option="false"
+            ></manager-chosen>
+            <form-control
+                v-model="form.description"
+                v-validate="'max:255'"
+                :type="'area'"
+                :label="'Mô tả'"
+                :placeholder="'Nhập mô tả'"
+                name="description"
+            ></form-control>
+            <form-control
+                v-model="form.url"
+                name="url"
+                :label="'Link upload file PYC'"
+                :data-vv-as="'Nhập link'"
+            ></form-control>
+        </form>
+        <template slot="footer">
+            <button class="btn btn-info" @click="closeModal">
+                {{ $t("button.cancel") }}
+            </button>
+            <button class="btn btn-primary" @click="validateForm('form')">
+                {{ isEdit ? $t("button.edit") : $t("button.add") }}
+            </button>
+        </template>
+    </modal>
+</template>
+
+<script>
+import Modal from "../../../components/common/Modal";
+import FormControl from "../../../components/common/FormControl";
+import ManagerChosen from "~/components/elements/chosens/ManagerChosen";
+import Form from "vform";
+import {
+    FORM_LABEL_WIDTH_LARGE,
+    PROVIDER_VIETTEL,
+    PROVIDER_VINAPHONE,
+    PROVIDER_MOBILEPHONE,
+    PROVIDER_VIETNAMMOBILE,
+    PROVIDER_GMOBILE,
+    PROVIDER_ALL,
+    PROVIDER_OTHER,
+    TYPE_BLACKLIST,
+    TYPE_WHITELIST
+} from "~/constants/constant";
+import { SUCCESS } from "~/constants/code";
+import {
+    notifyTryAgain,
+    notifyUpdateSuccess,
+    notifyAddSuccess
+} from "~/helpers/bootstrap-notify";
+
+const defaultForm = {
+    id: null,
+    alias: null,
+    typeId: {
+        id: TYPE_WHITELIST
+    },
+    type: null,
+    providerId: {
+        id: PROVIDER_ALL
+    },
+    provider: null,
+    manager_result: null,
+    manager: null,
+    description: null,
+    url: null
+};
+
+export default {
+    name: "ListModal",
+    components: { FormControl, Modal, ManagerChosen },
+    props: {
+        onActionSuccess: {
+            type: Function,
+            default: () => {}
+        }
+    },
+    data() {
+        return {
+            form: new Form(defaultForm),
+            formLabelWidth: FORM_LABEL_WIDTH_LARGE,
+            isEdit: false,
+            typeOptions: {
+                placeholder: "Chọn loại",
+                multiple: false,
+                searchable: false,
+                options: [
+                    {
+                        id: TYPE_WHITELIST,
+                        text: "Whitelist"
+                    },
+                    {
+                        id: TYPE_BLACKLIST,
+                        text: "Blacklist"
+                    }
+                ]
+            },
+            providerOptions: {
+                placeholder: "Chọn nhà cung cấp",
+                multiple: false,
+                searchable: false,
+                options: [
+                    {
+                        id: PROVIDER_ALL,
+                        text: "Tất cả"
+                    },
+                    {
+                        id: PROVIDER_VIETTEL,
+                        text: "Viettel"
+                    },
+                    {
+                        id: PROVIDER_VINAPHONE,
+                        text: "Vinaphone"
+                    },
+                    {
+                        id: PROVIDER_MOBILEPHONE,
+                        text: "Mobilephone"
+                    },
+                    {
+                        id: PROVIDER_VIETNAMMOBILE,
+                        text: "Vietnammobile"
+                    },
+                    {
+                        id: PROVIDER_GMOBILE,
+                        text: "Gmobile"
+                    },
+                    {
+                        id: PROVIDER_OTHER,
+                        text: "Nhà mạng khác"
+                    }
+                ]
+            }
+        };
+    },
+    methods: {
+        show(item = null) {
+            if (item != null) {
+                console.log(item);
+                item.typeId = {
+                    id: item.type
+                };
+                item.providerId = {
+                    id: item.provider
+                };
+                item.manager_result = {
+                    id: item.manager.id,
+                    text: item.manager.name,
+                    name: item.manager.name
+                };
+                this.form = new Form(item);
+                this.isEdit = true;
+            }
+            this.$refs.modal.show();
+        },
+        closeModal() {
+            this.$refs.modal.hide();
+        },
+        validateForm() {
+            this.$validator.validateAll().then(result => {
+                if (result) {
+                    if (this.isEdit) {
+                        this.editAlias();
+                    } else {
+                        this.addAlias();
+                    }
+                }
+            });
+        },
+        async editAlias() {
+            try {
+                this.form.type = this.form.typeId.id;
+                this.form.provider = this.form.providerId.id;
+                this.form.manager = this.form.manager_result.id;
+
+                const res = await this.form.post("/blackwhite/list/edit");
+                const { data } = res;
+
+                if (data.code === SUCCESS) {
+                    notifyUpdateSuccess(
+                        this.$t("brandname.list.notification.edit_success")
+                    );
+                    this.closeModal();
+                    this.onActionSuccess();
+                } else {
+                    notifyTryAgain();
+                }
+            } catch (e) {
+                const { status } = e.response;
+
+                if (status != 403) {
+                    notifyTryAgain();
+                }
+            }
+        },
+        async addAlias() {
+            try {
+                this.form.type = this.form.typeId.id;
+                this.form.provider = this.form.providerId.id;
+                this.form.manager = this.form.manager_result.id;
+
+                const res = await this.form.post("/blackwhite/list/add");
+                const { data } = res;
+
+                if (data.code === SUCCESS) {
+                    notifyAddSuccess(
+                        this.$t("brandname.list.notification.add_success")
+                    );
+                    this.closeModal();
+                    this.onActionSuccess();
+                } else {
+                    notifyTryAgain();
+                }
+            } catch (e) {
+                const { status } = e.response;
+
+                if (status != 403) {
+                    notifyTryAgain();
+                }
+            }
+        },
+        onModalHidden() {
+            this.form = new Form(defaultForm);
+            this.isEdit = false;
+            this.$validator.reset();
+        }
+    }
+};
+</script>
+
+<style scoped></style>

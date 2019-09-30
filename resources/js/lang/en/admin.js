@@ -160,5 +160,17 @@ export default {
         portlet: {
             title: "List sms topic"
         }
+    },
+    manager: {
+        add: "Add manager",
+        edit: "Edit manager",
+        title: "List manager",
+        name: "Name",
+        description: "Description",
+        placeholder: {
+            search: "Enter name",
+            name: "Enter name",
+            description: "Enter description"
+        }
     }
 };

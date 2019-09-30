@@ -166,5 +166,17 @@ export default {
         portlet: {
             title: "Danh sách Sms Topic"
         }
+    },
+    manager: {
+        add: "Thêm mới đơn vị",
+        edit: "Cập nhật đơn vị",
+        title: "Danh sách đơn vị quản lý",
+        name: "Tên đơn vị",
+        description: "Mô tả",
+        placeholder: {
+            search: "Nhập từ khóa tìm kiếm",
+            name: "Nhập tên",
+            description: "Nhập mô tả"
+        }
     }
 };

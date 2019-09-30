@@ -28,5 +28,8 @@ Route::group([
         includeRouteFiles(__DIR__ . '/Admin/');
     });
 
+    Route::group(['namespace' => 'BlackWhite', 'prefix' => '/blackwhite', 'as' => 'blackwhite.','middleware' => []], function () {
+        includeRouteFiles(__DIR__ . '/BlackWhite/');
+    });
 
 });

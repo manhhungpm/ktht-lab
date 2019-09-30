@@ -13,6 +13,8 @@ const Dashboard = () => import("~/pages/index.vue").then(m => m.default || m);
 //Admin component
 const User = () =>
     import("~/pages/admin/User/users.vue").then(m => m.default || m);
+const Manager = () =>
+    import("~/pages/admin/Manager/managers.vue").then(m => m.default || m);
 
 //Highchart
 const StatisticGroup = () =>
@@ -23,6 +25,10 @@ const StatisticSpam = () =>
 
 const StatisticSpamCallDetail = () =>
     import("../pages/statistic/SpamCallDetail.vue").then(m => m.default || m);
+
+//Black white
+const BlackWhiteList = () =>
+    import("~/pages/black-white/List.vue").then(m => m.default || m);
 
 export default {
     dashboard: { path: "/", name: "dashboard", component: Dashboard },
@@ -45,6 +51,12 @@ export default {
         meta: { title: i18n.t("admin.users.manage") }
     },
 
+    manager: {
+        path: "/admin/managers",
+        name: "admin.manager",
+        component: Manager
+    },
+
     //Statistic route
     statistic_group: {
         path: "/statistic/group",
@@ -60,5 +72,12 @@ export default {
         path: "/statistic/spam-call-detail",
         name: "statistic.spam_call_detail",
         component: StatisticSpamCallDetail
+    },
+
+    //Black white route
+    black_white_list: {
+        path: "/black-white-list",
+        name: "black_white.list.title",
+        component: BlackWhiteList
     }
 };
