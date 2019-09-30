@@ -283,21 +283,21 @@ export default {
                 const { data } = res;
 
                 this.roleList = data.data;
-                const displayName = [
-                    "A2P",
-                    "Admin",
-                    "Brandname",
-                    "CC",
-                    "Csp",
-                    "Politic",
-                    "Roaming",
-                    "Root",
-                    "Sms2way",
-                    "User"
-                ];
-                this.roleList.forEach(function(value, index) {
-                    value.display_name = displayName[index];
-                });
+                // const displayName = [
+                //     "A2P",
+                //     "Admin",
+                //     "Brandname",
+                //     "CC",
+                //     "Csp",
+                //     "Politic",
+                //     "Roaming",
+                //     "Root",
+                //     "Sms2way",
+                //     "User"
+                // ];
+                // this.roleList.forEach(function(value, index) {
+                //     value.display_name = displayName[index];
+                // });
             } catch (e) {
                 console.log(e);
             }
@@ -308,7 +308,8 @@ export default {
             for (var i = 0; i < this.roleList.length; i++) {
                 this.roleOptions.options.push({
                     id: this.roleList[i].id,
-                    text: this.roleList[i].display_name,
+                    text: this.roleList[i].name,
+                    // text: this.roleList[i].display_name,
                     display_name: this.roleList[i].display_name
                 });
             }

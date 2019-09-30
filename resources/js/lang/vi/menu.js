@@ -75,11 +75,18 @@ export default {
         user: "Quản lý tài khoản",
         api: "Quản lý API",
         configs: "Quản lý cấu hình",
-        smstopics: "Quản lý Sms Topic"
+        smstopics: "Quản lý Sms Topic",
+        manager: "Đơn vị quản lý"
     },
     statistic: {
+        title: "Báo cáo",
         group: "Báo cáo tương quan các nhóm",
         spam: "Báo cáo cuộc gọi nghi ngờ spam",
         spam_call_detail: "Báo cáo chi tiết gán nhãn spam các cuộc gọi nghi ngờ"
+    },
+    black_white: {
+        list: {
+            title: "Quản lý danh sách Blacklist/Whitelist"
+        }
     }
 };

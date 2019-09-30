@@ -12,5 +12,6 @@ export default {
     select_month_placeholder: "Select a month",
     sms_group: "Sms group",
     sms_type: "Sms type",
-    select_day: "Select day"
+    select_day: "Select day",
+    manager: "Manager"
 };
