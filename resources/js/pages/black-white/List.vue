@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="col-12">
-                <portlet title="Danh sách Blacklist/Whitelist">
+                <portlet :title="$t('blackwhite.list.title')">
                     <v-button
                         slot="tool"
                         color="primary"
@@ -72,16 +72,44 @@
                             <span>{{ $t("button.import") }}</span>
                         </span>
                     </v-button>
+                    <v-button
+                        color="success"
+                        style-type="air"
+                        class="m-btn m-btn--icon"
+                        style="margin-bottom: 18px"
+                        @click.native="activeIsSelected"
+                    >
+                        <span>
+                            <i class="la la-check-circle"></i>
+                            <span>{{ $t("button.active") }}</span>
+                        </span>
+                    </v-button>
+                    <v-button
+                        color="danger"
+                        style-type="air"
+                        class="m-btn m-btn--icon"
+                        style="margin-bottom: 18px"
+                        @click.native="disableIsSelected"
+                    >
+                        <span>
+                            <i class="la la-ban"></i>
+                            <span>{{ $t("button.disable") }}</span>
+                        </span>
+                    </v-button>
                     <data-table
                         ref="table"
                         :columns="columns"
                         :actions="actions"
                         url="/blackwhite/list/listing"
-                        :order-column-index="10"
+                        :order-column-index="11"
                         :order-type="'desc'"
                         :fixed-columns-left="3"
                         :fixed-columns-right="2"
                         :post-data="tableFilter"
+                        :selectable="true"
+                        :search-placeholder="
+                            $t('blackwhite.list.search_placeholder')
+                        "
                     ></data-table
                 ></portlet>
             </div>
@@ -93,29 +121,41 @@
                 ref="importModal"
                 :on-action-success="updateItemSuccess"
             ></list-import-modal>
+            <action-modal
+                ref="actionModal"
+                :on-action-success="updateItemSuccess"
+            ></action-modal>
         </div>
     </div>
 </template>
 
 <script>
-import Portlet from "../../components/common/Portlet";
-import DataTable from "../../components/common/DataTable";
-import moment from "moment";
+import Portlet from "~/components/common/Portlet";
+import DataTable from "~/components/common/DataTable";
 import ListModal from "./partials/ListModal";
 import { generateTableAction, htmlEscapeEntities } from "~/helpers/tableHelper";
 import bootbox from "bootbox";
 import axios from "axios";
 import {
+    notify,
     notifyTryAgain,
     notifyActiveSuccess,
     notifyDisableSuccess
 } from "~/helpers/bootstrap-notify";
 import ListFilter from "./partials/ListFilter";
 import ListImportModal from "./partials/ListImportModal";
+import ActionModal from "./partials/ActionModal";
 
 export default {
     name: "List",
-    components: { ListImportModal, ListFilter, ListModal, DataTable, Portlet },
+    components: {
+        ActionModal,
+        ListImportModal,
+        ListFilter,
+        ListModal,
+        DataTable,
+        Portlet
+    },
     data() {
         return {
             tableFilter: {
@@ -136,11 +176,11 @@ export default {
             return [
                 {
                     data: "alias",
-                    title: "Đầu số"
+                    title: this.$t("blackwhite.list.alias")
                 },
                 {
                     data: "type",
-                    title: "Loại đầu số",
+                    title: this.$t("blackwhite.list.type"),
                     orderable: false,
                     render(data) {
                         if (data != null) {
@@ -154,7 +194,7 @@ export default {
                 },
                 {
                     data: "provider",
-                    title: "Nhà mạng",
+                    title: this.$t("blackwhite.list.provider"),
                     orderable: false,
                     render(data) {
                         if (data != null) {
@@ -164,12 +204,12 @@ export default {
                 },
                 {
                     data: "manager.name",
-                    title: "Đơn vị quản lý",
+                    title: this.$t("blackwhite.list.manager"),
                     orderable: false
                 },
                 {
                     data: "active",
-                    title: "Trạng thái",
+                    title: this.$t("datatable.column.status"),
                     render(data) {
                         if (data != null) {
                             if (data == 1) {
@@ -184,21 +224,21 @@ export default {
                 },
                 {
                     data: "description",
-                    title: "Mô tả",
+                    title: this.$t("datatable.column.description"),
                     orderable: false
                 },
                 {
                     data: "who_created",
-                    title: "Người tạo",
+                    title: this.$t("datatable.column.who_created"),
                     orderable: false
                 },
                 {
                     data: "created_at",
-                    title: "Thời gian tạo"
+                    title: this.$t("datatable.column.when_created")
                 },
                 {
                     data: "who_updated",
-                    title: "Người cập nhật",
+                    title: this.$t("datatable.column.who_updated"),
                     orderable: false,
                     render(data) {
                         if (data != null) {
@@ -208,19 +248,20 @@ export default {
                 },
                 {
                     data: "updated_at",
-                    title: "Thời gian cập nhật",
+                    title: this.$t("datatable.column.when_updated"),
                     render(data) {
                         if (data != null) return data;
                     }
                 },
                 {
                     data: "url",
-                    title: "PYC",
+                    title: this.$t("blackwhite.list.url"),
+                    className: "text-center",
                     orderable: false,
                     render(data) {
                         if (data != null) {
                             return (
-                                '<a title="Download" href="' +
+                                '<a title="Download phiếu yêu cầu" href="' +
                                 data +
                                 '"><span class="la la-download"></span></a>'
                             );
@@ -229,7 +270,7 @@ export default {
                 },
                 {
                     data: null,
-                    title: "Hành động",
+                    title: this.$t("datatable.column.action"),
                     orderable: false,
                     className: "text-center tb-actions",
                     render(data) {
@@ -268,14 +309,6 @@ export default {
         }
     },
     methods: {
-        // async filterTime(data) {
-        //     this.tableFilter = data;
-        //     await this.$nextTick();
-        //     this.loadData();
-        // },
-        // async loadData() {
-        //     this.$refs.table.reload();
-        // },
         updateItemSuccess() {
             this.$refs.table.reload();
         },
@@ -287,6 +320,43 @@ export default {
         },
         importAlias() {
             this.$refs.importModal.show();
+        },
+        async activeIsSelected() {
+            const rows = this.$refs.table.getSelectedRows();
+            const ids = this.$refs.table.getSelectedRowsIds();
+
+            const alias = Array.from(rows, e => {
+                return {
+                    alias: e.alias
+                };
+            });
+
+            if (ids.length > 0) {
+                this.$refs.actionModal.show(ids, alias, true);
+            } else {
+                notify(
+                    this.$t("label.notification"),
+                    this.$t("notification.must_select_at_least_one_record")
+                );
+            }
+        },
+        async disableIsSelected() {
+            const rows = this.$refs.table.getSelectedRows();
+            const ids = this.$refs.table.getSelectedRowsIds();
+            const alias = Array.from(rows, e => {
+                return {
+                    alias: e.alias
+                };
+            });
+
+            if (ids.length > 0) {
+                this.$refs.actionModal.show(ids, alias, false);
+            } else {
+                notify(
+                    this.$t("label.notification"),
+                    this.$t("notification.must_select_at_least_one_record")
+                );
+            }
         },
         handleDisable(table, rowData) {
             let $this = this;
@@ -308,7 +378,7 @@ export default {
                 callback: async function(result) {
                     if (result) {
                         let res = await axios.post("/blackwhite/list/disable", {
-                            id: [rowData.id]
+                            ids: [rowData.id]
                         });
                         const { data } = res;
 
@@ -342,7 +412,7 @@ export default {
                 callback: async function(result) {
                     if (result) {
                         let res = await axios.post("/blackwhite/list/active", {
-                            id: [rowData.id]
+                            ids: [rowData.id]
                         });
                         const { data } = res;
 

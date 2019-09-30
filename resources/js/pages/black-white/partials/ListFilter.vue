@@ -6,7 +6,7 @@
                     v-model="form.type"
                     :type="'select'"
                     :select-options="typeOptions"
-                    :label="'Loại đầu số'"
+                    :label="$t('blackwhite.list.type')"
                 >
                 </form-control>
             </div>
@@ -16,7 +16,7 @@
                     v-model="form.provider"
                     :type="'select'"
                     :select-options="providerOptions"
-                    :label="'Nhà mạng'"
+                    :label="$t('blackwhite.list.provider')"
                 >
                 </form-control>
             </div>
@@ -121,14 +121,12 @@
 </template>
 
 <script>
-import ManagerChosen from "../../../components/elements/chosens/ManagerChosen";
+import ManagerChosen from "~/components/elements/chosens/ManagerChosen";
 import Form from "vform";
 import axios from "axios";
 import { downloadFile } from "~/helpers/downloadFile";
 import { notify, notifyTryAgain } from "~/helpers/bootstrap-notify";
-import i18n from "~/plugins/i18n";
 import {
-    FORM_LABEL_WIDTH_LARGE,
     PROVIDER_VIETTEL,
     PROVIDER_VINAPHONE,
     PROVIDER_MOBILEPHONE,
@@ -168,7 +166,7 @@ export default {
         return {
             form: new Form(defaultForm),
             typeOptions: {
-                placeholder: "Chọn loại",
+                placeholder: this.$t("blackwhite.list.placeholder.type"),
                 multiple: true,
                 searchable: false,
                 options: [
@@ -183,7 +181,7 @@ export default {
                 ]
             },
             providerOptions: {
-                placeholder: "Chọn nhà cung cấp",
+                placeholder: this.$t("blackwhite.list.placeholder.provider"),
                 multiple: true,
                 searchable: false,
                 options: [
@@ -218,7 +216,7 @@ export default {
                 ]
             },
             userOptions: {
-                placeholder: "Chọn user",
+                placeholder: this.$t("blackwhite.list.placeholder.user"),
                 multiple: true,
                 searchable: true,
                 options: [],
@@ -316,7 +314,7 @@ export default {
 
                     downloadFile(res);
                 } catch (e) {
-                    notify(this.$t("brandname.list.notification.export_error"));
+                    notify(this.$t("notification.export_error"));
                 }
             } else {
                 notifyTryAgain();

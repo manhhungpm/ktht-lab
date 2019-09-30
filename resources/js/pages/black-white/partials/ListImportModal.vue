@@ -2,7 +2,7 @@
     <modal
         id="modal"
         ref="modalImport"
-        :title="$t('spam.spam_patterns.white.import_title')"
+        :title="$t('blackwhite.list.import_title')"
         data-backdrop="static"
         data-keyboard="false"
     >
@@ -12,7 +12,7 @@
             class="alert alert-danger"
             role="alert"
         >
-            <strong>Lỗi:</strong>
+            <strong>{{ $t("blackwhite.list.import_modal.error") }}:</strong>
             <div class="view">
                 <div class="wrapper">
                     <p class="text" style="max-height: 42px ; overflow: hidden">
@@ -28,7 +28,9 @@
                         class="button"
                         @click="readMore"
                     >
-                        <a href="#" style="color: white">Xem thêm</a>
+                        <a href="#" style="color: white">{{
+                            $t("blackwhite.list.import_modal.readmore")
+                        }}</a>
                     </p>
                 </div>
             </div>
@@ -44,34 +46,26 @@
             </div>
             <div class="m-alert__text">
                 <strong
-                    >{{
-                        $t("spam.spam_patterns.white.import_modal.report")
-                    }}:</strong
+                    >{{ $t("blackwhite.list.import_modal.report") }}:</strong
                 >
-                {{ $t("spam.spam_patterns.white.import_modal.import") }}<br />
+                {{ $t("blackwhite.list.import_modal.import") }}<br />
                 <strong
                     >{{
-                        $t(
-                            "spam.spam_patterns.white.import_modal.example_file"
-                        )
+                        $t("blackwhite.list.import_modal.example_file")
                     }}:</strong
                 >
                 <a
                     href="/public/example/white_import_example.xlsx"
                     download="File_import_mau.xlsx"
                     ><i
-                        ><u>{{
-                            $t("spam.spam_patterns.white.import_modal.file")
-                        }}</u></i
+                        ><u>{{ $t("blackwhite.list.import_modal.file") }}</u></i
                     ></a
                 ><br />
                 <strong class="m--font-danger"
-                    >{{
-                        $t("spam.spam_patterns.white.import_modal.note")
-                    }}:</strong
+                    >{{ $t("blackwhite.list.import_modal.note") }}:</strong
                 >
                 <a class="m--font-danger">{{
-                    $t("spam.spam_patterns.white.import_modal.wait_import")
+                    $t("blackwhite.list.import_modal.wait_import")
                 }}</a>
             </div>
         </div>
@@ -91,9 +85,7 @@
                                 accept=".xlsx, .xls, .csv"
                             />
                             <label class="custom-file-label" for="file">{{
-                                $t(
-                                    "spam.spam_patterns.white.import_modal.select_file"
-                                )
+                                $t("blackwhite.list.import_modal.select_file")
                             }}</label>
                         </div>
                     </div>
@@ -123,16 +115,11 @@
 </template>
 
 <script>
-import FileUpload from "~/components/common/FileUpload";
 import axios from "axios";
-import {
-    notify,
-    notifyTryAgain,
-    notifyImportSuccess
-} from "~/helpers/bootstrap-notify";
+import { notifyImportSuccess } from "~/helpers/bootstrap-notify";
 export default {
     name: "ListImportModal",
-    components: { FileUpload },
+    components: {},
     props: {
         onActionSuccess: {
             type: Function,
@@ -155,9 +142,6 @@ export default {
             let defaultHeight = 42;
             let text = $(".text");
             let textHeight = text[0].scrollHeight;
-            // let button = $(".button");
-            // let a = true;
-            // text.css({"max-height": defaultHeight, "overflow": "hidden"});
 
             let newHeight = 0;
             if (text.hasClass("active")) {

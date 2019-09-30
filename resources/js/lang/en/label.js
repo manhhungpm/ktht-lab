@@ -13,5 +13,6 @@ export default {
     sms_group: "Sms group",
     sms_type: "Sms type",
     select_day: "Select day",
-    manager: "Manager"
+    manager: "Manager",
+    description: "Description"
 };
