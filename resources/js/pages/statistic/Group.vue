@@ -92,8 +92,8 @@
                         :tooltip-format="'Số lượng:<b> {point.y}%</b>'"
                         :horizontal-margin="92"
                     >
-                    </another-highcharts
-                ></portlet>
+                    </another-highcharts>
+                </portlet>
             </div>
         </div>
     </div>
@@ -104,6 +104,7 @@ import Portlet from "../../components/common/Portlet";
 import AnotherHighcharts from "../../components/common/AnotherHighcharts";
 import HighchartStackedColumn from "../../components/common/HighchartStackedColumn";
 import moment from "moment";
+
 export default {
     name: "Highchart",
     components: { HighchartStackedColumn, AnotherHighcharts, Portlet },
