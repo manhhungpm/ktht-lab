@@ -9,7 +9,6 @@
                         :chart-type="'line'"
                         :plot-options="linePlotOption1"
                         :has-legend="true"
-                        :compare-series="true"
                     ></another-highcharts>
                 </portlet>
             </div>
@@ -18,7 +17,6 @@
 </template>
 
 <script>
-// import Portlet from "../../components/common/Portlet";
 import axios from "axios";
 
 export default {

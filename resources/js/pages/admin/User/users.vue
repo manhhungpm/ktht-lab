@@ -178,9 +178,9 @@ export default {
                     orderable: false,
                     render(data) {
                         if (data === 1) {
-                            return htmlEscapeEntities("Hoạt động");
+                            return '<span class="text-success">Hoạt động</span>';
                         }
-                        return htmlEscapeEntities("Vô hiệu");
+                        return '<span class="text-danger">Vô hiệu</span>';
                     }
                 },
                 {

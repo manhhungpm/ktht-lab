@@ -146,7 +146,6 @@ import {
     notifyAddSuccess,
     notifyNoPermission
 } from "~/helpers/bootstrap-notify";
-import RoleChosen from "../../../../components/elements/chosens/RoleChosen";
 
 const defaultForm = {
     id: "",
@@ -286,21 +285,6 @@ export default {
                 const { data } = res;
 
                 this.roleList = data.data;
-                // const displayName = [
-                //     "A2P",
-                //     "Admin",
-                //     "Brandname",
-                //     "CC",
-                //     "Csp",
-                //     "Politic",
-                //     "Roaming",
-                //     "Root",
-                //     "Sms2way",
-                //     "User"
-                // ];
-                // this.roleList.forEach(function(value, index) {
-                //     value.display_name = displayName[index];
-                // });
             } catch (e) {
                 console.log(e);
             }

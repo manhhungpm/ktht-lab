@@ -80,14 +80,14 @@ class UserController extends Controller
 
     public function edit(EditUserRequest $request)
     {
-        $result = $this->userRepository->editUser($request->only('id', 'display_name', 'email', 'mobile_phone', 'role', 'expired_at', 'who_updated'));
+        $result = $this->userRepository->editUser($request->only('id', 'display_name', 'email', 'mobile_phone', 'role', 'expired_at', 'who_updated', 'version'));
 
         return processCommonResponse($result);
     }
 
     public function updatePassword(Request $request)
     {
-        $result = $this->userRepository->updatePassword($request->only('id','password'));
+        $result = $this->userRepository->updatePassword($request->only('id', 'password'));
 
         return processCommonResponse($result);
     }
