@@ -76,7 +76,8 @@ export default {
         api: "Api Management",
         configs: "Config Management",
         smstopics: "Sms Topic Management",
-        manager: "Manager Management"
+        manager: "Manager Management",
+        role: "Manager Role"
     },
     statistic: {
         title: "Statistic",

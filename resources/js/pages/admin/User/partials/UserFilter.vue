@@ -2,11 +2,11 @@
     <div>
         <div class="row">
             <div class="col-md-4">
-                <label>{{ $t("brandname.list.brandname") }}</label>
+                <label>{{ $t("admin.users.user_name") }}</label>
                 <input
                     v-model="form.name"
                     class="form-control"
-                    :placeholder="$t('brandname.list.placeholder.brandname')"
+                    :placeholder="$t('admin.users.user_name')"
                 />
             </div>
 
@@ -15,7 +15,7 @@
                     v-model="form.status"
                     :type="'select'"
                     :select-options="statusOptions"
-                    :label="this.$t('brandname.list.active')"
+                    :label="this.$t('admin.users.status')"
                 >
                 </form-control>
             </div>

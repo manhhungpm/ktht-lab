@@ -23,7 +23,7 @@ class UserController extends Controller
 
     function __construct(UserRepository $userRepository)
     {
-//        $this->middleware('auth');
+        $this->middleware('auth');
         $this->userRepository = $userRepository;
     }
 
@@ -73,7 +73,7 @@ class UserController extends Controller
 
     public function add(AddUserRequest $request)
     {
-        $result = $this->userRepository->addUser($request->only('name', 'display_name', 'email', 'mobile_phone', 'role', 'expired_at', 'active', 'who_created'));
+        $result = $this->userRepository->addUser($request->only('name', 'display_name', 'email', 'mobile_phone', 'role', 'expired_at', 'active', 'who_created', 'password'));
 
         return processCommonResponse($result);
     }
@@ -81,6 +81,13 @@ class UserController extends Controller
     public function edit(EditUserRequest $request)
     {
         $result = $this->userRepository->editUser($request->only('id', 'display_name', 'email', 'mobile_phone', 'role', 'expired_at', 'who_updated'));
+
+        return processCommonResponse($result);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $result = $this->userRepository->updatePassword($request->only('id','password'));
 
         return processCommonResponse($result);
     }

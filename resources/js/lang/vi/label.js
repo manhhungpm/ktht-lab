@@ -14,5 +14,6 @@ export default {
     sms_type: "Loại tin",
     select_day: "Chọn ngày",
     manager: "Đơn vị quản lý",
-    description: "Mô tả"
+    description: "Mô tả",
+    role: "Vai trò"
 };
