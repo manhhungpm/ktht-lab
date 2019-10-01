@@ -13,5 +13,8 @@ export default {
     sms_group: "Nhóm tin",
     sms_type: "Loại tin",
     select_day: "Chọn ngày",
-    manager: "Đơn vị quản lý"
+    manager: "Đơn vị quản lý",
+    time: "Thời gian",
+    month_start: "Từ tháng",
+    month_end: "Đến tháng"
 };
