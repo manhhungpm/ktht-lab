@@ -9,21 +9,25 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Role\AddRoleRequest;
+use App\Http\Requests\Admin\Role\EditRoleRequest;
 use App\Repositories\Admin\RoleRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
 
 
-class RoleController extends Controller{
+class RoleController extends Controller
+{
     protected $_roleRepository;
 
     function __construct(RoleRepository $roleRepository)
     {
         $this->middleware('auth');
-        $this->_roleRepository = $roleRepository ;
+        $this->_roleRepository = $roleRepository;
     }
 
-    public function listing(Request $request){
+    public function listing(Request $request)
+    {
         $params = getDataTableRequestParams($request);
 
         $total = $this->_roleRepository->getList(
@@ -48,14 +52,14 @@ class RoleController extends Controller{
         return response()->json($arr);
     }
 
-    public function add(Request $request)
+    public function add(AddRoleRequest $request)
     {
         $result = $this->_roleRepository->addRole($request->only('name', 'description'));
 
         return processCommonResponse($result);
     }
 
-    public function edit(Request $request)
+    public function edit(EditRoleRequest $request)
     {
         $result = $this->_roleRepository->editRole($request->only('name', 'description', 'id'));
 
@@ -64,14 +68,14 @@ class RoleController extends Controller{
 
     public function active(IdRequest $request)
     {
-        $result = $this->_roleRepository->setActive($request->only( 'id'));
+        $result = $this->_roleRepository->setActive($request->only('id'));
 
         return processCommonResponse($result);
     }
 
     public function disable(IdRequest $request)
     {
-        $result = $this->_roleRepository->setDisable($request->only( 'id'));
+        $result = $this->_roleRepository->setDisable($request->only('id'));
 
         return processCommonResponse($result);
     }
