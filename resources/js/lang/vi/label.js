@@ -15,5 +15,8 @@ export default {
     select_day: "Chọn ngày",
     manager: "Đơn vị quản lý",
     description: "Mô tả",
-    role: "Vai trò"
+    role: "Vai trò",
+    time: "Thời gian",
+    month_start: "Từ tháng",
+    month_end: "Đến tháng"
 };

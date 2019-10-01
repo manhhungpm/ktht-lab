@@ -15,5 +15,8 @@ export default {
     select_day: "Select day",
     manager: "Manager",
     description: "Description",
-    role: "Role"
+    role: "Role",
+    time: "Time",
+    month_start: "Start month",
+    month_end: "End month",
 };
