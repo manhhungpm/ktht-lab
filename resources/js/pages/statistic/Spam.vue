@@ -5,12 +5,11 @@
                 <portlet title="Báo cáo số lượng cuộc gọi nghi ngờ spam">
                     <another-highcharts
                         :point-width="20"
-                        :series="lineSeries1"
+                        :series="series"
                         :chart-type="'line'"
                         :plot-options="linePlotOption1"
                         :has-legend="true"
                         :compare-series="true"
-                        :categories="lineCategories1"
                     ></another-highcharts>
                 </portlet>
             </div>
@@ -19,31 +18,18 @@
 </template>
 
 <script>
-import Portlet from "../../components/common/Portlet";
-import AnotherHighcharts from "../../components/common/AnotherHighcharts";
+// import Portlet from "../../components/common/Portlet";
+import axios from "axios";
+
 export default {
     name: "Spam",
-    components: { AnotherHighcharts, Portlet },
     middleware: "auth",
     data() {
         return {
-            lineSeries1: [
+            series: [
                 {
                     name: "Nhóm nghi ngờ Spam",
-                    data: [
-                        43934,
-                        52503,
-                        57177,
-                        69658,
-                        97031,
-                        119931,
-                        137133,
-                        154175,
-                        97031,
-                        119931,
-                        137133,
-                        154175
-                    ]
+                    data: []
                 }
             ],
             linePlotOption1: {
@@ -53,22 +39,27 @@ export default {
                     }
                 },
                 enableMouseTracking: false
-            },
-            lineCategories1: [
-                "Tháng 1",
-                "Tháng 2",
-                "Tháng 3",
-                "Tháng 4",
-                "Tháng 5",
-                "Tháng 6",
-                "Tháng 7",
-                "Tháng 8",
-                "Tháng 9",
-                "Tháng 10",
-                "Tháng 11",
-                "Tháng 12"
-            ]
+            }
         };
+    },
+    mounted() {
+        this.getData();
+    },
+    methods: {
+        async getData() {
+            try {
+                const { data } = await axios.post(
+                    "statistic/suspect-spam-chat/get-data"
+                );
+                let seriesData = Object.keys(data.data).map(key => {
+                    return [key, data.data[key]];
+                });
+
+                this.series[0].data = seriesData;
+            } catch (e) {
+                console.log(e);
+            }
+        }
     }
 };
 </script>
