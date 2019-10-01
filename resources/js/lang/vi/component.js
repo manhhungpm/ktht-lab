@@ -10,7 +10,9 @@ export default {
             last_7_days: "7 ngày gần đây",
             last_30_days: "30 ngày gần đây",
             this_month: "Tháng này",
-            last_month: "Tháng trước"
+            last_month: "Tháng trước",
+            this_year: "Năm nay",
+            last_12_months: "12 Tháng gần nhất",
         }
     },
     data_table: {

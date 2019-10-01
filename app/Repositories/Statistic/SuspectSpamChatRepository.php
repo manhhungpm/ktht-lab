@@ -24,15 +24,15 @@ class SuspectSpamChatRepository extends BaseRepository
     public function getData($filter)
     {
         $grid = [];
-        $period = CarbonPeriod::create(Carbon::now()->subYear(), Carbon::now());
+        $period = CarbonPeriod::create($filter['from'], $filter['to']);
         foreach ($period as $dt) {
             $date = $dt->format('m/Y');
             $grid[$date] = 0;
         }
 
         $query = $this->model->select('month', 'value')
-            ->whereDate('month','>=',Carbon::now()->subYear()->startOfMonth())
-            ->whereDate('month','<=',Carbon::now()->startOfMonth())
+            ->whereDate('month','>=',$filter['from'])
+            ->whereDate('month','<=',$filter['to'])
             ->orderBy('month','asc')->get()->each(function ($obj) use (&$grid) {
             $date = Carbon::createFromFormat('Y-m-d', $obj->month)->format('m/Y');
             $grid[$date] = $obj->value;
