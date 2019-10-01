@@ -10,6 +10,7 @@ export default {
         action: "Hành động",
         who_created: "Người tạo",
         when_created: "Thời gian tạo",
-        status: "Trạng thái"
+        status: "Trạng thái",
+        description: "Mô tả"
     }
 };

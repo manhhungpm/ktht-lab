@@ -6,9 +6,8 @@
                     :default-time="defaultTime"
                     :label="$t('label.select_month')"
                     :placeholder="$t('label.select_month_placeholder')"
-                    :export-url="'/brandname/report-month/alias/export'"
                     value-format="yyyy-MM"
-                    :exportable="true"
+                    :exportable="false"
                     type="month"
                     :title="'Thông tin tìm kiếm'"
                     @search="filterTime"
@@ -137,18 +136,12 @@ export default {
                 }
             ],
             plotOptionPie1: {
-                column: {
-                    dataLabels: {
-                        enabled: false
-                    },
-                    minPointLength: 3
-                },
                 pie: {
                     allowPointSelect: true,
                     cursor: "pointer",
                     dataLabels: {
                         style: {
-                            fontSize: "12.5px"
+                            fontSize: "11.5px"
                         }
                     },
                     innerSize: "30%"
@@ -172,7 +165,7 @@ export default {
                     dataLabels: {
                         enabled: false
                     },
-                    minPointLength: 1
+                    minPointLength: 5
                 }
             },
             columnCategories1: ["Tháng 1"],

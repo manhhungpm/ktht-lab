@@ -48,13 +48,13 @@ class ListImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatch
     public function rules(): array
     {
         return [
-//            'alias' => 'required',
-//            'provider' => 'required',
-//            'type' => 'required',
-//            'active' => 'required',
-//            'description' => 'required',
-//            'who_created' => 'required',
-//            'created_at' => 'required',
+            'alias' => 'required',
+            'provider' => 'required',
+            'type' => 'required',
+            'active' => 'required',
+            'description' => 'required',
+            'who_created' => 'required',
+            'created_at' => 'required',
         ];
     }
 

@@ -1,13 +1,13 @@
 <template>
     <div>
-        <portlet :title="$t('admin.manager.title')">
+        <portlet :title="$t('admin.role.title')">
             <v-button
                 slot="tool"
                 color="primary"
                 style-type="air"
                 class="m-btn
                 m-btn--icon"
-                @click.native="addManager"
+                @click.native="addRole"
             >
                 <span>
                     <i class="la la-plus"></i>
@@ -17,24 +17,25 @@
             <data-table
                 ref="table"
                 :columns="columns"
-                url="/admin/manager/listing"
+                url="/admin/role/listing"
                 :fixed-columns-left="1"
                 :fixed-columns-right="2"
                 :actions="actions"
-                :search-placeholder="$t('admin.manager.placeholder.search')"
-                :order-column-index="4"
+                :search-placeholder="$t('admin.role.placeholder.search')"
+                :order-column-index="3"
                 :order-type="'desc'"
             >
             </data-table
         ></portlet>
-        <manager-modal
+        <role-modal
             ref="addModal"
             :on-action-success="updateItemSuccess"
-        ></manager-modal>
+        ></role-modal>
     </div>
 </template>
 
 <script>
+import RoleModal from "./partials/RoleModal";
 import bootbox from "bootbox";
 import axios from "axios";
 import {
@@ -47,11 +48,10 @@ import {
     notifyActiveSuccess,
     notifyDisableSuccess
 } from "~/helpers/bootstrap-notify";
-import ManagerModal from "./partials/ManagerModal";
 import Portlet from "../../../components/common/Portlet";
 export default {
-    name: "Managers",
-    components: { Portlet, ManagerModal },
+    name: "Roles",
+    components: { RoleModal, Portlet },
     middleware: "auth",
     data() {
         return {};
@@ -61,23 +61,13 @@ export default {
             return [
                 {
                     data: "name",
-                    title: this.$t("admin.manager.name")
+                    title: this.$t("admin.role.name")
                 },
                 {
                     data: "description",
-                    title: this.$t("admin.manager.description"),
+                    title: this.$t("admin.role.description"),
                     orderable: false,
                     className: "wrap-text"
-                },
-                {
-                    data: "who_updated",
-                    title: this.$t("datatable.column.who_updated"),
-                    orderable: false,
-                    render(data) {
-                        if (data != null) {
-                            return data;
-                        } else return "-";
-                    }
                 },
                 {
                     data: "updated_at",
@@ -87,11 +77,6 @@ export default {
                             return data;
                         } else return "-";
                     }
-                },
-                {
-                    data: "who_created",
-                    title: this.$t("datatable.column.who_created"),
-                    orderable: false
                 },
                 {
                     data: "created_at",
@@ -164,7 +149,7 @@ export default {
         updateItemSuccess() {
             this.$refs.table.reload();
         },
-        addManager() {
+        addRole() {
             this.$refs.addModal.show();
         },
         handleEdit(table, rowData) {
@@ -189,7 +174,7 @@ export default {
                 },
                 callback: async function(result) {
                     if (result) {
-                        let res = await axios.post("/admin/manager/active", {
+                        let res = await axios.post("/admin/role/active", {
                             id: rowData.id
                         });
                         const { data } = res;
@@ -223,7 +208,7 @@ export default {
                 },
                 callback: async function(result) {
                     if (result) {
-                        let res = await axios.post("/admin/manager/disable", {
+                        let res = await axios.post("/admin/role/disable", {
                             id: rowData.id
                         });
                         const { data } = res;

@@ -76,7 +76,8 @@ export default {
         api: "Quản lý API",
         configs: "Quản lý cấu hình",
         smstopics: "Quản lý Sms Topic",
-        manager: "Đơn vị quản lý"
+        manager: "Đơn vị quản lý",
+        role: "Quản lý vai trò"
     },
     statistic: {
         title: "Báo cáo",

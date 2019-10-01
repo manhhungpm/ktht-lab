@@ -7,6 +7,9 @@ export default {
         add_user: "Add user",
         edit_user: "Edit user",
         full_name: "Full name",
+        password: "Password",
+        repassword: "Password Confirmation",
+        renew_password: "Renew Password",
         email: "Email",
         phone: "Phone number",
         expired_at: "Epired at",
@@ -44,7 +47,8 @@ export default {
             display_name: "Enter full name",
             email: "Enter email",
             phone: "Enter phone number",
-            datetime: "Select a datetime"
+            datetime: "Select a datetime",
+            password: "Enter password"
         }
     },
     api: {
@@ -169,6 +173,18 @@ export default {
         description: "Description",
         placeholder: {
             search: "Enter name",
+            name: "Enter name",
+            description: "Enter description"
+        }
+    },
+    role: {
+        add: "Add role",
+        edit: "Edit role",
+        title: "List role",
+        name: "Name",
+        description: "Description",
+        placeholder: {
+            search: "Enter role name",
             name: "Enter name",
             description: "Enter description"
         }

@@ -25,7 +25,7 @@ class RoleRepository extends BaseRepository
             ->where('name', 'LIKE', "%$keyword%");
 
         if (!$counting) {
-            $query->select('id','name');
+            $query->select('id', 'name', 'active', 'updated_at', 'created_at', 'description');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);
@@ -40,5 +40,59 @@ class RoleRepository extends BaseRepository
 
         return $query->get();
 
+    }
+
+    public function addRole($arr)
+    {
+        $query = $this->model;
+        $arr['active'] = '1';
+        $query->fill($arr);
+        return $query->save();
+    }
+
+    public function editRole($arr)
+    {
+        $query = $this->model->find($arr['id']);
+        if ($query != null) {
+            $query->fill($arr);
+            if ($query->save()) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public function setActive($id)
+    {
+        $query = $this->model->where('id', $id);
+        if ($query) {
+            $query->update(['active' => 1]);
+            return $query;
+        }
+    }
+
+    public function setDisable($id)
+    {
+        $query = $this->model->where('id', $id);
+        if ($query) {
+            $query->update(['active' => 0]);
+            return $query;
+        }
+    }
+
+    public function listingAll($isCounting = false, $keyword = null, $limit = 10, $offset = 0)
+    {
+        $query = Role::where('name', 'LIKE', "%$keyword%")->where('active', ACTIVE);
+        if (!$isCounting) {
+            $query->select('id', 'name')
+                ->skip($offset)
+                ->take($limit)
+                ->orderBy('name', 'asc');
+        } else {
+            return $query->count();
+        }
+
+        return $query->get();
     }
 }
