@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Statistic;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Spam\SpamPatternRepository;
-use App\Repositories\Spam\SpamPatternsWarningRepository;
-use App\Repositories\Spam\SpamPhoneRepository;
 use App\Repositories\Statistic\SuspectSpamChatRepository;
 use Illuminate\Http\Request;
 use App\Exports\Spam\SpamPatterns\WarningExport;
@@ -31,10 +28,11 @@ class SuspectSpamChatController extends Controller
         $this->suspectSpamChatRepository = $suspectSpamChatRepository;
     }
 
-    function listing(Request $request){
+    function getData(Request $request){
+
         $arr = [
             'code' => CODE_SUCCESS,
-            'data' => $this->suspectSpamChatRepository->listing($request->only('from', 'to'))
+            'data' => $this->suspectSpamChatRepository->getData($request->only('from', 'to'))
         ];
         return response()->json($arr);
     }
