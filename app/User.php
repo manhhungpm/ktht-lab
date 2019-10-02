@@ -54,7 +54,7 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    protected $dateFormat = 'Y-m-d H:i:s.u';
+    protected $dateFormat = 'Y-m-d H:i:s';
 
     const UPDATED_AT = 'when_updated';
     const CREATED_AT = 'when_created';
