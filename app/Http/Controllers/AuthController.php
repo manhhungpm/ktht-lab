@@ -111,7 +111,7 @@ class AuthController extends Controller
             ], 401);
         }
 //        event(new LoggedIn(auth()->user(), $request->ip()));
-        if(Carbon::createFromFormat('Y-m-d H:i:s.u', auth()->user()->expired_at)->lt(Carbon::now())){
+        if(Carbon::createFromFormat('Y-m-d H:i:s', auth()->user()->expired_at)->lt(Carbon::now())){
             return response()->json([
                 'code' => CODE_ERROR,
                 'message' =>  'Tài khoản hết hạn'

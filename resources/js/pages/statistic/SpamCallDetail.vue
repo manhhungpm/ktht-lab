@@ -1,26 +1,38 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-12">
-                <time-range-filter
-                    :title="$t('label.search_information')"
-                    :default-filter="defaultTime"
-                    :exportable="false"
-                    :export-url="'/brandname/report-day/alias/export'"
-                    :rules-validate="''"
-                    :name-shortcut="['last_7_days', 'last_30_days']"
-                    :disabled-date="'greaterThanToday'"
-                    @search="filterTime"
-                >
-                </time-range-filter>
+            <!--<time-range-filter-->
+            <!--:title="$t('label.search_information')"-->
+            <!--:default-filter="defaultTime"-->
+            <!--:exportable="false"-->
+            <!--:export-url="'/brandname/report-day/alias/export'"-->
+            <!--:rules-validate="''"-->
+            <!--:name-shortcut="['last_7_days', 'last_30_days']"-->
+            <!--:disabled-date="'greaterThanToday'"-->
+            <!--@search="filterTime"-->
+            <!--&gt;-->
+            <!--</time-range-filter>-->
+            <div class="col-5" align="right">
+                <label style="margin-top: 10px">Chọn khoảng thời gian</label>
+            </div>
+            <div class="col-2">
+                <form-control
+                    v-model="timeFilter"
+                    name="typeId"
+                    :type="'select'"
+                    :select-options="timeOptions"
+                    :has-all-options="'true'"
+                ></form-control>
             </div>
             <div class="col-12">
                 <portlet title="Báo cáo chi tiết">
                     <data-table
+                        ref="table"
                         :columns="columns"
-                        url="/admin/user/listing"
-                    ></data-table
-                ></portlet>
+                        url="/statistic/msisdn-summary-type/listing"
+                        :post-data="tableFilter"
+                    ></data-table>
+                </portlet>
             </div>
         </div>
     </div>
@@ -29,32 +41,36 @@
 <script>
 import Portlet from "../../components/common/Portlet";
 import DataTable from "../../components/common/DataTable";
-import moment from "moment";
+import { THREE_DAYS, SEVEN_DAYS, THIRTY_DAY } from "../../constants/constant";
+import FormControl from "../../components/common/FormControl";
 
 export default {
     name: "SpamCallDetail",
-    components: { DataTable, Portlet },
+    components: { FormControl, DataTable, Portlet },
     data() {
         return {
-            defaultTime: {
-                time: [
-                    moment()
-                        .startOf("day")
-                        .subtract(1, "days")
-                        .format("YYYY-MM-DD HH:mm:ss"),
-                    moment()
-                        .startOf("day")
-                        .format("YYYY-MM-DD HH:mm:ss")
+            timeFilter: {},
+            timeOptions: {
+                placeholder: "Chọn thời gian",
+                multiple: false,
+                searchable: false,
+                options: [
+                    {
+                        id: 1,
+                        text: "3 ngày"
+                    },
+                    {
+                        id: 2,
+                        text: "7 ngày"
+                    },
+                    {
+                        id: 3,
+                        text: "30 ngày"
+                    }
                 ]
             },
             tableFilter: {
-                from: moment()
-                    .startOf("day")
-                    .subtract(1, "days")
-                    .format("YYYY-MM-DD HH:mm:ss"),
-                to: moment()
-                    .startOf("day")
-                    .format("YYYY-MM-DD HH:mm:ss")
+                duration_type_id: null
             }
         };
     },
@@ -62,35 +78,61 @@ export default {
         columns() {
             return [
                 {
-                    data: "mobile_phone",
+                    data: "msisdn",
                     title: "Số điện thoại"
                 },
                 {
-                    data: "active",
+                    data: "num_call_out",
                     title: "Tổng số cuộc gọi ra"
                 },
                 {
-                    data: "active",
+                    data: "duration_type.label",
+                    title: "Khoảng thời gian",
+                    render(data) {
+                        if (data != null) {
+                            var day = "";
+                            switch (parseInt(data)) {
+                                case THREE_DAYS:
+                                    day = "3 ngày";
+                                    break;
+                                case SEVEN_DAYS:
+                                    day = "7 ngày";
+                                    break;
+                                case THIRTY_DAY:
+                                    day = "30 ngày";
+                                    break;
+                            }
+                            return day;
+                        } else return "-";
+                    }
+                },
+                {
+                    data: "sum_duration_call_out",
                     title: "Tổng thời lượng cuộc gọi ra (phút)"
                 },
                 {
-                    data: "active",
+                    data: "num_call_label_spam",
                     title: "Tổng số cuộc gọi được gán nhãn spam"
                 },
                 {
-                    data: "active",
+                    data: "num_call_label_not_spam",
                     title: "Tổng số cuộc gọi gán nhãn không spam"
                 },
                 {
-                    data: "active",
+                    data: "num_call_not_label",
                     title: "Tổng số cuộc gọi không gán nhãn"
                 }
             ];
         }
     },
+    watch: {
+        timeFilter(data) {
+            this.filterTime(data);
+        }
+    },
     methods: {
         async filterTime(data) {
-            this.tableFilter = data;
+            this.tableFilter.duration_type_id = data.id;
             await this.$nextTick();
             this.loadData();
         },
@@ -101,4 +143,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.time-filter {
+    margin: auto;
+    margin-bottom: 15px;
+}
+</style>

@@ -23,3 +23,8 @@ export const PROVIDER_OTHER = "other";
 
 export const TYPE_BLACKLIST = 0;
 export const TYPE_WHITELIST = 1;
+
+//Man hinh bao cao msidn duration type
+export const THREE_DAYS = 3;
+export const SEVEN_DAYS = 7;
+export const THIRTY_DAY = 30;
