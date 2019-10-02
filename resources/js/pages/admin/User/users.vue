@@ -69,6 +69,10 @@
                 ref="addModal"
                 :on-action-success="updateItemSuccess"
             ></user-modal>
+            <renew-password-modal
+                ref="renewPasswordModal"
+                :on-action-success="updateItemSuccess"
+            ></renew-password-modal>
         </div>
     </div>
 </template>
@@ -93,9 +97,17 @@ import {
 } from "~/helpers/bootstrap-notify";
 import bootbox from "bootbox";
 import UserFilter from "./partials/UserFilter";
+import RenewPasswordModal from "./partials/RenewPasswordModal";
+import i18n from "~/plugins/i18n";
 
 export default {
-    components: { UserFilter, FormControl, ThePortlet, DataTable, UserModal },
+    components: {
+        RenewPasswordModal,
+        UserFilter,
+        ThePortlet,
+        DataTable,
+        UserModal
+    },
     middleware: "auth",
     head() {
         return {
@@ -141,6 +153,11 @@ export default {
                     type: "click",
                     name: "handleActive",
                     action: this.handleActive
+                },
+                {
+                    type: "click",
+                    name: "handlePassword",
+                    action: this.handlePassword
                 }
             ];
         },
@@ -161,9 +178,9 @@ export default {
                     orderable: false,
                     render(data) {
                         if (data === 1) {
-                            return htmlEscapeEntities("Hoạt động");
+                            return '<span class="text-success">Hoạt động</span>';
                         }
-                        return htmlEscapeEntities("Vô hiệu");
+                        return '<span class="text-danger">Vô hiệu</span>';
                     }
                 },
                 {
@@ -191,7 +208,12 @@ export default {
                 {
                     data: "who_updated",
                     title: this.$t("datatable.column.who_updated"),
-                    orderable: false
+                    orderable: false,
+                    render(data) {
+                        if (data != null) {
+                            return data;
+                        } else return "-";
+                    }
                 },
                 {
                     data: "when_updated",
@@ -199,7 +221,7 @@ export default {
                     render(data) {
                         if (data != null) {
                             return formatDate(data);
-                        }
+                        } else return "-";
                     }
                 },
                 {
@@ -221,12 +243,28 @@ export default {
                         if (data.active === 1) {
                             return (
                                 generateTableAction("edit", "handleEdit") +
-                                generateTableAction("disable", "handleDisable")
+                                generateTableAction(
+                                    "disable",
+                                    "handleDisable"
+                                ) +
+                                generateTableAction(
+                                    "",
+                                    "handlePassword",
+                                    "warning",
+                                    "la-lock",
+                                    i18n.t("button.renew_password")
+                                )
                             );
                         } else
-                            return generateTableAction(
-                                "active",
-                                "handleActive"
+                            return (
+                                generateTableAction("active", "handleActive") +
+                                generateTableAction(
+                                    "renewPassword",
+                                    "handlePassword",
+                                    "warning",
+                                    "la-lock",
+                                    i18n.t("button.renew_password")
+                                )
                             );
                     }
                 }
@@ -266,6 +304,9 @@ export default {
         },
         handleEdit(table, rowData) {
             this.$refs.addModal.show(rowData);
+        },
+        handlePassword(table, rowData) {
+            this.$refs.renewPasswordModal.show(rowData);
         },
         addUser() {
             this.$refs.addModal.show();

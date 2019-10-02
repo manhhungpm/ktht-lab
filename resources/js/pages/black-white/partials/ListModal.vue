@@ -1,7 +1,7 @@
 <template>
     <modal
         ref="modal"
-        :title="isEdit ? 'Chỉnh sửa' : 'Thêm mới'"
+        :title="isEdit ? $t('blackwhite.list.edit') : $t('blackwhite.list.add')"
         :on-hidden="onModalHidden"
     >
         <form
@@ -12,17 +12,17 @@
                 v-model="form.alias"
                 v-validate="'required|max:15'"
                 name="alias"
-                :label="'Đầu số'"
-                :placeholder="'Nhập đầu số'"
+                :label="$t('blackwhite.list.alias')"
+                :placeholder="$t('blackwhite.list.placeholder.alias')"
                 :error="errors.first('alias') || form.errors.get('alias')"
                 :required="true"
-                :data-vv-as="'Nhập đầu số'"
+                :data-vv-as="$t('blackwhite.list.placeholder.alias')"
             ></form-control>
             <form-control
                 v-model="form.typeId"
                 v-validate="'required'"
-                :label="'Loại đầu số'"
-                :data-vv-as="'Nhập loại đầu số'"
+                :label="$t('blackwhite.list.type')"
+                :data-vv-as="$t('blackwhite.list.placeholder.type')"
                 :required="true"
                 name="typeId"
                 :type="'select'"
@@ -32,8 +32,8 @@
             <form-control
                 v-model="form.providerId"
                 v-validate="'required'"
-                :label="'Nhà mạng'"
-                :data-vv-as="'Nhập nhà mạng'"
+                :label="$t('blackwhite.list.provider')"
+                :data-vv-as="$t('blackwhite.list.placeholder.provider')"
                 :required="true"
                 name="providerId"
                 :type="'select'"
@@ -54,15 +54,15 @@
                 v-model="form.description"
                 v-validate="'max:255'"
                 :type="'area'"
-                :label="'Mô tả'"
-                :placeholder="'Nhập mô tả'"
+                :label="$t('label.description')"
+                :placeholder="$t('blackwhite.list.placeholder.description')"
                 name="description"
             ></form-control>
             <form-control
                 v-model="form.url"
                 name="url"
-                :label="'Link upload file PYC'"
-                :data-vv-as="'Nhập link'"
+                :label="$t('blackwhite.list.url')"
+                :data-vv-as="$t('blackwhite.list.placeholder.url')"
             ></form-control>
         </form>
         <template slot="footer">
@@ -77,8 +77,8 @@
 </template>
 
 <script>
-import Modal from "../../../components/common/Modal";
-import FormControl from "../../../components/common/FormControl";
+import Modal from "~/components/common/Modal";
+import FormControl from "~/components/common/FormControl";
 import ManagerChosen from "~/components/elements/chosens/ManagerChosen";
 import Form from "vform";
 import {
@@ -132,7 +132,7 @@ export default {
             formLabelWidth: FORM_LABEL_WIDTH_LARGE,
             isEdit: false,
             typeOptions: {
-                placeholder: "Chọn loại",
+                placeholder: this.$t("blackwhite.list.placeholder.type"),
                 multiple: false,
                 searchable: false,
                 options: [
@@ -147,7 +147,7 @@ export default {
                 ]
             },
             providerOptions: {
-                placeholder: "Chọn nhà cung cấp",
+                placeholder: this.$t("blackwhite.list.placeholder.provider"),
                 multiple: false,
                 searchable: false,
                 options: [
@@ -227,9 +227,7 @@ export default {
                 const { data } = res;
 
                 if (data.code === SUCCESS) {
-                    notifyUpdateSuccess(
-                        this.$t("brandname.list.notification.edit_success")
-                    );
+                    notifyUpdateSuccess();
                     this.closeModal();
                     this.onActionSuccess();
                 } else {
@@ -253,9 +251,7 @@ export default {
                 const { data } = res;
 
                 if (data.code === SUCCESS) {
-                    notifyAddSuccess(
-                        this.$t("brandname.list.notification.add_success")
-                    );
+                    notifyAddSuccess();
                     this.closeModal();
                     this.onActionSuccess();
                 } else {

@@ -15,6 +15,8 @@ const User = () =>
     import("~/pages/admin/User/users.vue").then(m => m.default || m);
 const Manager = () =>
     import("~/pages/admin/Manager/managers.vue").then(m => m.default || m);
+const Role = () =>
+    import("~/pages/admin/Role/roles.vue").then(m => m.default || m);
 
 //Highchart
 const StatisticGroup = () =>
@@ -55,6 +57,12 @@ export default {
         path: "/admin/managers",
         name: "admin.manager",
         component: Manager
+    },
+
+    role: {
+        path: "/admin/roles",
+        name: "admin.role",
+        component: Role
     },
 
     //Statistic route

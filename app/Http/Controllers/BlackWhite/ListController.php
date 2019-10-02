@@ -12,13 +12,13 @@ use Maatwebsite\Excel\Excel;
 
 class ListController extends Controller
 {
-    protected $listRepository;
+    protected $_listRepository;
     protected $_excel;
 
     public function __construct(ListRepository $listRepository, Excel $excel)
     {
         $this->middleware('auth');
-        $this->listRepository = $listRepository;
+        $this->_listRepository = $listRepository;
         $this->_excel = $excel;
     }
 
@@ -27,7 +27,7 @@ class ListController extends Controller
         $params = getDataTableRequestParams($request);
         $searchParams = $request->only('type', 'manager', 'provider', 'who_created', 'created_at', 'who_updated', 'updated_at');
 
-        $total = $this->listRepository->getList(
+        $total = $this->_listRepository->getList(
             $params['keyword'],
             $searchParams,
             true
@@ -35,7 +35,7 @@ class ListController extends Controller
 
         $arr = array(
             'recordsTotal' => $total,
-            'data' => $this->listRepository->getList(
+            'data' => $this->_listRepository->getList(
                 $params['keyword'],
                 $searchParams,
                 false,
@@ -53,28 +53,28 @@ class ListController extends Controller
 
     public function add(Request $request)
     {
-        $result = $this->listRepository->addAlias($request->only('alias', 'type', 'provider', 'manager', 'description', 'url'));
+        $result = $this->_listRepository->addAlias($request->only('alias', 'type', 'provider', 'manager', 'description', 'url'));
 
         return processCommonResponse($result);
     }
 
     public function edit(Request $request)
     {
-        $result = $this->listRepository->editAlias($request->only('id', 'alias', 'type', 'provider', 'manager', 'description', 'url'));
+        $result = $this->_listRepository->editAlias($request->only('id', 'alias', 'type', 'provider', 'manager', 'description', 'url'));
 
         return processCommonResponse($result);
     }
 
     public function active(Request $request)
     {
-        $result = $this->listRepository->setActive($request->input('id'));
+        $result = $this->_listRepository->setActive($request->input('ids'));
 
         return processCommonResponse($result);
     }
 
     public function disable(Request $request)
     {
-        $result = $this->listRepository->setDisable($request->input('id'));
+        $result = $this->_listRepository->setDisable($request->input('ids'));
 
         return processCommonResponse($result);
     }

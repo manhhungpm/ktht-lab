@@ -12,11 +12,11 @@
                     <div class="m-grid__item m-grid__item--middle">
                         <span class="m-login__title"
                             >Chào mừng bạn đến với hệ thống <br />
-                            SMS Firewall
+                            AntiSpam Call
                         </span>
                         <span class="m-login__subtitle"
-                            >Cung cấp các tính năng nghiệp vụ về hệ thống SMS
-                            Firewall</span
+                            >Cung cấp các tính năng nghiệp vụ về hệ thống
+                            AntiSpam Call</span
                         >
                     </div>
                 </div>
@@ -24,7 +24,7 @@
                     <div class="m-login__info">
                         <div class="m-login__section">
                             <router-link to="/" class="m-link"
-                                >© 2019 SMS Firewall</router-link
+                                >© 2019 AntiSpam Call</router-link
                             >
                         </div>
                         <div class="m-login__section">

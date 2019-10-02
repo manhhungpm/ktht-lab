@@ -55,7 +55,6 @@
                 v-validate="'required'"
                 :label="$t('admin.users.phone')"
                 name="mobile_phone"
-                autocomplete="off"
                 :placeholder="$t('admin.users.placeholder.phone')"
                 :error="
                     errors.first('mobile_phone') ||
@@ -65,6 +64,17 @@
                 :data-vv-as="$t('admin.users.placeholder.phone')"
             >
             </form-control>
+            <form-control
+                v-if="!isEdit"
+                v-model="form.password"
+                v-validate="'required|isPassword:true'"
+                type="password"
+                :label="$t('admin.users.password')"
+                name="password"
+                :placeholder="$t('admin.users.placeholder.password')"
+                :error="errors.first('password') || form.errors.get('password')"
+                :required="true"
+            ></form-control>
             <form-control
                 v-model="form.role"
                 v-validate="'required'"
@@ -78,7 +88,6 @@
                 :data-vv-as="$t('admin.users.placeholder.select_role')"
             >
             </form-control>
-
             <div
                 class="form-group m-form__group"
                 :class="{
@@ -137,7 +146,6 @@ import {
     notifyAddSuccess,
     notifyNoPermission
 } from "~/helpers/bootstrap-notify";
-import TheDateRange from "../../../../components/common/TheDateRange";
 
 const defaultForm = {
     id: "",
@@ -148,12 +156,14 @@ const defaultForm = {
     role: [],
     expired_at: "",
     who_created: "",
-    who_updated: ""
+    who_updated: "",
+    password: null,
+    test: null
 };
 
 export default {
     name: "UserModal",
-    components: { TheDateRange, FormControl },
+    components: { FormControl },
     props: {
         onActionSuccess: {
             type: Function,
@@ -183,14 +193,10 @@ export default {
     methods: {
         show(item = null) {
             if (item != null) {
-                this.isEdit = true;
-
                 var role_id = [];
-
                 for (var i = 0; i < item.user_role.length; i++) {
                     role_id.push(item.user_role[i].role_id);
                 }
-
                 item.role = role_id.map(x => {
                     return {
                         id: x
@@ -198,11 +204,7 @@ export default {
                 });
 
                 this.form = new Form(item);
-            } else {
-                // const roleUser = 3;
-                // this.form.role[0] = {
-                //     id: roleUser
-                // };
+                this.isEdit = true;
             }
             this.$refs.modal.show();
         },
@@ -283,21 +285,6 @@ export default {
                 const { data } = res;
 
                 this.roleList = data.data;
-                // const displayName = [
-                //     "A2P",
-                //     "Admin",
-                //     "Brandname",
-                //     "CC",
-                //     "Csp",
-                //     "Politic",
-                //     "Roaming",
-                //     "Root",
-                //     "Sms2way",
-                //     "User"
-                // ];
-                // this.roleList.forEach(function(value, index) {
-                //     value.display_name = displayName[index];
-                // });
             } catch (e) {
                 console.log(e);
             }

@@ -10,6 +10,7 @@ export default {
         action: "Action",
         who_created: "Who created",
         when_created: "When created",
-        status: "Status"
+        status: "Status",
+        description: "Description"
     }
 };

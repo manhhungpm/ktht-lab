@@ -14,6 +14,8 @@ export default {
     sms_type: "Sms type",
     select_day: "Select day",
     manager: "Manager",
+    description: "Description",
+    role: "Role",
     time: "Time",
     month_start: "Start month",
     month_end: "End month",

@@ -40,15 +40,15 @@ class ListExport implements FromCollection, WithHeadings, ShouldAutoSize, WithEv
         return
             [
                 trans('common.table.index'),
-                "Đầu số",
-                "Loại đầu số",
-                "Nhà mạng",
-                "Đơn vị quản lý",
-                "Mô tả",
-                "Người cập nhật",
-                "Thời gian cập nhật",
-                "Người tạo",
-                "Thời gian tạo",
+                trans('blackwhite.alias'),
+                trans('blackwhite.type'),
+                trans('blackwhite.provider'),
+                trans('blackwhite.manager'),
+                trans('common.table.description'),
+                trans('common.table.who_updated'),
+                trans('common.table.when_updated'),
+                trans('common.table.who_created'),
+                trans('common.table.when_created'),
             ];
     }
 

@@ -7,6 +7,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use \phpCAS;
 
@@ -101,7 +102,6 @@ class AuthController extends Controller
             $this->fireLockoutEvent($request);
             return response()->json(['code' => CODE_ERROR,'message' => 'Đăng nhập thất bại quá nhiều. Đợi '.$this->decayMinutes.' phút để thử lại'], 400);
         }
-
 
         if (!$token = auth()->attempt($credentials)) {
             $this->incrementLoginAttempts($request);

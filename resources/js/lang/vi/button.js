@@ -20,5 +20,7 @@ export default {
     resend: "Gửi lại",
     delete: "Xóa",
     show_history: "Xem lịch sử",
-    import: "Nhập file"
+    import: "Nhập file",
+    update: "Cập nhật",
+    renew_password: "Đổi mật khẩu"
 };

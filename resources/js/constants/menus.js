@@ -17,6 +17,10 @@ export default [
                 route: "/admin/users"
             },
             {
+                title: "menu.admin.role",
+                route: "/admin/roles"
+            },
+            {
                 title: "menu.admin.manager",
                 route: "/admin/managers"
             }

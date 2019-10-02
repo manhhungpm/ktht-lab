@@ -32,8 +32,8 @@ class ListRepository extends BaseRepository
                     }
                     break;
                 case 'manager':
-                    if(isset($item)){
-                        $query->whereIn('manager_id',$item);
+                    if (isset($item)) {
+                        $query->whereIn('manager_id', $item);
                     }
                     break;
                 case 'who_created':
@@ -99,17 +99,17 @@ class ListRepository extends BaseRepository
         return false;
     }
 
-    public function setActive($id)
+    public function setActive($ids): bool
     {
-        $query = $this->model->where('id', $id);
+        $query = $this->model->whereIn('id', $ids);
 
         $result = $query->update(['active' => ACTIVE]);
         return $result;
     }
 
-    public function setDisable($id)
+    public function setDisable($ids): bool
     {
-        $query = $this->model->whereIn('id', $id);
+        $query = $this->model->whereIn('id', $ids);
 
         $result = $query->update(['active' => INACTIVE]);
         return $result;

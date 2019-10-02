@@ -10,9 +10,9 @@ class Role extends Model
 {
     use RoleTrait;
 
-    protected $fillable = ['name','active','id'];
-    protected $hidden = ['pivot'];
-    public $timestamps = false;
+    protected $fillable = ['name', 'active', 'id', 'created_at', 'updated_at', 'description'];
+
+    public $timestamps = true;
 
     //CONST
     public const A2P = 'a2p';
@@ -27,7 +27,7 @@ class Role extends Model
 
     public function userRole()
     {
-        return $this->hasMany(UserRole::class,'role_id');
+        return $this->hasMany(UserRole::class, 'role_id');
     }
 
 

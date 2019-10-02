@@ -6,7 +6,9 @@ export default {
         user_name: "Tên tài khoản",
         add_user: "Thêm tài khoản",
         edit_user: "Cập nhật tài khoản",
-        manage1: "manage1",
+        password: "Mật khẩu",
+        repassword: "Nhập lại password",
+        renew_password: "Thay đổi mật khẩu",
         full_name: "Họ tên",
         email: "Email",
         phone: "Điện thoại",
@@ -45,7 +47,8 @@ export default {
             display_name: "Nhập tên họ tên đầy đủ",
             email: "Nhập email",
             phone: "Nhập số điện thoại",
-            datetime: "Chọn thời gian"
+            datetime: "Chọn thời gian",
+            password: "Nhập mật khẩu"
         }
     },
     api: {
@@ -176,6 +179,18 @@ export default {
         placeholder: {
             search: "Nhập từ khóa tìm kiếm",
             name: "Nhập tên",
+            description: "Nhập mô tả"
+        }
+    },
+    role: {
+        add: "Thêm mới vai trò",
+        edit: "Cập nhật vai trò",
+        title: "Danh sách vai trò",
+        name: "Tên vai trò",
+        description: "Mô tả",
+        placeholder: {
+            search: "Nhập tên vai trò",
+            name: "Nhập tên vai trò",
             description: "Nhập mô tả"
         }
     }
