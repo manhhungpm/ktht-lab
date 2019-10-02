@@ -56,7 +56,7 @@ import { SUCCESS } from "~/constants/code";
 import {
     notifyTryAgain,
     notifyUpdateSuccess,
-    notifyAddSuccess,
+    notifyAddSuccess
 } from "~/helpers/bootstrap-notify";
 
 const defaultForm = {

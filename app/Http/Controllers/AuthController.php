@@ -234,7 +234,7 @@ class AuthController extends Controller
 
     protected function initCas()
     {
-        $cas_host = env('CAS_HOST', '10.60.156.97:8225');
+        $cas_host = env('CAS_HOST', 'https://sso2.viettel.vn:8001');
         $cas_context = env('CAS_CONTEXT', '/sso');
         $cas_port = 443;
 
