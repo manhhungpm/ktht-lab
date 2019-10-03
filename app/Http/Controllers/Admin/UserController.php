@@ -13,6 +13,7 @@ use App\Http\Requests\Admin\User\ActiveUserRequest;
 use App\Http\Requests\Admin\User\AddUserRequest;
 use App\Http\Requests\Admin\User\DisableUserRequest;
 use App\Http\Requests\Admin\User\EditUserRequest;
+use App\Http\Requests\Admin\User\UpdatePasswordRequest;
 use App\Http\Requests\Common\IdRequest;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -85,7 +86,7 @@ class UserController extends Controller
         return processCommonResponse($result);
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(UpdatePasswordRequest $request)
     {
         $result = $this->userRepository->updatePassword($request->only('id', 'password'));
 

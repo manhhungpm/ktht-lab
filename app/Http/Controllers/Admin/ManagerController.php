@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Manager\AddManagerRequest;
+use App\Http\Requests\Admin\Manager\EditManagerRequest;
 use App\Repositories\Admin\ManagerRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
@@ -43,14 +45,14 @@ class ManagerController extends Controller
         return response()->json($arr);
     }
 
-    public function add(Request $request)
+    public function add(AddManagerRequest $request)
     {
         $result = $this->managerRepository->addManager($request->only('name', 'description'));
 
         return processCommonResponse($result);
     }
 
-    public function edit(Request $request)
+    public function edit(EditManagerRequest $request)
     {
         $result = $this->managerRepository->editManager($request->only('name', 'description', 'id'));
 
