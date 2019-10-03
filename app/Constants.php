@@ -3,6 +3,8 @@
 define('CODE_SUCCESS', 0);
 define('CODE_ERROR', 1);
 
+define('MEDIA_PENDING', 0);
+
 //lỗi kích hoạt cấu hình khi loại tin đang vô hiệu
 define('CODE_ERROR_ACTIVE_CONFIG_WHEN_SMS_TYPE_DISABLE', 2);
 

@@ -254,18 +254,27 @@ export default {
                     }
                 },
                 {
-                    data: "url",
-                    title: this.$t("blackwhite.list.url"),
-                    className: "text-center",
-                    orderable: false,
+                    data: "file",
+                    title: this.$t("blackwhite.list.file"),
+                    className: "tb-actions",
+                    width: "150px",
                     render(data) {
-                        if (data != null) {
-                            return (
-                                '<a title="Download phiếu yêu cầu" href="' +
-                                data +
-                                '"><span class="la la-download"></span></a>'
-                            );
-                        } else return "-";
+                        if (data == null || data == "[]") {
+                            return "-";
+                        } else {
+                            let files = JSON.parse(data);
+                            let filenameList = "";
+                            for (let i = 0; i < files.length; i++) {
+                                filenameList =
+                                    filenameList +
+                                    `<p>${i + 1}. <a href="/storage/${
+                                        files[i].path
+                                    }" target="_blank">${
+                                        files[i].name
+                                    }</a></p>`;
+                            }
+                            return filenameList;
+                        }
                     }
                 },
                 {
@@ -443,4 +452,4 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style></style>

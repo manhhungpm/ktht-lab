@@ -309,7 +309,7 @@ export default {
                     setTimeout(() => {
                         $this.relayout();
                         $this.updateDataTableSelectAllCtrl();
-                    }, 100);
+                    }, 200);
                 },
                 initComplete: function() {}
             };

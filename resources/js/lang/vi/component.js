@@ -12,7 +12,7 @@ export default {
             this_month: "Tháng này",
             last_month: "Tháng trước",
             this_year: "Năm nay",
-            last_12_months: "12 Tháng gần nhất",
+            last_12_months: "12 Tháng gần nhất"
         }
     },
     data_table: {
@@ -23,5 +23,11 @@ export default {
         range_separator: "-",
         start_placeholder: "Từ giờ",
         end_placeholder: "Đến giờ"
+    },
+    dropzone: {
+        title: "Chọn tập tin để tải lên",
+        desc: "Bạn có thể kéo thả hoặc nhấn vào để chọn",
+        allowed_extension: "Các extension cho phép: ",
+        max_size: "Dung lượng tối đa: "
     }
 };
