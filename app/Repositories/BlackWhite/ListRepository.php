@@ -3,6 +3,7 @@
 namespace App\Repositories\BlackWhite;
 
 use App\Models\AliasBlackWhiteLists;
+use App\Models\Media;
 use App\Repositories\BaseRepository;
 
 class ListRepository extends BaseRepository
@@ -62,7 +63,7 @@ class ListRepository extends BaseRepository
         });
 
         if (!$counting) {
-            $query->with('manager')->select('id', 'who_created', 'who_updated', 'active', 'alias', 'type', 'created_at', 'updated_at', 'url', 'description', 'provider', 'manager_id');
+            $query->with('manager')->select('id', 'who_created', 'who_updated', 'active', 'alias', 'type', 'created_at', 'updated_at', 'file', 'description', 'provider', 'manager_id');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);
@@ -79,6 +80,14 @@ class ListRepository extends BaseRepository
 
     public function addAlias($arr)
     {
+        if(isset($arr['file'])){
+            $files = json_decode($arr['file']);
+            foreach ($files as $key => $value) {
+                $file = Media::find($value->id);
+                $file->status = 1;
+                $file->save();
+            }
+        }
         $query = new $this->model;
         $arr['who_created'] = \auth()->user()->name;
         $arr['active'] = ACTIVE;
@@ -91,6 +100,27 @@ class ListRepository extends BaseRepository
     {
         $query = $this->model->find($arr['id']);
         if ($query != null) {
+
+            if (isset($order->file)) {
+                $oldFile = json_decode($query->file);
+
+                foreach ($oldFile as $key => $value) {
+                    $file = Media::find($value->id);
+                    $file->status = 0;
+                    $file->save();
+                }
+            }
+
+            //cập nhật trạng thái file mới
+            if (isset($arr['file'])) {
+                $files = json_decode($arr['file']);
+                foreach ($files as $key => $value) {
+                    $file = Media::find($value->id);
+                    $file->status = 1;
+                    $file->save();
+                }
+            }
+
             $arr['who_updated'] = \auth()->user()->name;
             $query->manager_id = $arr['manager'];
             $query->fill($arr);

@@ -53,14 +53,14 @@ class ListController extends Controller
 
     public function add(Request $request)
     {
-        $result = $this->_listRepository->addAlias($request->only('alias', 'type', 'provider', 'manager', 'description', 'url'));
+        $result = $this->_listRepository->addAlias($request->only('alias', 'type', 'provider', 'manager', 'description', 'file'));
 
         return processCommonResponse($result);
     }
 
     public function edit(Request $request)
     {
-        $result = $this->_listRepository->editAlias($request->only('id', 'alias', 'type', 'provider', 'manager', 'description', 'url'));
+        $result = $this->_listRepository->editAlias($request->only('id', 'alias', 'type', 'provider', 'manager', 'description', 'file'));
 
         return processCommonResponse($result);
     }

@@ -7,7 +7,7 @@ export default {
         type: "Loại đầu số",
         provider: "Nhà mạng",
         manager: "Đơn vị quản lý",
-        url: "Phiếu yêu cầu",
+        file: "File phiếu yêu cầu",
         search_placeholder: "Nhập đầu số tìm kiếm",
         import_title: "Import đầu số mới",
         import_modal: {

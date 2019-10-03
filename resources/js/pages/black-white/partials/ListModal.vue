@@ -58,12 +58,50 @@
                 :placeholder="$t('blackwhite.list.placeholder.description')"
                 name="description"
             ></form-control>
-            <form-control
-                v-model="form.url"
-                name="url"
-                :label="$t('blackwhite.list.url')"
-                :data-vv-as="$t('blackwhite.list.placeholder.url')"
-            ></form-control>
+            <div
+                v-if="!hidden"
+                class="form-group m-form__group"
+                :class="{
+                    'has-danger':
+                        errors.first('file') || form.errors.get('file')
+                }"
+            >
+                <label>{{ $t("blackwhite.list.file") }}</label>
+                <div v-if="isEdit">
+                    <div v-for="(file, index) in form.oldFile" class="row col">
+                        {{ index + 1 }}.
+                        <a :href="`/storage/${file.path}`" target="_blank">{{
+                            file.name
+                        }}</a>
+                        <a
+                            href="javascript:;"
+                            style="margin: -6px 5px;"
+                            class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill table-action"
+                            title=" Xóa "
+                            @click="deleteFile(file, index)"
+                        >
+                            <i class="la la-trash"></i>
+                        </a>
+                    </div>
+                </div>
+                <file-upload
+                    v-model="form.newFile"
+                    :upload-multiple="false"
+                    :title="$t('component.dropzone.title')"
+                    :desc="$t('component.dropzone.desc')"
+                    :max-filesize="5"
+                    accepted-files=".pdf"
+                >
+                </file-upload>
+                <div
+                    v-if="errors.first('file') || form.errors.get('file')"
+                    class="form-control-feedback"
+                >
+                    {{ errors.first("file") }}
+                    <br />
+                    {{ form.errors.get("file") }}
+                </div>
+            </div>
         </form>
         <template slot="footer">
             <button class="btn btn-info" @click="closeModal">
@@ -114,7 +152,8 @@ const defaultForm = {
     manager_result: null,
     manager: null,
     description: null,
-    url: null
+    newFile: [],
+    oldFile: []
 };
 
 export default {
@@ -131,6 +170,7 @@ export default {
             form: new Form(defaultForm),
             formLabelWidth: FORM_LABEL_WIDTH_LARGE,
             isEdit: false,
+            hidden: false,
             typeOptions: {
                 placeholder: this.$t("blackwhite.list.placeholder.type"),
                 multiple: false,
@@ -186,7 +226,6 @@ export default {
     methods: {
         show(item = null) {
             if (item != null) {
-                console.log(item);
                 item.typeId = {
                     id: item.type
                 };
@@ -199,8 +238,11 @@ export default {
                     name: item.manager.name
                 };
                 this.form = new Form(item);
+                this.form.newFile = [];
+                this.form.oldFile = JSON.parse(item.file);
                 this.isEdit = true;
             }
+            this.hidden = false;
             this.$refs.modal.show();
         },
         closeModal() {
@@ -222,6 +264,7 @@ export default {
                 this.form.type = this.form.typeId.id;
                 this.form.provider = this.form.providerId.id;
                 this.form.manager = this.form.manager_result.id;
+                this.form.file = JSON.stringify(this.form.newFile);
 
                 const res = await this.form.post("/blackwhite/list/edit");
                 const { data } = res;
@@ -246,6 +289,7 @@ export default {
                 this.form.type = this.form.typeId.id;
                 this.form.provider = this.form.providerId.id;
                 this.form.manager = this.form.manager_result.id;
+                this.form.file = JSON.stringify(this.form.newFile);
 
                 const res = await this.form.post("/blackwhite/list/add");
                 const { data } = res;
@@ -268,6 +312,7 @@ export default {
         onModalHidden() {
             this.form = new Form(defaultForm);
             this.isEdit = false;
+            this.hidden = true;
             this.$validator.reset();
         }
     }

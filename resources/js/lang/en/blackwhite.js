@@ -7,7 +7,7 @@ export default {
         type: "Type",
         provider: "Provider",
         manager: "Manager",
-        url: "Url",
+        file: "Request letter",
         search_placeholder: "Nhập đầu số tìm kiếm",
         import_title: "Import đầu số mới",
         import_modal: {
