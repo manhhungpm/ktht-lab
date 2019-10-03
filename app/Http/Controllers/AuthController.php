@@ -110,11 +110,11 @@ class AuthController extends Controller
                 'message' =>  'Thông tin đăng nhập không đúng!'
             ], 401);
         }
-//        event(new LoggedIn(auth()->user(), $request->ip()));
-        if(Carbon::createFromFormat('Y-m-d H:i:s', auth()->user()->expired_at)->lt(Carbon::now())){
+
+        if(Carbon::createFromFormat('Y-m-d H:i:s', auth()->user()->expired_at)->lt(Carbon::now()) || auth()->user()->active == 0 ){
             return response()->json([
                 'code' => CODE_ERROR,
-                'message' =>  'Tài khoản hết hạn'
+                'message' =>  'Tài khoản hết hạn hoặc đã bị khóa!'
             ], 401);
         } else {
             return $this->respondWithToken($token);
