@@ -148,6 +148,7 @@ import ActionModal from "./partials/ActionModal";
 
 export default {
     name: "List",
+    middleware: "auth",
     components: {
         ActionModal,
         ListImportModal,
@@ -267,11 +268,11 @@ export default {
                             for (let i = 0; i < files.length; i++) {
                                 filenameList =
                                     filenameList +
-                                    `<p>${i + 1}. <a href="/storage/${
+                                    `<a href="/storage/${
                                         files[i].path
                                     }" target="_blank">${
                                         files[i].name
-                                    }</a></p>`;
+                                    }</a>`;
                             }
                             return filenameList;
                         }
