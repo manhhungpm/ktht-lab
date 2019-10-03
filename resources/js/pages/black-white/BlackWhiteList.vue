@@ -148,6 +148,7 @@ import ActionModal from "./partials/ActionModal";
 
 export default {
     name: "BlackWhiteList",
+    middleware: "auth",
     components: {
         ActionModal,
         BlackWhiteListImportModal,
@@ -267,11 +268,7 @@ export default {
                             for (let i = 0; i < files.length; i++) {
                                 filenameList =
                                     filenameList +
-                                    `<p>${i + 1}. <a href="/storage/${
-                                        files[i].path
-                                    }" target="_blank">${
-                                        files[i].name
-                                    }</a></p>`;
+                                    `<a href="/storage/${files[i].path}" target="_blank">${files[i].name}</a>`;
                             }
                             return filenameList;
                         }

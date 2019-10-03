@@ -306,10 +306,7 @@ export default {
                         .find(".dataTables_paginate");
                     pagination.toggle(this.api().page.info().pages > 0);
 
-                    setTimeout(() => {
-                        $this.relayout();
-                        $this.updateDataTableSelectAllCtrl();
-                    }, 200);
+
                 },
                 initComplete: function() {}
             };
@@ -358,6 +355,10 @@ export default {
 
             this.table.on("draw.dt", () => {
                 $(this.$el).tooltip({ selector: ".table-action" });
+                setTimeout(() => {
+                    $this.relayout();
+                    $this.updateDataTableSelectAllCtrl();
+                }, 500);
             });
 
             if (this.selectable) {

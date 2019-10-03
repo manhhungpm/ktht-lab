@@ -269,7 +269,11 @@ export default {
                 this.form.type = this.form.typeId.id;
                 this.form.provider = this.form.providerId.id;
                 this.form.manager = this.form.manager_result.id;
-                this.form.file = JSON.stringify(this.form.newFile);
+                this.form.file = JSON.stringify(
+                    this.form.newFile.length > 0
+                        ? this.form.newFile
+                        : this.form.oldFile
+                );
 
                 const res = await this.form.post("/blackwhite/list/edit");
                 const { data } = res;
@@ -294,7 +298,11 @@ export default {
                 this.form.type = this.form.typeId.id;
                 this.form.provider = this.form.providerId.id;
                 this.form.manager = this.form.manager_result.id;
-                this.form.file = JSON.stringify(this.form.newFile);
+                this.form.file = JSON.stringify(
+                    this.form.newFile.length > 0
+                        ? this.form.newFile
+                        : this.form.oldFile
+                );
 
                 const res = await this.form.post("/blackwhite/list/add");
                 const { data } = res;

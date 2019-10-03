@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row">
+        <div class="row" @keydown.enter.prevent="search">
             <div class="col-md-4">
                 <label>{{ $t("admin.users.user_name") }}</label>
                 <input
