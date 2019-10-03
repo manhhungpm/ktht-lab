@@ -23,6 +23,7 @@ Route::group([
 
     includeRouteFiles(__DIR__ . '/Auth/');
     includeRouteFiles(__DIR__ . '/Dashboard/');
+    includeRouteFiles(__DIR__ . '/Common/');
 
     Route::group(['namespace' => 'Admin', 'prefix' => '/admin', 'as' => 'admin.','middleware' => []], function () {
         includeRouteFiles(__DIR__ . '/Admin/');

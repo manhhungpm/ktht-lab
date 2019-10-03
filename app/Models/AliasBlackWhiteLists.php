@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AliasBlackWhiteLists extends Model
 {
-    protected $fillable = ['id', 'who_created', 'who_updated', 'active', 'alias', 'type', 'created_at', 'updated_at', 'url', 'description', 'provider', 'manager_id'];
+    protected $fillable = ['id', 'who_created', 'who_updated', 'active', 'alias', 'type', 'created_at', 'updated_at', 'file', 'description', 'provider', 'manager_id'];
 
     protected $table = 'alias_black_white_lists';
 

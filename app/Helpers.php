@@ -129,3 +129,15 @@ function formatDate($date)
     $dateFormat = date_create($date);
     return date_format($dateFormat, "d/m/Y");
 }
+
+function getFileUpload($file)
+{
+    $files = json_decode($file);
+
+    if (!empty($files)) {
+        return $files[0];
+    }
+
+    return null;
+}
+
