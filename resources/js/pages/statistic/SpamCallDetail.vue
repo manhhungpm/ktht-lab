@@ -1,21 +1,19 @@
 <template>
     <div>
         <div class="row">
-            <!--<time-range-filter-->
-            <!--:title="$t('label.search_information')"-->
-            <!--:default-filter="defaultTime"-->
-            <!--:exportable="false"-->
-            <!--:export-url="'/brandname/report-day/alias/export'"-->
-            <!--:rules-validate="''"-->
-            <!--:name-shortcut="['last_7_days', 'last_30_days']"-->
-            <!--:disabled-date="'greaterThanToday'"-->
-            <!--@search="filterTime"-->
-            <!--&gt;-->
-            <!--</time-range-filter>-->
-            <div class="col-5" align="right">
+            <div
+                class="col-5"
+                align="right"
+                style="    margin-bottom: 15px;
+"
+            >
                 <label style="margin-top: 10px">Chọn khoảng thời gian</label>
             </div>
-            <div class="col-2">
+            <div
+                class="col-2"
+                style="    margin-bottom: 15px;
+"
+            >
                 <form-control
                     v-model="timeFilter"
                     name="typeId"
@@ -143,9 +141,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.time-filter {
-    margin: auto;
-    margin-bottom: 15px;
-}
-</style>
+<style scoped></style>

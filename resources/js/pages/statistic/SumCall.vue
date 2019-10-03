@@ -29,21 +29,6 @@
                 </portlet>
             </div>
             <div class="col-6">
-                <portlet title="Báo cáo tổng thời lượng cuộc gọi thuê bao">
-                    <another-highcharts
-                        :chart-type="'column'"
-                        :series="columnSeries1"
-                        :plot-options="columnPlotOptions1"
-                        :tooltip-format="'{series.name}:<b> {point.y}</b>'"
-                        :has-legend="true"
-                        :point-width="60"
-                        :margin-top="20"
-                        :categories="columnCategories1"
-                        :exporting="true"
-                    ></another-highcharts>
-                </portlet>
-            </div>
-            <div class="col-6">
                 <portlet
                     title="Báo cáo tổng các cuộc gọi 1 chiều, 2 chiều trong tháng"
                     style="height: 550px; "
@@ -62,22 +47,6 @@
                         :plot-options="stackedPlotOptions1"
                         :horizontal-margin="92"
                     ></highchart-stacked-column>
-                </portlet>
-            </div>
-            <div class="col-6">
-                <portlet
-                    title="Báo cáo tổng các cuộc gọi có thời lượng <10s, 10s->60s, >60s trong tháng"
-                    style="height: 600px; "
-                >
-                    <another-highcharts
-                        :chart-type="'area'"
-                        :series="areaSeries1"
-                        :plot-options="areaPlotOption1"
-                        :exporting="true"
-                        :categories="areaCategories1"
-                        :has-legend="true"
-                        :tooltip-format="'{series.name}:<b> {point.y}</b>'"
-                    ></another-highcharts>
                 </portlet>
             </div>
             <div class="col-6">
@@ -105,7 +74,7 @@ import HighchartStackedColumn from "../../components/common/HighchartStackedColu
 import moment from "moment";
 
 export default {
-    name: "Highchart",
+    name: "SumCall",
     components: { HighchartStackedColumn, AnotherHighcharts, Portlet },
     middleware: "auth",
     data() {

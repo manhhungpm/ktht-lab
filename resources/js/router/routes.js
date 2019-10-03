@@ -19,8 +19,11 @@ const Role = () =>
     import("~/pages/admin/Role/roles.vue").then(m => m.default || m);
 
 //Highchart
-const StatisticGroup = () =>
-    import("~/pages/statistic/Group.vue").then(m => m.default || m);
+const StatisticTimeCall = () =>
+    import("~/pages/statistic/TimeCall.vue").then(m => m.default || m);
+
+const StatisticSumCall = () =>
+    import("~/pages/statistic/SumCall.vue").then(m => m.default || m);
 
 const StatisticSpam = () =>
     import("../pages/statistic/Spam.vue").then(m => m.default || m);
@@ -66,10 +69,15 @@ export default {
     },
 
     //Statistic route
-    statistic_group: {
-        path: "/statistic/group",
-        name: "statistic.group",
-        component: StatisticGroup
+    statistic_time_call: {
+        path: "/statistic/time-call",
+        name: "statistic.time_call",
+        component: StatisticTimeCall
+    },
+    statistic_sum_call: {
+        path: "/statistic/sum-call",
+        name: "statistic.sum_call",
+        component: StatisticSumCall
     },
     statistic_spam: {
         path: "/statistic/spam",
