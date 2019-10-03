@@ -160,7 +160,6 @@ class UserRepository extends BaseRepository
 
     public function addUser($arr)
     {
-        dd($arr);
         $role = $arr['role'];
         $user = new User();
         $arr['who_created'] = \auth()->user()->name;

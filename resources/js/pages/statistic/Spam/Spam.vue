@@ -30,7 +30,7 @@
 // import Portlet from "../../components/common/Portlet";
 import axios from "axios";
 import moment from "moment";
-import MonthRange from "../../components/elements/filter/MonthRange";
+import MonthRange from "~/components/elements/filter/MonthRange";
 
 export default {
     name: "Spam",

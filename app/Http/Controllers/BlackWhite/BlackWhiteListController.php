@@ -4,18 +4,21 @@ namespace App\Http\Controllers\BlackWhite;
 
 use App\Exports\Blackwhite\ListExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BlackWhite\BlackWhiteList\AddBlackWhiteListRequest;
+use App\Http\Requests\BlackWhite\BlackWhiteList\EditBlackWhiteListRequest;
+use App\Http\Requests\Common\IdsRequest;
 use App\Http\Requests\Common\ImportRequest;
 use App\Imports\ListImport;
-use App\Repositories\BlackWhite\ListRepository;
+use App\Repositories\BlackWhite\BlackWhiteListRepository;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
 
-class ListController extends Controller
+class BlackWhiteListController extends Controller
 {
     protected $_listRepository;
     protected $_excel;
 
-    public function __construct(ListRepository $listRepository, Excel $excel)
+    public function __construct(BlackWhiteListRepository $listRepository, Excel $excel)
     {
         $this->middleware('auth');
         $this->_listRepository = $listRepository;
@@ -51,28 +54,28 @@ class ListController extends Controller
         return response()->json($arr);
     }
 
-    public function add(Request $request)
+    public function add(AddBlackWhiteListRequest $request)
     {
         $result = $this->_listRepository->addAlias($request->only('alias', 'type', 'provider', 'manager', 'description', 'file'));
 
         return processCommonResponse($result);
     }
 
-    public function edit(Request $request)
+    public function edit(EditBlackWhiteListRequest $request)
     {
         $result = $this->_listRepository->editAlias($request->only('id', 'alias', 'type', 'provider', 'manager', 'description', 'file'));
 
         return processCommonResponse($result);
     }
 
-    public function active(Request $request)
+    public function active(IdsRequest $request)
     {
         $result = $this->_listRepository->setActive($request->input('ids'));
 
         return processCommonResponse($result);
     }
 
-    public function disable(Request $request)
+    public function disable(IdsRequest $request)
     {
         $result = $this->_listRepository->setDisable($request->input('ids'));
 
@@ -87,7 +90,7 @@ class ListController extends Controller
         $locale = $request->cookie('locale');
         \Illuminate\Support\Facades\App::setLocale($locale);
         $export = new ListExport($searchParams);
-        return $excel->download($export, 'Kết quả tìm kiếm'.'.xlsx');
+        return $excel->download($export, 'Kết quả tìm kiếm' . '.xlsx');
     }
 
     public function import(ImportRequest $request)

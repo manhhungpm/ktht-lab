@@ -30,7 +30,7 @@
                                 data-parent="#m_accordion_5"
                             >
                                 <div class="m-accordion__item-content">
-                                    <list-filter
+                                    <black-white-list-filter
                                         :is-required-to-export="
                                             isRequiredToExport
                                         "
@@ -38,7 +38,7 @@
                                         @isExportFileSuccessfully="
                                             isExportFileSuccessfully
                                         "
-                                    ></list-filter>
+                                    ></black-white-list-filter>
                                 </div>
                             </div>
                         </div>
@@ -113,14 +113,14 @@
                     ></data-table
                 ></portlet>
             </div>
-            <list-modal
+            <black-white-list-modal
                 ref="addModal"
                 :on-action-success="updateItemSuccess"
-            ></list-modal>
-            <list-import-modal
+            ></black-white-list-modal>
+            <black-white-list-import-modal
                 ref="importModal"
                 :on-action-success="updateItemSuccess"
-            ></list-import-modal>
+            ></black-white-list-import-modal>
             <action-modal
                 ref="actionModal"
                 :on-action-success="updateItemSuccess"
@@ -132,7 +132,7 @@
 <script>
 import Portlet from "~/components/common/Portlet";
 import DataTable from "~/components/common/DataTable";
-import ListModal from "./partials/ListModal";
+import BlackWhiteListModal from "./partials/BlackWhiteListModal";
 import { generateTableAction, htmlEscapeEntities } from "~/helpers/tableHelper";
 import bootbox from "bootbox";
 import axios from "axios";
@@ -142,18 +142,18 @@ import {
     notifyActiveSuccess,
     notifyDisableSuccess
 } from "~/helpers/bootstrap-notify";
-import ListFilter from "./partials/ListFilter";
-import ListImportModal from "./partials/ListImportModal";
+import BlackWhiteListFilter from "./partials/BlackWhiteListFilter";
+import BlackWhiteListImportModal from "./partials/BlackWhiteListImportModal";
 import ActionModal from "./partials/ActionModal";
 
 export default {
-    name: "List",
+    name: "BlackWhiteList",
     middleware: "auth",
     components: {
         ActionModal,
-        ListImportModal,
-        ListFilter,
-        ListModal,
+        BlackWhiteListImportModal,
+        BlackWhiteListFilter,
+        BlackWhiteListModal,
         DataTable,
         Portlet
     },
@@ -268,11 +268,7 @@ export default {
                             for (let i = 0; i < files.length; i++) {
                                 filenameList =
                                     filenameList +
-                                    `<a href="/storage/${
-                                        files[i].path
-                                    }" target="_blank">${
-                                        files[i].name
-                                    }</a>`;
+                                    `<a href="/storage/${files[i].path}" target="_blank">${files[i].name}</a>`;
                             }
                             return filenameList;
                         }

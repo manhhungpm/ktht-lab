@@ -161,7 +161,7 @@ const defaultForm = {
 };
 
 export default {
-    name: "ListModal",
+    name: "BlackWhiteListModal",
     components: { FormControl, Modal, ManagerChosen },
     props: {
         onActionSuccess: {

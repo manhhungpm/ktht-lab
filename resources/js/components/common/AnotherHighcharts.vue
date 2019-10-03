@@ -128,7 +128,7 @@ export default {
         },
         series: {
             handler(newVal, oldVal) {
-                console.log(newVal);
+                // console.log(newVal);
                 if (newVal.length != oldVal.length) {
                     this.chart.destroy();
                     this.initChart();

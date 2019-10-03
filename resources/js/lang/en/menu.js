@@ -81,7 +81,8 @@ export default {
     },
     statistic: {
         title: "Statistic",
-        group: "Statistic group",
+        time_call: "Statistic time call",
+        sum_call: "Statistic sum call",
         spam: "Statistic spam",
         spam_call_detail: "Spam call detail"
     },

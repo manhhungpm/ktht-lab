@@ -19,18 +19,23 @@ const Role = () =>
     import("~/pages/admin/Role/roles.vue").then(m => m.default || m);
 
 //Highchart
-const StatisticGroup = () =>
-    import("~/pages/statistic/Group.vue").then(m => m.default || m);
+const StatisticTimeCall = () =>
+    import("~/pages/statistic/TimeCall/TimeCall.vue").then(m => m.default || m);
+
+const StatisticSumCall = () =>
+    import("~/pages/statistic/SumCall/SumCall.vue").then(m => m.default || m);
 
 const StatisticSpam = () =>
-    import("../pages/statistic/Spam.vue").then(m => m.default || m);
+    import("~/pages/statistic/Spam/Spam.vue").then(m => m.default || m);
 
 const StatisticSpamCallDetail = () =>
-    import("../pages/statistic/SpamCallDetail.vue").then(m => m.default || m);
+    import("~/pages/statistic/SpamCallDetail/SpamCallDetail.vue").then(
+        m => m.default || m
+    );
 
 //Black white
 const BlackWhiteList = () =>
-    import("~/pages/black-white/List.vue").then(m => m.default || m);
+    import("~/pages/black-white/BlackWhiteList.vue").then(m => m.default || m);
 
 export default {
     dashboard: { path: "/", name: "dashboard", component: Dashboard },
@@ -66,10 +71,15 @@ export default {
     },
 
     //Statistic route
-    statistic_group: {
-        path: "/statistic/group",
-        name: "statistic.group",
-        component: StatisticGroup
+    statistic_time_call: {
+        path: "/statistic/time-call",
+        name: "statistic.time_call",
+        component: StatisticTimeCall
+    },
+    statistic_sum_call: {
+        path: "/statistic/sum-call",
+        name: "statistic.sum_call",
+        component: StatisticSumCall
     },
     statistic_spam: {
         path: "/statistic/spam",

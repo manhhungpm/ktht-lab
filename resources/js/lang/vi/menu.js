@@ -81,7 +81,8 @@ export default {
     },
     statistic: {
         title: "Báo cáo",
-        group: "Báo cáo tương quan các nhóm",
+        time_call: "Báo cáo theo thời gian gọi",
+        sum_call: "Báo cáo theo số lượng cuộc gọi",
         spam: "Báo cáo cuộc gọi nghi ngờ spam",
         spam_call_detail: "Báo cáo chi tiết gán nhãn spam các cuộc gọi nghi ngờ"
     },
