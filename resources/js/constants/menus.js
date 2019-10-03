@@ -33,15 +33,15 @@ export default [
         children: [
             {
                 title: "Báo cáo tương quan các nhóm",
-                route: "statistic/group"
+                route: "/statistic/group"
             },
             {
                 title: "Báo cáo cuộc gọi nghi ngờ spam",
-                route: "statistic/spam"
+                route: "/statistic/spam"
             },
             {
                 title: "Báo cáo chi tiết gán nhãn spam các cuộc gọi nghi ngờ",
-                route: "statistic/spam-call-detail"
+                route: "/statistic/spam-call-detail"
             }
         ]
     },
@@ -49,6 +49,6 @@ export default [
         title: "menu.black_white.list.title",
         icon: "flaticon-list",
         roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
-        route: "black-white-list"
+        route: "/black-white-list"
     }
 ];

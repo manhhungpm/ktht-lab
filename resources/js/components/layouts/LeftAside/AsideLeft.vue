@@ -303,7 +303,7 @@ export default {
     },
     computed: {
         activeRoute() {
-            return this.$router.history.current.fullPath;
+            return this.$store.state.route.fullPath;
         }
     },
     mounted() {
@@ -329,7 +329,6 @@ export default {
                         });
                     }
                 });
-
                 if (routNames.indexOf(this.activeRoute) !== -1) {
                     return true;
                 }
