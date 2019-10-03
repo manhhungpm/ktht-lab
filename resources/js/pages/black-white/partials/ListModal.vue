@@ -67,8 +67,12 @@
                 }"
             >
                 <label>{{ $t("blackwhite.list.file") }}</label>
-                <div v-if="isEdit">
-                    <div v-for="(file, index) in form.oldFile" class="row col">
+                <div v-if="isEdit" class="file-list">
+                    <div
+                        v-for="(file, index) in form.oldFile"
+                        :key="'file' + index"
+                        class="row col"
+                    >
                         {{ index + 1 }}.
                         <a :href="`/storage/${file.path}`" target="_blank">{{
                             file.name
@@ -239,7 +243,8 @@ export default {
                 };
                 this.form = new Form(item);
                 this.form.newFile = [];
-                this.form.oldFile = JSON.parse(item.file);
+                this.$set(this.form, "oldFile", JSON.parse(item.file));
+                // this.form.oldFile = JSON.parse(item.file);
                 this.isEdit = true;
             }
             this.hidden = false;
@@ -314,6 +319,10 @@ export default {
             this.isEdit = false;
             this.hidden = true;
             this.$validator.reset();
+        },
+
+        deleteFile(file, index) {
+            this.form.oldFile.splice(index, 1);
         }
     }
 };

@@ -76,3 +76,7 @@
 
 //== Component Skin - Light
 @include m-build-component--dropzone-skin(light);
+
+.file-list {
+  margin-bottom: 10px;
+}
