@@ -26,25 +26,19 @@
             </div>
 
             <div class="col-md-4">
-                <form-control
+                <label>{{ $t("common.who_created") }}</label>
+                <user-chosen
                     v-model="form.who_created"
-                    :label="$t('common.who_created')"
-                    name="who_created"
-                    :type="'select'"
-                    :select-options="userOptions"
-                >
-                </form-control>
+                    :multiple="true"
+                ></user-chosen>
             </div>
 
             <div class="col-md-4">
-                <form-control
+                <label>{{ $t("common.who_updated") }}</label>
+                <user-chosen
                     v-model="form.who_updated"
-                    :label="$t('common.who_updated')"
-                    name="who_updated"
-                    :type="'select'"
-                    :select-options="userOptions"
-                >
-                </form-control>
+                    :multiple="true"
+                ></user-chosen>
             </div>
 
             <div class="col-md-4">
@@ -138,6 +132,7 @@ import {
     TYPE_WHITELIST
 } from "~/constants/constant";
 import TheDateRange from "~/components/common/TheDateRange";
+import UserChosen from "../../../components/elements/chosens/UserChosen";
 
 const defaultForm = {
     who_created: null,
@@ -150,8 +145,8 @@ const defaultForm = {
 };
 
 export default {
-    name: "ListFilter",
-    components: { ManagerChosen, TheDateRange },
+    name: "BlackWhiteListFilter",
+    components: { UserChosen, ManagerChosen, TheDateRange },
     props: {
         onActionSuccess: {
             type: Function,

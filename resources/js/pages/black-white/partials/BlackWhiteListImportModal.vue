@@ -118,7 +118,7 @@
 import axios from "axios";
 import { notifyImportSuccess } from "~/helpers/bootstrap-notify";
 export default {
-    name: "ListImportModal",
+    name: "BlackWhiteListImportModal",
     components: {},
     props: {
         onActionSuccess: {

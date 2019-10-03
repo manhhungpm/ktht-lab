@@ -37,10 +37,10 @@
 </template>
 
 <script>
-import Portlet from "../../components/common/Portlet";
-import DataTable from "../../components/common/DataTable";
-import { THREE_DAYS, SEVEN_DAYS, THIRTY_DAY } from "../../constants/constant";
-import FormControl from "../../components/common/FormControl";
+import Portlet from "~/components/common/Portlet";
+import DataTable from "~/components/common/DataTable";
+import { THREE_DAYS, SEVEN_DAYS, THIRTY_DAY } from "~/constants/constant";
+import FormControl from "~/components/common/FormControl";
 
 export default {
     name: "SpamCallDetail",

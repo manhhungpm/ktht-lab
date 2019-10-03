@@ -68,9 +68,9 @@
 </template>
 
 <script>
-import Portlet from "../../components/common/Portlet";
-import AnotherHighcharts from "../../components/common/AnotherHighcharts";
-import HighchartStackedColumn from "../../components/common/HighchartStackedColumn";
+import Portlet from "~/components/common/Portlet";
+import AnotherHighcharts from "~/components/common/AnotherHighcharts";
+import HighchartStackedColumn from "~/components/common/HighchartStackedColumn";
 import moment from "moment";
 
 export default {

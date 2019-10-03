@@ -33,19 +33,19 @@ export default [
         children: [
             {
                 title: "Báo cáo theo thời gian gọi",
-                route: "statistic/time-call"
+                route: "/statistic/time-call"
             },
             {
                 title: "Báo cáo theo số lượng cuộc gọi",
-                route: "statistic/sum-call"
+                route: "/statistic/sum-call"
             },
             {
                 title: "Báo cáo cuộc gọi nghi ngờ spam",
-                route: "statistic/spam"
+                route: "/statistic/spam"
             },
             {
                 title: "Báo cáo chi tiết gán nhãn spam các cuộc gọi nghi ngờ",
-                route: "statistic/spam-call-detail"
+                route: "/statistic/spam-call-detail"
             }
         ]
     },

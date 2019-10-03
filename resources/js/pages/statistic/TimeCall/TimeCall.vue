@@ -42,45 +42,28 @@
                 </portlet>
             </div>
         </div>
-        <user-chosen :multiple="true"></user-chosen>
     </div>
 </template>
 
 <script>
-import Portlet from "../../components/common/Portlet";
-import AnotherHighcharts from "../../components/common/AnotherHighcharts";
+import Portlet from "~/components/common/Portlet";
+import AnotherHighcharts from "~/components/common/AnotherHighcharts";
 import moment from "moment";
 import axios from "axios";
-import MonthRange from "../../components/elements/filter/MonthRange";
-import UserChosen from "../../components/elements/chosens/UserChosen";
+import MonthRange from "~/components/elements/filter/MonthRange";
 
 export default {
     name: "TimeCall",
-    components: {UserChosen, MonthRange, AnotherHighcharts, Portlet },
+    components: { MonthRange, AnotherHighcharts, Portlet },
     middleware: "auth",
     data() {
         return {
             //Highchart 2
-            // columnSeries1: [
-            //     { name: "Cuộc gọi bình thường", data: [50] },
-            //     { name: "Cuộc gọi nghi ngờ spam", data: [89] },
-            //     { name: "Cuộc gọi nghề nghiệp đặc thù", data: [32] },
-            //     { name: "Cuộc gọi từ tổng đài,telesale", data: [66] }
-            // ],
-            // columnPlotOptions1: {
-            //     column: {
-            //         dataLabels: {
-            //             enabled: false
-            //         },
-            //         minPointLength: 5
-            //     }
-            // },
-            // columnCategories1: ["Tháng 1"],
             columnSeries1: [
-                { name: "Cuộc gọi bình thường", data: [50] },
-                { name: "Cuộc gọi nghi ngờ spam", data: [89] },
-                { name: "Cuộc gọi nghề nghiệp đặc thù", data: [32] },
-                { name: "Cuộc gọi từ tổng đài,telesale", data: [66] }
+                { name: "Cuộc gọi bình thường", data: [50, 11] },
+                { name: "Cuộc gọi nghi ngờ spam", data: [89, 11] },
+                { name: "Cuộc gọi nghề nghiệp đặc thù", data: [32, 11] },
+                { name: "Cuộc gọi từ tổng đài,telesale", data: [66, 11] }
             ],
             columnPlotOptions1: {
                 column: {
@@ -90,7 +73,17 @@ export default {
                     minPointLength: 5
                 }
             },
-            columnCategories1: ["Tháng 1"],
+            columnCategories1: ["Tháng 1", "Tháng 2"],
+            // columnSeries1: [{}],
+            // columnPlotOptions1: {
+            //     column: {
+            //         dataLabels: {
+            //             enabled: false
+            //         },
+            //         minPointLength: 5
+            //     }
+            // },
+            // columnCategories1: ["Tháng 1"],
 
             //Highchart 4
             areaSeries1: [
@@ -142,7 +135,7 @@ export default {
         }
     },
     mounted() {
-        this.getData();
+        // this.getData();
     },
     methods: {
         async getData() {
@@ -154,13 +147,25 @@ export default {
                         to: this.timeFilter[1]
                     }
                 );
+                var arr = data.data;
+
                 // let seriesData = Object.keys(data.data).map(key => {
                 //     return [key, data.data[key]];
                 // });
                 //
                 // this.series[0].data = seriesData;
 
-                console.log(data.data);
+                var temp = Object.keys(arr).map(key => {
+                    return [key, data.data[key]];
+                });
+                temp.forEach(function(value, index, array) {
+                    this.columnSeries1.push({
+                        name: value[0],
+                        data: Object.values(value[1])
+                    });
+                }, this);
+
+                console.log(this.columnSeries1);
             } catch (e) {
                 console.log(e);
             }

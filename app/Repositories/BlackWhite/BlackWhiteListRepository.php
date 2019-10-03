@@ -6,7 +6,7 @@ use App\Models\AliasBlackWhiteLists;
 use App\Models\Media;
 use App\Repositories\BaseRepository;
 
-class ListRepository extends BaseRepository
+class BlackWhiteListRepository extends BaseRepository
 {
     public function model()
     {
