@@ -53,6 +53,6 @@ export default [
         title: "menu.black_white.list.title",
         icon: "flaticon-list",
         roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
-        route: "black-white-list"
+        route: "/black-white-list"
     }
 ];
