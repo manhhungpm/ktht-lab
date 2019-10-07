@@ -91,5 +91,6 @@ export default {
             title: "Quản lý danh sách Blacklist/Whitelist"
         }
     },
-    alias_block_spam: "Tra cứu thuê bao chặn spam"
+    alias_block_spam: "Tra cứu thuê bao chặn spam",
+    spam_call_detail: "Cảnh báo thuê bao bị nghi ngờ spam"
 };

@@ -104,7 +104,7 @@
                     <data-table
                         ref="table"
                         :columns="columns"
-                        url="/statistic/msisdn-summary-type/listing"
+                        url="/spam-call-detail/listing"
                         :post-data="tableFilter"
                         :selectable="true"
                         :actions="actions"
@@ -415,13 +415,10 @@ export default {
                 },
                 callback: async function(result) {
                     if (result) {
-                        let res = await axios.post(
-                            "/statistic/msisdn-summary-type/label",
-                            {
-                                phone: rowData.msisdn,
-                                status: LOCKED
-                            }
-                        );
+                        let res = await axios.post("/spam-call-detail/label", {
+                            phone: rowData.msisdn,
+                            status: LOCKED
+                        });
                         const { data } = res;
 
                         if (data.code == SUCCESS) {
@@ -476,7 +473,7 @@ export default {
                     callback: async function(result) {
                         if (result) {
                             let res = await axios.post(
-                                "/statistic/msisdn-summary-type/label-multiple",
+                                "/spam-call-detail/label-multiple",
                                 {
                                     phone: selectedMsisdn,
                                     status: LOCKED
@@ -539,7 +536,7 @@ export default {
                     callback: async function(result) {
                         if (result) {
                             let res = await axios.post(
-                                "/statistic/msisdn-summary-type/label-multiple",
+                                "/spam-call-detail/label-multiple",
                                 {
                                     phone: selectedMsisdn,
                                     status: BYPASSED
@@ -580,13 +577,10 @@ export default {
                 },
                 callback: async function(result) {
                     if (result) {
-                        let res = await axios.post(
-                            "/statistic/msisdn-summary-type/label",
-                            {
-                                phone: rowData.msisdn,
-                                status: UNLOCKED
-                            }
-                        );
+                        let res = await axios.post("/spam-call-detail/label", {
+                            phone: rowData.msisdn,
+                            status: UNLOCKED
+                        });
                         const { data } = res;
 
                         if (data.code == SUCCESS) {
@@ -621,13 +615,10 @@ export default {
                 },
                 callback: async function(result) {
                     if (result) {
-                        let res = await axios.post(
-                            "/statistic/msisdn-summary-type/label",
-                            {
-                                phone: rowData.msisdn,
-                                status: BYPASSED
-                            }
-                        );
+                        let res = await axios.post("/spam-call-detail/label", {
+                            phone: rowData.msisdn,
+                            status: BYPASSED
+                        });
                         const { data } = res;
 
                         if (data.code == SUCCESS) {

@@ -28,8 +28,8 @@ const StatisticSumCall = () =>
 const StatisticSpam = () =>
     import("~/pages/statistic/Spam/Spam.vue").then(m => m.default || m);
 
-const StatisticSpamCallDetail = () =>
-    import("~/pages/statistic/SpamCallDetail/SpamCallDetail.vue").then(
+const SpamCallDetail = () =>
+    import("~/pages/spam-call-detail/SpamCallDetail.vue").then(
         m => m.default || m
     );
 
@@ -93,9 +93,9 @@ export default {
         component: StatisticSpam
     },
     statistic_spam_call_detail: {
-        path: "/statistic/spam-call-detail",
+        path: "/spam-call-detail",
         name: "statistic.spam_call_detail",
-        component: StatisticSpamCallDetail
+        component: SpamCallDetail
     },
 
     //Black white route

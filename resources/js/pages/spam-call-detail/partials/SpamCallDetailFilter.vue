@@ -205,8 +205,8 @@ export default {
                 filter.carrier = this.form.carrier.value;
             }
             if (this.form.status && this.form.status.length > 0) {
-                filter.status = this.form.status.map((e) => {
-                    return e.id
+                filter.status = this.form.status.map(e => {
+                    return e.id;
                 });
             }
             if (this.form.duration_type && this.form.duration_type.id) {

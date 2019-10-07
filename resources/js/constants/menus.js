@@ -50,6 +50,12 @@ export default [
         ]
     },
     {
+        title: "menu.spam_call_detail",
+        icon: "flaticon-exclamation",
+        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
+        route: "/spam-call-detail"
+    },
+    {
         title: "menu.black_white.list.title",
         icon: "flaticon-list",
         roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],

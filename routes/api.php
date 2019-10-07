@@ -41,4 +41,8 @@ Route::group([
         includeRouteFiles(__DIR__ . '/AliasBlockSpam/');
     });
 
+    Route::group(['namespace' => 'SpamCallDetail','middleware' => []], function () {
+        includeRouteFiles(__DIR__ . '/SpamCallDetail/');
+    });
+
 });

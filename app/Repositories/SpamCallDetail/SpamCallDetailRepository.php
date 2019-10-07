@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Repositories\Statistic;
+namespace App\Repositories\SpamCallDetail;
 
 use App\Models\Phone\PhoneLabel;
 use App\Models\Statistic\MsisdnSummaryType;
 use App\Repositories\BaseRepository;
 
 
-class MsisdnSummaryTypeRepository extends BaseRepository
+class SpamCallDetailRepository extends BaseRepository
 {
     public function model()
     {

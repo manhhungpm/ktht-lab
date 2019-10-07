@@ -1,27 +1,28 @@
 <?php
 
-namespace App\Http\Controllers\Statistic;
+namespace App\Http\Controllers\SpamCallDetail;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Phone\PhoneLabelRequest;
-use App\Repositories\Statistic\MsisdnSummaryTypeRepository;
+use App\Repositories\SpamCallDetail\SpamCallDetailRepository;
 use Illuminate\Http\Request;
 
-class MsisdnSummaryTypeController extends Controller
+class SpamCallDetailController extends Controller
 {
-    protected $msisdnSummaryTypeRepository;
-    public function __construct(MsisdnSummaryTypeRepository $msisdnSummaryTypeRepository)
+    protected $_spamCallDetailRepository;
+
+    public function __construct(SpamCallDetailRepository $spamCallDetailRepository)
     {
         $this->middleware('auth');
-        $this->msisdnSummaryTypeRepository = $msisdnSummaryTypeRepository;
+        $this->_spamCallDetailRepository = $spamCallDetailRepository;
     }
 
     public function listing(Request $request)
     {
         $params = getDataTableRequestParams($request);
-        $searchParams = $request->only('duration_type_id','status','msisdn','carrier');
+        $searchParams = $request->only('duration_type_id', 'status', 'msisdn', 'carrier');
 
-        $total = $this->msisdnSummaryTypeRepository->getList(
+        $total = $this->_spamCallDetailRepository->getList(
             $params['keyword'],
             $searchParams,
             true
@@ -29,7 +30,7 @@ class MsisdnSummaryTypeController extends Controller
 
         $arr = array(
             'recordsTotal' => $total,
-            'data' => $this->msisdnSummaryTypeRepository->getList(
+            'data' => $this->_spamCallDetailRepository->getList(
                 $params['keyword'],
                 $searchParams,
                 false,
@@ -44,13 +45,16 @@ class MsisdnSummaryTypeController extends Controller
 
         return response()->json($arr);
     }
-    public function label(PhoneLabelRequest $request){
-        $result = $this->msisdnSummaryTypeRepository->setLabel($request->only('phone','status'));
+
+    public function label(PhoneLabelRequest $request)
+    {
+        $result = $this->_spamCallDetailRepository->setLabel($request->only('phone', 'status'));
         return processCommonResponse($result);
     }
 
-    public function labelMultiple(PhoneLabelRequest $request){
-        $result = $this->msisdnSummaryTypeRepository->setLabelMultiple($request->only('phone','status'));
+    public function labelMultiple(PhoneLabelRequest $request)
+    {
+        $result = $this->_spamCallDetailRepository->setLabelMultiple($request->only('phone', 'status'));
         return processCommonResponse($result);
     }
 }

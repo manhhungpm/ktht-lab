@@ -91,5 +91,6 @@ export default {
             title: "List blacklist/whitelist"
         }
     },
-    alias_block_spam: "Msisdn Block Spam"
+    alias_block_spam: "Msisdn Block Spam",
+    spam_call_detail: "Report Msisdn Spam"
 };
