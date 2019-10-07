@@ -21,5 +21,9 @@ export default {
     show_history: "Show history",
     import: "Import",
     update: "Update",
-    renew_password: "Renew Password"
+    renew_password: "Renew Password",
+    lock: "Lock",
+    unlock: "Unlock",
+    bypass: "Bypass",
+    select_all: "Select all"
 };

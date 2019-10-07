@@ -5,6 +5,7 @@ export default {
         count: "Selected {count} rows"
     },
     column: {
+        index: "#",
         who_updated: "Who updated",
         when_updated: "When updated",
         action: "Action",
