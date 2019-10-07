@@ -60,7 +60,7 @@ class MsisdnSummaryTypeRepository extends BaseRepository
 
         if (!$counting) {
             $query->select('id', 'msisdn', 'num_call_out', 'sum_duration_call_out', 'num_call_label_spam',
-                'num_call_label_not_spam', 'num_call_not_label', 'duration_type_id')
+                'num_call_label_not_spam', 'num_call_not_label', 'duration_type_id', 'carrier')
                 ->with('durationType')
                 ->with('label:phone_number,status,id');
 
