@@ -19,4 +19,5 @@ export default {
     time: "Time",
     month_start: "Start month",
     month_end: "End month",
+    confirm: "Are you sure"
 };

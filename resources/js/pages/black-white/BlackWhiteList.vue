@@ -138,6 +138,7 @@ import bootbox from "bootbox";
 import axios from "axios";
 import {
     notify,
+    notifyNoRecord,
     notifyTryAgain,
     notifyActiveSuccess,
     notifyDisableSuccess
@@ -340,10 +341,7 @@ export default {
             if (ids.length > 0) {
                 this.$refs.actionModal.show(ids, alias, true);
             } else {
-                notify(
-                    this.$t("label.notification"),
-                    this.$t("notification.must_select_at_least_one_record")
-                );
+                notifyNoRecord();
             }
         },
         async disableIsSelected() {
@@ -358,10 +356,7 @@ export default {
             if (ids.length > 0) {
                 this.$refs.actionModal.show(ids, alias, false);
             } else {
-                notify(
-                    this.$t("label.notification"),
-                    this.$t("notification.must_select_at_least_one_record")
-                );
+                notifyNoRecord();
             }
         },
         handleDisable(table, rowData) {
