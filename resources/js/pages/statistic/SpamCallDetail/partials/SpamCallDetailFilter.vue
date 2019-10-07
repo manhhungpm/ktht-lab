@@ -52,7 +52,7 @@
                     </span>
                 </v-button>
                 <v-button
-                    color="warning"
+                    color="info"
                     style-type="air"
                     class="m-btn m-btn--icon"
                     @click.native="reset()"
