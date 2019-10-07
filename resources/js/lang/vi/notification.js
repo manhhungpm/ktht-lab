@@ -12,5 +12,8 @@ export default {
         "Không thể thực hiện vì loại tin của cấu hình đang vô hiệu ",
     resend_success: "Gửi lại yêu cầu thành công",
     must_select_at_least_one_record: "Phải chọn 1 bản ghi",
-    export_error: "Export lỗi"
+    export_error: "Có lỗi khi xuất file",
+    lock_success: "Khóa thành công",
+    unlock_success: "Mở khóa thành công",
+    bypass_success: "Bỏ qua thành công"
 };

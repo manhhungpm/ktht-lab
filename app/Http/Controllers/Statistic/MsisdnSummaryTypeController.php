@@ -3,24 +3,25 @@
 namespace App\Http\Controllers\Statistic;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Phone\PhoneLabelRequest;
 use App\Repositories\Statistic\MsisdnSummaryTypeRepository;
 use Illuminate\Http\Request;
 
 class MsisdnSummaryTypeController extends Controller
 {
-    protected $_msisdnSummaryTypeRepository;
+    protected $msisdnSummaryTypeRepository;
     public function __construct(MsisdnSummaryTypeRepository $msisdnSummaryTypeRepository)
     {
         $this->middleware('auth');
-        $this->_msisdnSummaryTypeRepository = $msisdnSummaryTypeRepository;
+        $this->msisdnSummaryTypeRepository = $msisdnSummaryTypeRepository;
     }
 
     public function listing(Request $request)
     {
         $params = getDataTableRequestParams($request);
-        $searchParams = $request->only('duration_type_id');
+        $searchParams = $request->only('duration_type_id','status','msisdn','carrier');
 
-        $total = $this->_msisdnSummaryTypeRepository->getList(
+        $total = $this->msisdnSummaryTypeRepository->getList(
             $params['keyword'],
             $searchParams,
             true
@@ -28,7 +29,7 @@ class MsisdnSummaryTypeController extends Controller
 
         $arr = array(
             'recordsTotal' => $total,
-            'data' => $this->_msisdnSummaryTypeRepository->getList(
+            'data' => $this->msisdnSummaryTypeRepository->getList(
                 $params['keyword'],
                 $searchParams,
                 false,
@@ -42,5 +43,14 @@ class MsisdnSummaryTypeController extends Controller
         );
 
         return response()->json($arr);
+    }
+    public function label(PhoneLabelRequest $request){
+        $result = $this->msisdnSummaryTypeRepository->setLabel($request->only('phone','status'));
+        return processCommonResponse($result);
+    }
+
+    public function labelMultiple(PhoneLabelRequest $request){
+        $result = $this->msisdnSummaryTypeRepository->setLabelMultiple($request->only('phone','status'));
+        return processCommonResponse($result);
     }
 }

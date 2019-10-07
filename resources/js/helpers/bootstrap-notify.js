@@ -106,9 +106,33 @@ export const notifyDisableSuccess = objectName =>
         i18n.t("notification.disable_success", [objectName]),
         "success"
     );
+export const notifyLockSuccess = objectName =>
+    notify(
+        i18n.t("label.notification"),
+        i18n.t("notification.lock_success", [objectName]),
+        "success"
+    );
+export const notifyUnLockSuccess = objectName =>
+    notify(
+        i18n.t("label.notification"),
+        i18n.t("notification.lock_success", [objectName]),
+        "success"
+    );
+export const notifyBypassSuccess = objectName =>
+    notify(
+        i18n.t("label.notification"),
+        i18n.t("notification.bypass_success", [objectName]),
+        "success"
+    );
 export const notifyNoPermission = objectName =>
     notify(
         i18n.t("label.notification"),
         i18n.t("errors.not_permission", [objectName]),
+        "danger"
+    );
+export const notifyNoRecord = () =>
+    notify(
+        i18n.t("label.notification"),
+        i18n.t("notification.must_select_at_least_one_record"),
         "danger"
     );

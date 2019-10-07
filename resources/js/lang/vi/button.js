@@ -22,5 +22,9 @@ export default {
     show_history: "Xem lịch sử",
     import: "Nhập file",
     update: "Cập nhật",
-    renew_password: "Đổi mật khẩu"
+    renew_password: "Đổi mật khẩu",
+    lock: "Khóa",
+    unlock: "Mở khóa",
+    bypass: "Bỏ qua",
+    select_all: "Chọn tất cả"
 };

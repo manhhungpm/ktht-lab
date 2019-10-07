@@ -9,5 +9,8 @@ export default {
     no_active_because_sms_type_disable: "No permission to active",
     resend_success: "Resend success",
     must_select_at_least_one_record: "Must select one record",
-    export_error: "Export error"
+    export_error: "Export error",
+    lock_success: "Successfully locked",
+    unlock_success: "Successfully unlocked",
+    bypass_success: "Successfully bypassed"
 };

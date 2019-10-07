@@ -5,6 +5,7 @@ export default {
         count: "Đã chọn {count} bản ghi"
     },
     column: {
+        index: "STT",
         who_updated: "Người cập nhật",
         when_updated: "Thời gian cập nhật",
         action: "Hành động",

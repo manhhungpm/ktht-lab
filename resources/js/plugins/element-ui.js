@@ -7,7 +7,9 @@ import {
     Loading,
     Collapse,
     CollapseItem,
-    TimePicker
+    TimePicker,
+    Breadcrumb,
+    BreadcrumbItem
 } from "element-ui";
 
 Vue.component(Pagination.name, Pagination);
@@ -17,4 +19,6 @@ Vue.component(DatePicker.name, DatePicker);
 Vue.component(Collapse.name, Collapse);
 Vue.component(CollapseItem.name, CollapseItem);
 Vue.component(TimePicker.name, TimePicker);
+Vue.component(Breadcrumb.name, Breadcrumb);
+Vue.component(BreadcrumbItem.name, BreadcrumbItem);
 // configure language
