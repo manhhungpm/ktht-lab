@@ -97,9 +97,7 @@
                                         "statistic_suspected_phone.table.fee_total"
                                     )
                                 }}</span>
-                                <span>
-                                    {{ feeTotalFormatted }} VND
-                                </span>
+                                <span> {{ feeTotalFormatted }} VND </span>
                             </b>
                         </div>
                     </div>
@@ -196,10 +194,26 @@ export default {
                     )
                 },
                 {
-                    data: "num_call_out",
-                    title: this.$t(
-                        "statistic_suspected_phone.table.calls_total"
-                    )
+                    data: "carrier",
+                    title: this.$t("statistic_suspected_phone.table.carrier"),
+                    render(data) {
+                        switch (data) {
+                            case "viettel":
+                                return "Viettel";
+                            case "vinaphone":
+                                return "Vinaphone";
+                            case "mobifone":
+                                return "Mobiphone";
+                            case "vietnamobile":
+                                return "Vietnamobile";
+                            case "gmobile":
+                                return "Gmobile";
+                            case "other":
+                                return $this.$t(
+                                    "statistic_suspected_phone.carrier.other"
+                                );
+                        }
+                    }
                 },
                 {
                     data: "duration_type.label",
@@ -225,6 +239,13 @@ export default {
                         } else return "-";
                     }
                 },
+                {
+                    data: "num_call_out",
+                    title: this.$t(
+                        "statistic_suspected_phone.table.calls_total"
+                    )
+                },
+
                 {
                     data: "sum_duration_call_out",
                     title: this.$t(
