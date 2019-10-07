@@ -36,7 +36,7 @@ if (mix.inProduction()) {
         "vuex-router-sync",
         "perfect-scrollbar",
         "datatables.net",
-        "datatables.net-bs4",g
+        "datatables.net-bs4",
         "select2",
         "numeral",
         "moment",
