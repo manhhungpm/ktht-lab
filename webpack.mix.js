@@ -18,33 +18,33 @@ mix.js("resources/js/app.js", "public/js")
     .sourceMaps(false, "source-map")
     .disableNotifications();
 
-if (mix.inProduction()) {
-    mix.version();
-
-    mix.extract([
-        "vue",
-        "axios",
-        "vuex",
-        "jquery",
-        "popper.js",
-        "vue-i18n",
-        "vue-meta",
-        "js-cookie",
-        "jquery-ui-dist/jquery-ui",
-        "bootstrap",
-        "vue-router",
-        "vuex-router-sync",
-        "perfect-scrollbar",
-        "datatables.net",
-        "datatables.net-bs4",
-        "select2",
-        "numeral",
-        "moment",
-        "highcharts"
-    ]);
-} else {
-    mix.browserSync("http://localhost:8000");
-}
+// if (mix.inProduction()) {
+//     mix.version();
+//
+//     mix.extract([
+//         "vue",
+//         "axios",
+//         "vuex",
+//         "jquery",
+//         "popper.js",
+//         "vue-i18n",
+//         "vue-meta",
+//         "js-cookie",
+//         "jquery-ui-dist/jquery-ui",
+//         "bootstrap",
+//         "vue-router",
+//         "vuex-router-sync",
+//         "perfect-scrollbar",
+//         "datatables.net",
+//         "datatables.net-bs4",
+//         "select2",
+//         "numeral",
+//         "moment",
+//         "highcharts"
+//     ]);
+// } else {
+//     mix.browserSync("http://localhost:8000");
+// }
 
 mix.webpackConfig({
     plugins: [

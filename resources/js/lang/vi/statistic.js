@@ -6,7 +6,7 @@ export default {
             title: "Báo cáo số lượng thuê bao"
         },
         type_percent_call: {
-            title: "Báo cáo tổng các cuộc gọi 1 chiều, 2 chiều trong tháng"
+            title: "Báo cáo tổng các cuộc gọi 1 chiều, 2 chiều"
         },
         type_number_out_call: {
             title: "Báo cáo tổng số lượng cuộc gọi ra của thuê bao"
@@ -18,7 +18,7 @@ export default {
         },
         type_duration_type: {
             title:
-                "Báo cáo tổng các cuộc gọi có thời lượng <10s, 10s->60s, >60s trong tháng"
+                "Báo cáo tổng các cuộc gọi có thời lượng <10s, 10s->60s, >60s"
         }
     }
 };
