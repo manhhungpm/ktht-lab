@@ -2,14 +2,14 @@
 
 namespace App\Repositories\Statistic;
 
-use App\Models\Statistic\TypeDurationMsisdn;
+use App\Models\Statistic\TypeNumberOutCall;
 use App\Repositories\BaseRepository;
 
-class TypeDurationMsisdnRepository extends BaseRepository
+class TypeNumberOutCallRepository extends BaseRepository
 {
     public function model()
     {
-        return TypeDurationMsisdn::class;
+        return TypeNumberOutCall::class;
     }
 
     public function getData($filter)
@@ -17,7 +17,7 @@ class TypeDurationMsisdnRepository extends BaseRepository
         $query = $this->model;
 
         if (isset($filter)) {
-            $query = $query->select('month', 'value')->whereDate('month', $filter)->orderBy('msisdn_type_id', 'asc');
+            $query = $query->select('month', 'value','msisdn_type_id')->whereDate('month', $filter)->orderBy('msisdn_type_id', 'asc');
         }
 
         return $query->get();

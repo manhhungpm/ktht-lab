@@ -12,9 +12,9 @@
   width: 135px !important;
 }
 
-.el-picker-panel__body{
-  padding-left: 29px !important;
-}
+//.el-picker-panel__body{
+//  padding-left: 29px !important;
+//}
 
 .el-range-editor.is-active {
   border-color: #716aca !important;
@@ -74,3 +74,19 @@
   background-color: #716aca!important;
 }
 
+.el-month-table td.current:not(.disabled) .cell {
+  color: #716aca!important;;
+}
+
+//hung
+.el-date-range-picker__time-header {
+  padding-left: 30px !important;
+}
+
+.el-date-range-picker .el-picker-panel__content {
+  padding-left: 30px !important;
+}
+
+.el-date-range-picker__time-header  {
+  border-bottom : 0px !important;
+}

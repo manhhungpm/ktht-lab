@@ -4,7 +4,6 @@
 namespace App\Http\Controllers\Statistic;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Statistic\MsisdnSummaryTypeRepository;
 use App\Repositories\Statistic\TypeDurationMsisdnRepository;
 use Illuminate\Http\Request;
 
@@ -22,7 +21,7 @@ class TypeDurationMsisdnController extends Controller
 
         $arr = [
             'code' => CODE_SUCCESS,
-            'data' => $this->_typeDurationMsisdnRepository->getData($request->only('from', 'to'))
+            'data' => $this->_typeDurationMsisdnRepository->getData($request->only('time_filter'))
         ];
         return response()->json($arr);
     }

@@ -1,27 +1,26 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-12">
-                <date-filter-month
-                    :default-time="defaultTime"
-                    :label="$t('label.select_month')"
-                    :placeholder="$t('label.select_month_placeholder')"
-                    value-format="yyyy-MM"
-                    :exportable="false"
+            <div class="time-filter">
+                <label style="margin-right: 30px">Chọn tháng</label>
+                <el-date-picker
+                    v-model="timeFilter"
                     type="month"
-                    :title="'Thông tin tìm kiếm'"
-                    @search="filterTime"
-                ></date-filter-month>
+                    placeholder="Chọn 1 tháng"
+                    value-format="yyyy-MM-dd"
+                    :default-time="defaultTime"
+                >
+                </el-date-picker>
             </div>
-            <div class="col-6">
+            <div class="col-12">
                 <portlet
                     style="height: 550px; "
-                    title="Báo cáo số lượng thuê bao"
+                    :title="$t('statistic.sum_call.type_number_msisdn.title')"
                 >
                     <another-highcharts
                         :series="pieSeries1"
                         :plot-options="plotOptionPie1"
-                        :tooltip-format="'<b>{point.y}%</b>'"
+                        :tooltip-format="'<b>{point.percentage:.1f}%</b>'"
                         :chart-height="450"
                         :margin-top="50"
                         :exporting="true"
@@ -30,7 +29,7 @@
             </div>
             <div class="col-6">
                 <portlet
-                    title="Báo cáo tổng các cuộc gọi 1 chiều, 2 chiều trong tháng"
+                    :title="$t('statistic.sum_call.type_percent_call.title')"
                     style="height: 550px; "
                 >
                     <highchart-stacked-column
@@ -50,7 +49,9 @@
                 </portlet>
             </div>
             <div class="col-6">
-                <portlet title="Báo cáo tổng số lượng cuộc gọi ra của thuê bao">
+                <portlet
+                    :title="$t('statistic.sum_call.type_number_out_call.title')"
+                >
                     <another-highcharts
                         :chart-type="'bar'"
                         :categories="barCategories1"
@@ -59,6 +60,7 @@
                         :exporting="true"
                         :tooltip-format="'Số lượng:<b> {point.y}%</b>'"
                         :horizontal-margin="92"
+                        :chart-height="432"
                     >
                     </another-highcharts>
                 </portlet>
@@ -72,6 +74,7 @@ import Portlet from "~/components/common/Portlet";
 import AnotherHighcharts from "~/components/common/AnotherHighcharts";
 import HighchartStackedColumn from "~/components/common/HighchartStackedColumn";
 import moment from "moment";
+import axios from "axios";
 
 export default {
     name: "SumCall",
@@ -82,26 +85,7 @@ export default {
             //Highchart 1
             pieSeries1: [
                 {
-                    data: [
-                        {
-                            name: "Cuộc gọi bình thường",
-                            y: 61.41,
-                            sliced: true,
-                            selected: true
-                        },
-                        {
-                            name: "Cuộc gọi nghi ngờ spam",
-                            y: 11.84
-                        },
-                        {
-                            name: "Cuộc gọi nghề nghiệp đặc thù",
-                            y: 10.85
-                        },
-                        {
-                            name: "Cuộc gọi từ tổng đài,telesale",
-                            y: 4.67
-                        }
-                    ]
+                    data: [{}]
                 }
             ],
             plotOptionPie1: {
@@ -110,10 +94,11 @@ export default {
                     cursor: "pointer",
                     dataLabels: {
                         style: {
-                            fontSize: "11.5px"
+                            fontSize: "13px"
                         }
                     },
-                    innerSize: "30%"
+                    innerSize: "30%",
+                    showInLegend: true
                 },
                 series: {
                     animation: {
@@ -122,72 +107,19 @@ export default {
                 }
             },
 
-            //Highchart 2
-            columnSeries1: [
-                { name: "Cuộc gọi bình thường", data: [50] },
-                { name: "Cuộc gọi nghi ngờ spam", data: [89] },
-                { name: "Cuộc gọi nghề nghiệp đặc thù", data: [32] },
-                { name: "Cuộc gọi từ tổng đài,telesale", data: [66] }
-            ],
-            columnPlotOptions1: {
-                column: {
-                    dataLabels: {
-                        enabled: false
-                    },
-                    minPointLength: 5
-                }
-            },
-            columnCategories1: ["Tháng 1"],
-
             //Highchart 3
+            stackedSeries1: [{}],
             stackedCategories1: [
                 "Cuộc gọi bình thường",
                 "Cuộc gọi nghi ngờ spam",
                 "Cuộc gọi nghề nghiệp đặc thù",
                 "Cuộc gọi từ tổng đài,telesale"
             ],
-            stackedSeries1: [
-                {
-                    name: "Số lượng cuộc gọi 1 chiều",
-                    data: [5, 3, 4, 2]
-                },
-                {
-                    name: "Số lượng cuộc gọi 2 chiều",
-                    data: [2, 2, 3, 1]
-                }
-            ],
             stackedPlotOptions1: {
                 column: {
                     stacking: "percent"
                 }
             },
-
-            //Highchart 4
-            areaSeries1: [
-                {
-                    name: "<10s",
-                    data: [50, 31, 64, 14]
-                },
-                {
-                    name: ">60s",
-                    data: [91, 20, 33, 55]
-                },
-                {
-                    name: "10s->60s",
-                    data: [18, 9, 13, 68]
-                }
-            ],
-            areaPlotOption1: {
-                area: {
-                    fillOpacity: 0.5
-                }
-            },
-            areaCategories1: [
-                "Cuộc gọi bình thường",
-                "Cuộc gọi nghi ngờ spam",
-                "Cuộc gọi nghề nghiệp đặc thù",
-                "Cuộc gọi từ tổng đài,telesale"
-            ],
 
             //Highchart 5
             barSeries1: [{ data: [] }],
@@ -199,55 +131,203 @@ export default {
                     stacking: "percent"
                 }
             },
-            barCategories1: [
-                "Cuộc gọi bình thường",
-                "Cuộc gọi nghi ngờ spam",
-                "Cuộc gọi nghề nghiệp đặc thù",
-                "Cuộc gọi từ tổng đài,telesale"
-            ],
+            barCategories1: [],
 
             //Filter
             defaultTime: moment()
                 .startOf("month")
                 .format("YYYY-MM"),
-            tableFilter: {
-                time: [
-                    moment()
-                        .startOf("month")
-                        .format("YYYY-MM-DD 00:00:00"),
-                    moment()
-                        .endOf("month")
-                        .format("YYYY-MM-DD 23:59:59")
-                ]
-            }
+            timeFilter: null
         };
     },
+    watch: {
+        timeFilter() {
+            this.$validator.validateAll().then(result => {
+                if (result) {
+                    this.getDataBarHighchart();
+                    this.getDataPieHighchart();
+                    this.getDataStackedHighchart();
+                }
+            });
+        }
+    },
     mounted() {
-        this.getChartData5();
+        this.getDataBarHighchart();
+        this.getDataPieHighchart();
+        this.getDataStackedHighchart();
     },
     methods: {
-        getChartData5() {
-            var response = [26, 56, 89, 12];
-            var arr = response.sort().reverse(); //sx mang tu lon den be
-            var max = arr[0];
+        setPercent(res) {
+            var max = res[0];
             var series = [];
 
-            arr.forEach(function(value) {
+            res.forEach(function(value) {
                 series.push([parseInt(((value / max) * 100).toFixed(1))]);
             });
 
-            this.barSeries1[0].data = series;
+            return series;
         },
-        async filterTime(data) {
-            this.tableFilter = data;
-            await this.$nextTick();
-            this.loadData();
+        parseName(value) {
+            var name;
+            switch (value) {
+                case 1:
+                    name = "Cuộc gọi bình thường";
+                    break;
+                case 2:
+                    name = "Cuộc gọi nghi ngờ spam";
+                    break;
+                case 3:
+                    name = "Cuộc gọi nghề nghiệp đặc thù ";
+                    break;
+                case 4:
+                    name = "Cuộc gọi từ tổng đài, telesale";
+                    break;
+            }
+            return name;
         },
-        async loadData() {
-            this.$refs.table.reload();
+        async getDataPieHighchart() {
+            try {
+                const { data } = await axios.post(
+                    "statistic/type-number-msisdn/get-data",
+                    { time_filter: this.timeFilter }
+                );
+                var arr = data.data;
+
+                if (arr.length != 0) {
+                    this.pieSeries1 = [
+                        {
+                            data: [
+                                {
+                                    name:
+                                        "Số lượng thuê bao nhóm cuộc gọi bình thường",
+                                    y: arr[0].value,
+                                    sliced: true,
+                                    selected: true
+                                },
+                                {
+                                    name:
+                                        "Số lượng thuê bao nhóm nghi ngờ spam",
+                                    y: arr[1].value
+                                },
+                                {
+                                    name:
+                                        "Số lượng thuê bao nhóm nghề nghiệp đặc thù",
+                                    y: arr[2].value
+                                },
+                                {
+                                    name:
+                                        "Số lượng thuê bao nhóm tổng đài, telesale",
+                                    y: arr[3].value
+                                }
+                            ]
+                        }
+                    ];
+                } else {
+                    this.pieSeries1 = [
+                        {
+                            data: [
+                                {
+                                    name:
+                                        "Số lượng thuê bao nhóm cuộc gọi bình thường",
+                                    y: 0,
+                                    sliced: true,
+                                    selected: true
+                                },
+                                {
+                                    name:
+                                        "Số lượng thuê bao nhóm nghi ngờ spam",
+                                    y: 0
+                                },
+                                {
+                                    name:
+                                        "Số lượng thuê bao nhóm nghề nghiệp đặc thù",
+                                    y: 0
+                                },
+                                {
+                                    name:
+                                        "Số lượng thuê bao nhóm tổng đài, telesale",
+                                    y: 0
+                                }
+                            ]
+                        }
+                    ];
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        },
+        async getDataStackedHighchart() {
+            try {
+                const { data } = await axios.post(
+                    "statistic/type-percent-call/get-data",
+                    { time_filter: this.timeFilter }
+                );
+                var arr = data.data;
+                var oneWay = [];
+                var twoWay = [];
+                if (arr.length != 0) {
+                    arr.forEach(function(e) {
+                        oneWay.push(e.value_one_way);
+                        twoWay.push(e.value_two_way);
+                    });
+                } else {
+                    arr.forEach(function() {
+                        oneWay.push(0, 0, 0, 0);
+                        twoWay.push(0, 0, 0, 0);
+                    });
+                }
+                this.stackedSeries1 = [
+                    {
+                        name: "Số lượng cuộc gọi 1 chiều",
+                        data: oneWay
+                    },
+                    {
+                        name: "Số lượng cuộc gọi 2 chiều",
+                        data: twoWay
+                    }
+                ];
+            } catch (e) {
+                console.log(e);
+            }
+        },
+        async getDataBarHighchart() {
+            try {
+                const { data } = await axios.post(
+                    "statistic/type-number-out-call/get-data",
+                    { time_filter: this.timeFilter }
+                );
+                var arr = data.data;
+                var nameMsisdn = [];
+                var valueMsisdn = [];
+
+                if (arr.length != 0) {
+                    //sắp xếp object từ lớn đến bé
+                    arr.sort(function(a, b) {
+                        return a.value - b.value;
+                    }).reverse();
+                    console.log(arr);
+
+                    arr.forEach(function(e) {
+                        nameMsisdn.push(this.parseName(e.msisdn_type_id));
+                        valueMsisdn.push(e.value);
+                    }, this);
+
+                    this.barCategories1 = nameMsisdn;
+                    this.barSeries1[0].data = this.setPercent(valueMsisdn);
+                } else {
+                    this.barSeries1[0].data = [0, 0, 0, 0];
+                }
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.time-filter {
+    margin: auto;
+    margin-bottom: 15px;
+}
+</style>

@@ -37,4 +37,8 @@ Route::group([
         includeRouteFiles(__DIR__ . '/Statistic/');
     });
 
+    Route::group(['namespace' => 'AliasBlockSpam','middleware' => []], function () {
+        includeRouteFiles(__DIR__ . '/AliasBlockSpam/');
+    });
+
 });

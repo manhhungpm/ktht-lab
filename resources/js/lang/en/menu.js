@@ -90,5 +90,6 @@ export default {
         list: {
             title: "List blacklist/whitelist"
         }
-    }
+    },
+    alias_block_spam: "Msisdn Block Spam"
 };

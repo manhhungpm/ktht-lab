@@ -90,5 +90,6 @@ export default {
         list: {
             title: "Quản lý danh sách Blacklist/Whitelist"
         }
-    }
+    },
+    alias_block_spam: "Tra cứu thuê bao chặn spam"
 };

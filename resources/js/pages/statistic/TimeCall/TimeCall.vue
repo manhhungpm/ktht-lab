@@ -2,17 +2,24 @@
     <div>
         <div class="row">
             <div class="time-filter">
-                <month-range
+                <label style="margin-right: 30px">Chọn tháng</label>
+                <el-date-picker
                     v-model="timeFilter"
-                    v-validate="'withinAYear'"
-                    :name="'monthRange'"
-                    :label="$t('label.time')"
-                    :error="errors.first('monthRange')"
-                ></month-range>
+                    type="month"
+                    placeholder="Pick a month"
+                    value-format="yyyy-MM-dd"
+                    :default-time="defaultTime"
+                >
+                </el-date-picker>
             </div>
             <div class="col-12">
-                <portlet title="Báo cáo tổng thời lượng cuộc gọi thuê bao">
+                <portlet
+                    :title="
+                        $t('statistic.time_call.type_duration_msisdn.title')
+                    "
+                >
                     <another-highcharts
+                        id="column1"
                         :chart-type="'column'"
                         :series="columnSeries1"
                         :plot-options="columnPlotOptions1"
@@ -27,7 +34,7 @@
             </div>
             <div class="col-12">
                 <portlet
-                    title="Báo cáo tổng các cuộc gọi có thời lượng <10s, 10s->60s, >60s trong tháng"
+                    :title="$t('statistic.time_call.type_duration_type.title')"
                     style="height: 615px; "
                 >
                     <another-highcharts
@@ -50,21 +57,15 @@ import Portlet from "~/components/common/Portlet";
 import AnotherHighcharts from "~/components/common/AnotherHighcharts";
 import moment from "moment";
 import axios from "axios";
-import MonthRange from "~/components/elements/filter/MonthRange";
 
 export default {
     name: "TimeCall",
-    components: { MonthRange, AnotherHighcharts, Portlet },
+    components: { AnotherHighcharts, Portlet },
     middleware: "auth",
     data() {
         return {
             //Highchart 2
-            columnSeries1: [
-                { name: "Cuộc gọi bình thường", data: [50, 11] },
-                { name: "Cuộc gọi nghi ngờ spam", data: [89, 11] },
-                { name: "Cuộc gọi nghề nghiệp đặc thù", data: [32, 11] },
-                { name: "Cuộc gọi từ tổng đài,telesale", data: [66, 11] }
-            ],
+            columnSeries1: [{}],
             columnPlotOptions1: {
                 column: {
                     dataLabels: {
@@ -73,33 +74,10 @@ export default {
                     minPointLength: 5
                 }
             },
-            columnCategories1: ["Tháng 1", "Tháng 2"],
-            // columnSeries1: [{}],
-            // columnPlotOptions1: {
-            //     column: {
-            //         dataLabels: {
-            //             enabled: false
-            //         },
-            //         minPointLength: 5
-            //     }
-            // },
-            // columnCategories1: ["Tháng 1"],
+            columnCategories1: [],
 
             //Highchart 4
-            areaSeries1: [
-                {
-                    name: "<10s",
-                    data: [50, 31, 64, 14]
-                },
-                {
-                    name: ">60s",
-                    data: [91, 20, 33, 55]
-                },
-                {
-                    name: "10s->60s",
-                    data: [18, 9, 13, 68]
-                }
-            ],
+            areaSeries1: [{}],
             areaPlotOption1: {
                 area: {
                     fillOpacity: 0.5
@@ -113,59 +91,141 @@ export default {
             ],
 
             //Filter
-            timeFilter: [
-                moment()
-                    .startOf("month")
-                    .subtract(12, "month")
-                    .format("YYYY-MM-DD"),
-                moment()
-                    .startOf("month")
-                    .subtract(1, "month")
-                    .format("YYYY-MM-DD")
-            ]
+            defaultTime: moment()
+                .startOf("month")
+                .format("YYYY-MM"),
+            timeFilter: null
         };
     },
     watch: {
         timeFilter() {
             this.$validator.validateAll().then(result => {
                 if (result) {
-                    this.getData();
+                    this.getDataColumnHighchart();
+                    this.getDataColumnArea();
                 }
             });
         }
     },
     mounted() {
-        // this.getData();
+        this.getDataColumnHighchart();
+        this.getDataColumnArea();
     },
     methods: {
-        async getData() {
+        async getDataColumnHighchart() {
             try {
                 const { data } = await axios.post(
                     "statistic/type-duration-msisdn/get-data",
-                    {
-                        from: this.timeFilter[0],
-                        to: this.timeFilter[1]
-                    }
+                    { time_filter: this.timeFilter }
+                );
+                var arr = data.data;
+                var seriesData = [];
+                // console.log(arr);
+
+                if (arr.length != 0) {
+                    arr.forEach(function(e) {
+                        seriesData.push(e.value);
+                    });
+                    this.columnSeries1 = [
+                        {
+                            name: "Cuộc gọi bình thường",
+                            data: [seriesData[0]]
+                        },
+                        {
+                            name: "Cuộc gọi nghi ngờ spam",
+                            data: [seriesData[1]]
+                        },
+                        {
+                            name: "Cuộc gọi nghề nghiệp đặc thù",
+                            data: [seriesData[2]]
+                        },
+                        {
+                            name: "Cuộc gọi từ tổng đài, telesale",
+                            data: [seriesData[3]]
+                        }
+                    ];
+                    this.columnCategories1.splice(0, 1);
+                    this.columnCategories1.push(arr[0].month);
+                } else {
+                    this.columnSeries1 = [
+                        {
+                            name: "Cuộc gọi bình thường",
+                            data: [0]
+                        },
+                        {
+                            name: "Cuộc gọi nghi ngờ spam",
+                            data: [0]
+                        },
+                        {
+                            name: "Cuộc gọi nghề nghiệp đặc thù",
+                            data: [0]
+                        },
+                        {
+                            name: "Cuộc gọi từ tổng đài, telesale",
+                            data: [0]
+                        }
+                    ];
+                    this.columnCategories1.splice(0, 1);
+                    this.columnCategories1.push("Không có");
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        },
+        async getDataColumnArea() {
+            try {
+                const { data } = await axios.post(
+                    "statistic/type-duration-type/get-data",
+                    { time_filter: this.timeFilter }
                 );
                 var arr = data.data;
 
-                // let seriesData = Object.keys(data.data).map(key => {
-                //     return [key, data.data[key]];
-                // });
-                //
-                // this.series[0].data = seriesData;
-
-                var temp = Object.keys(arr).map(key => {
-                    return [key, data.data[key]];
-                });
-                temp.forEach(function(value, index, array) {
-                    this.columnSeries1.push({
-                        name: value[0],
-                        data: Object.values(value[1])
-                    });
-                }, this);
-
-                console.log(this.columnSeries1);
+                if (arr.length != 0) {
+                    this.areaSeries1 = [
+                        {
+                            name: "<10s",
+                            data: [
+                                arr[0].value,
+                                arr[1].value,
+                                arr[2].value,
+                                arr[3].value
+                            ]
+                        },
+                        {
+                            name: ">60s",
+                            data: [
+                                arr[4].value,
+                                arr[5].value,
+                                arr[6].value,
+                                arr[7].value
+                            ]
+                        },
+                        {
+                            name: "10s->60s",
+                            data: [
+                                arr[8].value,
+                                arr[9].value,
+                                arr[10].value,
+                                arr[11].value
+                            ]
+                        }
+                    ];
+                } else {
+                    this.areaSeries1 = [
+                        {
+                            name: "<10s",
+                            data: [0, 0, 0, 0]
+                        },
+                        {
+                            name: ">60s",
+                            data: [0, 0, 0, 0]
+                        },
+                        {
+                            name: "10s->60s",
+                            data: [0, 0, 0, 0]
+                        }
+                    ];
+                }
             } catch (e) {
                 console.log(e);
             }

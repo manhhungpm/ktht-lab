@@ -28,3 +28,9 @@ export const TYPE_WHITELIST = 1;
 export const THREE_DAYS = 3;
 export const SEVEN_DAYS = 7;
 export const THIRTY_DAY = 30;
+
+//Man hinh tra cuu thue bao chan spam
+export const ALL = -1;
+export const NO = 0;
+export const YES = 1;
+export const NO_RESPONSE = 2;

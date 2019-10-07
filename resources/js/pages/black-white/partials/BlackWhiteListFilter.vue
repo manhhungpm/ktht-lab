@@ -166,6 +166,10 @@ export default {
                 searchable: false,
                 options: [
                     {
+                        id: -1,
+                        text: "Tất cả"
+                    },
+                    {
                         id: TYPE_WHITELIST,
                         text: "Whitelist"
                     },

@@ -2,14 +2,14 @@
 
 namespace App\Repositories\Statistic;
 
-use App\Models\Statistic\TypeDurationMsisdn;
+use App\Models\Statistic\TypeNumberMsisdn;
 use App\Repositories\BaseRepository;
 
-class TypeDurationMsisdnRepository extends BaseRepository
+class TypeNumberMsisdnRepository extends BaseRepository
 {
     public function model()
     {
-        return TypeDurationMsisdn::class;
+        return TypeNumberMsisdn::class;
     }
 
     public function getData($filter)

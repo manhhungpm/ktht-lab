@@ -37,6 +37,12 @@ const StatisticSpamCallDetail = () =>
 const BlackWhiteList = () =>
     import("~/pages/black-white/BlackWhiteList.vue").then(m => m.default || m);
 
+//Block spam
+const AliasBlockSpam = () =>
+    import("~/pages/alias-block-spam/AliasBlockSpam.vue").then(
+        m => m.default || m
+    );
+
 export default {
     dashboard: { path: "/", name: "dashboard", component: Dashboard },
 
@@ -97,5 +103,12 @@ export default {
         path: "/black-white-list",
         name: "black_white.list.title",
         component: BlackWhiteList
+    },
+
+    //Block spam
+    block_spam: {
+        path: "/alias-block-spam",
+        name: "alias_block_spam",
+        component: AliasBlockSpam
     }
 };
