@@ -16,8 +16,12 @@ class TypePercentCallRepository extends BaseRepository
     {
         $query = $this->model;
 
-        if (isset($filter)) {
-            $query = $query->select('month', 'value_one_way','value_two_way')->whereDate('month', $filter)->orderBy('msisdn_type_id', 'asc');
+        $date = $filter['time_filter'];
+
+        if (isset($date)) {
+            $query = $query->select('month', 'msisdn_type_id', 'value_one_way', 'value_two_way')
+                ->whereDate('month','>=', $date[0])
+                ->whereDate('month','<=', $date[1]);
         }
 
         return $query->get();

@@ -16,8 +16,12 @@ class TypeNumberMsisdnRepository extends BaseRepository
     {
         $query = $this->model;
 
-        if (isset($filter)) {
-            $query = $query->select('month', 'value')->whereDate('month', $filter)->orderBy('msisdn_type_id', 'asc');
+        $date = $filter['time_filter'];
+
+        if (isset($date)) {
+            $query = $query->select('month', 'value','msisdn_type_id')
+                ->whereDate('month','>=', $date[0])
+                ->whereDate('month','<=',$date[1]);
         }
 
         return $query->get();

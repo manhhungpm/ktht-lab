@@ -2,15 +2,15 @@
     <div>
         <div class="row">
             <div class="time-filter">
-                <label style="margin-right: 30px">Chọn tháng</label>
-                <el-date-picker
+                <the-date-range
                     v-model="timeFilter"
-                    type="month"
-                    placeholder="Pick a month"
-                    value-format="yyyy-MM-dd"
-                    :default-time="defaultTime"
-                >
-                </el-date-picker>
+                    :label="'Chọn ngày'"
+                    :format="'dd/MM/yyyy'"
+                    :value-format="'yyyy-MM-dd'"
+                    :disabled-date="'greaterThanToday'"
+                    :name-shortcut="['last_7_days', 'last_30_days']"
+                    :shortcut="true"
+                ></the-date-range>
             </div>
             <div class="col-12">
                 <portlet
@@ -91,10 +91,15 @@ export default {
             ],
 
             //Filter
-            defaultTime: moment()
-                .startOf("month")
-                .format("YYYY-MM"),
-            timeFilter: null
+            timeFilter: [
+                moment()
+                    .startOf("day")
+                    .subtract(1, "days")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .startOf("day")
+                    .format("YYYY-MM-DD")
+            ]
         };
     },
     watch: {
@@ -119,12 +124,24 @@ export default {
                     { time_filter: this.timeFilter }
                 );
                 var arr = data.data;
-                var seriesData = [];
-                // console.log(arr);
+                var seriesData = [0, 0, 0, 0];
 
                 if (arr.length != 0) {
                     arr.forEach(function(e) {
-                        seriesData.push(e.value);
+                        switch (e.msisdn_type_id) {
+                            case 1:
+                                seriesData[0] += e.value;
+                                break;
+                            case 2:
+                                seriesData[1] += e.value;
+                                break;
+                            case 3:
+                                seriesData[2] += e.value;
+                                break;
+                            case 4:
+                                seriesData[3] += e.value;
+                                break;
+                        }
                     });
                     this.columnSeries1 = [
                         {
@@ -144,8 +161,7 @@ export default {
                             data: [seriesData[3]]
                         }
                     ];
-                    this.columnCategories1.splice(0, 1);
-                    this.columnCategories1.push(arr[0].month);
+                    this.columnCategories1.push("Kết quả");
                 } else {
                     this.columnSeries1 = [
                         {
@@ -165,8 +181,7 @@ export default {
                             data: [0]
                         }
                     ];
-                    this.columnCategories1.splice(0, 1);
-                    this.columnCategories1.push("Không có");
+                    this.columnCategories1.push("Kết quả");
                 }
             } catch (e) {
                 console.log(e);
@@ -184,32 +199,69 @@ export default {
                     this.areaSeries1 = [
                         {
                             name: "<10s",
-                            data: [
-                                arr[0].value,
-                                arr[1].value,
-                                arr[2].value,
-                                arr[3].value
-                            ]
+                            data: [0, 0, 0, 0]
                         },
                         {
                             name: ">60s",
-                            data: [
-                                arr[4].value,
-                                arr[5].value,
-                                arr[6].value,
-                                arr[7].value
-                            ]
+                            data: [0, 0, 0, 0]
                         },
                         {
                             name: "10s->60s",
-                            data: [
-                                arr[8].value,
-                                arr[9].value,
-                                arr[10].value,
-                                arr[11].value
-                            ]
+                            data: [0, 0, 0, 0]
                         }
                     ];
+                    arr.forEach(function(e) {
+                        switch (e.call_duration_type_id) {
+                            case 1:
+                                switch (e.msisdn_type_id) {
+                                    case 1:
+                                        this.areaSeries1[0].data[0] += e.value;
+                                        break;
+                                    case 2:
+                                        this.areaSeries1[0].data[1] += e.value;
+                                        break;
+                                    case 3:
+                                        this.areaSeries1[0].data[2] += e.value;
+                                        break;
+                                    case 4:
+                                        this.areaSeries1[0].data[3] += e.value;
+                                        break;
+                                }
+                                break;
+                            case 2:
+                                switch (e.msisdn_type_id) {
+                                    case 1:
+                                        this.areaSeries1[1].data[0] += e.value;
+                                        break;
+                                    case 2:
+                                        this.areaSeries1[1].data[1] += e.value;
+                                        break;
+                                    case 3:
+                                        this.areaSeries1[1].data[2] += e.value;
+                                        break;
+                                    case 4:
+                                        this.areaSeries1[1].data[3] += e.value;
+                                        break;
+                                }
+                                break;
+                            case 3:
+                                switch (e.msisdn_type_id) {
+                                    case 1:
+                                        this.areaSeries1[2].data[0] += e.value;
+                                        break;
+                                    case 2:
+                                        this.areaSeries1[2].data[1] += e.value;
+                                        break;
+                                    case 3:
+                                        this.areaSeries1[2].data[2] += e.value;
+                                        break;
+                                    case 4:
+                                        this.areaSeries1[2].data[3] += e.value;
+                                        break;
+                                }
+                                break;
+                        }
+                    }, this);
                 } else {
                     this.areaSeries1 = [
                         {

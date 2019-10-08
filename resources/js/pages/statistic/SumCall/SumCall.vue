@@ -2,15 +2,15 @@
     <div>
         <div class="row">
             <div class="time-filter">
-                <label style="margin-right: 30px">Chọn tháng</label>
-                <el-date-picker
+                <the-date-range
                     v-model="timeFilter"
-                    type="month"
-                    placeholder="Chọn 1 tháng"
-                    value-format="yyyy-MM-dd"
-                    :default-time="defaultTime"
-                >
-                </el-date-picker>
+                    :label="'Chọn ngày'"
+                    :format="'dd/MM/yyyy'"
+                    :value-format="'yyyy-MM-dd'"
+                    :disabled-date="'greaterThanToday'"
+                    :name-shortcut="['last_7_days', 'last_30_days']"
+                    :shortcut="true"
+                ></the-date-range>
             </div>
             <div class="col-12">
                 <portlet
@@ -75,10 +75,16 @@ import AnotherHighcharts from "~/components/common/AnotherHighcharts";
 import HighchartStackedColumn from "~/components/common/HighchartStackedColumn";
 import moment from "moment";
 import axios from "axios";
+import TheDateRange from "../../../components/common/TheDateRange";
 
 export default {
     name: "SumCall",
-    components: { HighchartStackedColumn, AnotherHighcharts, Portlet },
+    components: {
+        TheDateRange,
+        HighchartStackedColumn,
+        AnotherHighcharts,
+        Portlet
+    },
     middleware: "auth",
     data() {
         return {
@@ -134,10 +140,15 @@ export default {
             barCategories1: [],
 
             //Filter
-            defaultTime: moment()
-                .startOf("month")
-                .format("YYYY-MM"),
-            timeFilter: null
+            timeFilter: [
+                moment()
+                    .startOf("day")
+                    .subtract(1, "days")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .startOf("day")
+                    .format("YYYY-MM-DD")
+            ]
         };
     },
     watch: {
@@ -167,24 +178,6 @@ export default {
 
             return series;
         },
-        parseName(value) {
-            var name;
-            switch (value) {
-                case 1:
-                    name = "Cuộc gọi bình thường";
-                    break;
-                case 2:
-                    name = "Cuộc gọi nghi ngờ spam";
-                    break;
-                case 3:
-                    name = "Cuộc gọi nghề nghiệp đặc thù ";
-                    break;
-                case 4:
-                    name = "Cuộc gọi từ tổng đài, telesale";
-                    break;
-            }
-            return name;
-        },
         async getDataPieHighchart() {
             try {
                 const { data } = await axios.post(
@@ -192,32 +185,51 @@ export default {
                     { time_filter: this.timeFilter }
                 );
                 var arr = data.data;
-
+                var series1 = 0,
+                    series2 = 0,
+                    series3 = 0,
+                    series4 = 0;
                 if (arr.length != 0) {
+                    arr.forEach(function(e) {
+                        switch (e.msisdn_type_id) {
+                            case 1:
+                                series1 += e.value;
+                                break;
+                            case 2:
+                                series2 += e.value;
+                                break;
+                            case 3:
+                                series3 += e.value;
+                                break;
+                            case 4:
+                                series4 += e.value;
+                                break;
+                        }
+                    });
                     this.pieSeries1 = [
                         {
                             data: [
                                 {
                                     name:
                                         "Số lượng thuê bao nhóm cuộc gọi bình thường",
-                                    y: arr[0].value,
+                                    y: series1,
                                     sliced: true,
                                     selected: true
                                 },
                                 {
                                     name:
                                         "Số lượng thuê bao nhóm nghi ngờ spam",
-                                    y: arr[1].value
+                                    y: series2
                                 },
                                 {
                                     name:
                                         "Số lượng thuê bao nhóm nghề nghiệp đặc thù",
-                                    y: arr[2].value
+                                    y: series3
                                 },
                                 {
                                     name:
                                         "Số lượng thuê bao nhóm tổng đài, telesale",
-                                    y: arr[3].value
+                                    y: series4
                                 }
                             ]
                         }
@@ -263,12 +275,28 @@ export default {
                     { time_filter: this.timeFilter }
                 );
                 var arr = data.data;
-                var oneWay = [];
-                var twoWay = [];
+                var oneWay = [0, 0, 0, 0];
+                var twoWay = [0, 0, 0, 0];
                 if (arr.length != 0) {
                     arr.forEach(function(e) {
-                        oneWay.push(e.value_one_way);
-                        twoWay.push(e.value_two_way);
+                        switch (e.msisdn_type_id) {
+                            case 1:
+                                oneWay[0] += e.value_one_way;
+                                twoWay[0] += e.value_two_way;
+                                break;
+                            case 2:
+                                oneWay[1] += e.value_one_way;
+                                twoWay[1] += e.value_two_way;
+                                break;
+                            case 3:
+                                oneWay[2] += e.value_one_way;
+                                twoWay[2] += e.value_two_way;
+                                break;
+                            case 4:
+                                oneWay[3] += e.value_one_way;
+                                twoWay[3] += e.value_two_way;
+                                break;
+                        }
                     });
                 } else {
                     arr.forEach(function() {
@@ -301,17 +329,50 @@ export default {
                 var valueMsisdn = [];
 
                 if (arr.length != 0) {
-                    //sắp xếp object từ lớn đến bé
-                    arr.sort(function(a, b) {
-                        return a.value - b.value;
-                    }).reverse();
-                    console.log(arr);
-
+                    var result = [
+                        {
+                            name: "Cuộc gọi bình thường",
+                            value: 0
+                        },
+                        {
+                            name: "Cuộc gọi nghi ngờ spam",
+                            value: 0
+                        },
+                        {
+                            name: "Cuộc gọi nghề nghiệp đặc thù",
+                            value: 0
+                        },
+                        {
+                            name: "Cuộc gọi từ tổng đài, telesale",
+                            value: 0
+                        }
+                    ];
                     arr.forEach(function(e) {
-                        nameMsisdn.push(this.parseName(e.msisdn_type_id));
+                        switch (e.msisdn_type_id) {
+                            case 1:
+                                result[0].value += e.value;
+                                break;
+                            case 2:
+                                result[1].value += e.value;
+                                break;
+                            case 3:
+                                result[2].value += e.value;
+                                break;
+                            case 4:
+                                result[3].value += e.value;
+                                break;
+                        }
+                    });
+                    //sắp xếp object từ lớn đến bé
+                    result
+                        .sort(function(a, b) {
+                            return a.value - b.value;
+                        })
+                        .reverse();
+                    result.forEach(function(e) {
+                        nameMsisdn.push(e.name);
                         valueMsisdn.push(e.value);
-                    }, this);
-
+                    });
                     this.barCategories1 = nameMsisdn;
                     this.barSeries1[0].data = this.setPercent(valueMsisdn);
                 } else {
