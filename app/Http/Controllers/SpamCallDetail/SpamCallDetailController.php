@@ -57,4 +57,15 @@ class SpamCallDetailController extends Controller
         $result = $this->_spamCallDetailRepository->setLabelMultiple($request->only('phone', 'status'));
         return processCommonResponse($result);
     }
+
+    public function getTotal(Request $request){
+        $searchParams = $request->only('duration_type_id','status','msisdn','carrier');
+        $data = $this->_spamCallDetailRepository->getTotal($searchParams);
+        if($data){
+            return processCommonResponse(true, $data);
+        }
+        else {
+            return processCommonResponse(false);
+        }
+    }
 }

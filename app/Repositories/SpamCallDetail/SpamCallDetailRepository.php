@@ -41,7 +41,7 @@ class SpamCallDetailRepository extends BaseRepository
                 case 'status':
                     if (isset($item)) {
                         if (in_array(0, $item)) {
-                            $query->where(function ($q) use ($item){
+                            $query->where(function ($q) use ($item) {
                                 $q->whereHas('label', function ($q1) use ($item) {
                                     $q1->whereIn('status', $item);
                                 })->orDoesntHave('label');
@@ -78,6 +78,69 @@ class SpamCallDetailRepository extends BaseRepository
         return $query->get();
     }
 
+    public function getTotal($search = [])
+    {
+        ini_set('max_execution_time', '0');
+        $time_start = microtime(true);
+        $query = $this->model->newQuery();
+        collect($search)->each(function ($item, $key) use ($query) {
+            switch ($key) {
+                case 'msisdn':
+                    if (isset($item)) {
+                        $query->where('msisdn', 'LIKE', "%$item%");
+                    }
+                    break;
+                case 'duration_type_id':
+                    if (isset($item)) {
+                        $query->where('duration_type_id', $item);
+                    }
+                    break;
+                case 'carrier':
+                    if (isset($item) && $item != 'all') {
+                        $query->where('carrier', $item);
+                    }
+                    break;
+                case 'status':
+                    if (isset($item)) {
+                        if (in_array(0, $item)) {
+                            $query->where(function ($q) use ($item) {
+                                $q->whereHas('label', function ($q1) use ($item) {
+                                    $q1->whereIn('status', $item);
+                                })->orDoesntHave('label');
+                            });
+                        } else {
+                            $query->whereHas('label', function ($q) use ($item) {
+                                $q->whereIn('status', $item);
+                            });
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+        $spamTotal = 0;
+        $feeTotal = 0;
+        try {
+              $query->chunk(50000, function($records) use (&$spamTotal, &$feeTotal) {
+                 foreach($records as $record){
+                     $spamTotal += $record->num_call_label_spam;
+                     $feeTotal += $record->sum_duration_call_out * 1000;
+                 }
+              });
+        } catch (\Exception $e) {
+            dd($e);
+        }
+        $time_end = microtime(true);
+        $execution_time = ($time_end - $time_start);
+        ini_set('max_execution_time', '30');
+        return [
+            'spam_total' => $spamTotal,
+            'fee_total' => $feeTotal,
+            'exec_time' => $execution_time
+        ];
+    }
+
     public function setLabel($arr)
     {
         try {
@@ -92,10 +155,11 @@ class SpamCallDetailRepository extends BaseRepository
         }
 
     }
+
     public function setLabelMultiple($arr)
     {
         try {
-            foreach($arr['phone'] as $phone) {
+            foreach ($arr['phone'] as $phone) {
                 $label = PhoneLabel::updateOrCreate(['phone_number' => $phone], [
                     'status' => $arr['status'],
                     'who_updated' => auth()->user()->name
