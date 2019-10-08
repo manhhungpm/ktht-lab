@@ -150,6 +150,10 @@ export default {
         selectable: {
             type: Boolean,
             default: false
+        },
+        countSelected: {
+            type: Boolean,
+            default: true
         }
         // selectStyle: {
         //   type: String,
@@ -210,14 +214,15 @@ export default {
         rowsSelected(value) {
             if (this.selectable) {
                 const table = this.table.table().container();
-
-                $(table)
-                    .find("div.selected-count")
-                    .html(
-                        this.$t("datatable.select.count", {
-                            count: value.length
-                        })
-                    );
+                if (this.countSelected) {
+                    $(table)
+                        .find("div.selected-count")
+                        .html(
+                            this.$t("datatable.select.count", {
+                                count: value.length
+                            })
+                        );
+                }
                 this.$emit("onSelect");
             }
         },
@@ -721,6 +726,23 @@ export default {
         },
         getSelectedRowsIds() {
             return this.rowsSelected;
+        },
+        selectAllCurrentPage() {
+            const table = this.table.table().container();
+            let selectAllBtn;
+            if (this.fixedColumnsLeft == 0) {
+                selectAllBtn = $(table).find('thead input[name="select_all"]');
+            } else {
+                selectAllBtn = $(table).find(
+                    ".DTFC_LeftHeadWrapper .dt-checkboxes-select-all"
+                );
+            }
+            if (selectAllBtn && selectAllBtn.prop("checked")) {
+                selectAllBtn.click();
+                selectAllBtn.click();
+            } else {
+                selectAllBtn.click();
+            }
         },
         nextPrePage() {
             this.table.page("previous").draw("page");
