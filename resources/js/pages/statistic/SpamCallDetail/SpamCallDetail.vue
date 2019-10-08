@@ -68,15 +68,16 @@
                                     <span>{{ $t("button.bypass") }}</span>
                                 </span>
                             </v-button>
-                            <!--<v-button-->
-                            <!--color="success"-->
-                            <!--style-type="air"-->
-                            <!--class="m-btn m-btn&#45;&#45;icon"-->
-                            <!--style="margin-bottom: 18px"-->
-                            <!--@click.native="disableIsSelected"-->
-                            <!--&gt;-->
-                            <!--<span>{{ $t("button.select_all") }}</span>-->
-                            <!--</v-button>-->
+                            <v-button
+                                color="success"
+                                style-type="air"
+                                class="m-btn m-btn--icon"
+                                style="margin-bottom: 18px"
+                                :loading="selectAllLoading"
+                                @click.native="selectAll"
+                            >
+                                <span>{{ $t("button.select_all") }}</span>
+                            </v-button>
                         </div>
                         <div class="col-md-3 col-lg-4 table-addition-label">
                             <b>
@@ -111,6 +112,7 @@
                         :order-column-index="2"
                         :fixed-columns-left="3"
                         :fixed-columns-right="2"
+                        :count-selected="false"
                         @onSelect="reCalculate"
                     ></data-table>
                 </portlet>
@@ -155,7 +157,8 @@ export default {
                 duration_type_id: 1
             },
             spamTotal: 0,
-            feeTotal: 0
+            feeTotal: 0,
+            selectAllLoading: false
         };
     },
     computed: {
@@ -450,10 +453,12 @@ export default {
                             '"' + htmlEscapeEntities(obj) + '",<br/>');
                     }, "<br/>");
                 } else {
-                    numbersText = selectedMsisdn.reduce((html, obj) => {
-                        return (html +=
-                            '"' + htmlEscapeEntities(obj) + '",<br/>');
-                    }, "<br/>");
+                    numbersText = selectedMsisdn
+                        .slice(0, 5)
+                        .reduce((html, obj) => {
+                            return (html +=
+                                '"' + htmlEscapeEntities(obj) + '",<br/>');
+                        }, "<br/>");
                     numbersText += `và ${selectedMsisdn.length -
                         5} số khác... <br/>`;
                 }
@@ -513,10 +518,12 @@ export default {
                             '"' + htmlEscapeEntities(obj) + '",<br/>');
                     }, "<br/>");
                 } else {
-                    numbersText = selectedMsisdn.reduce((html, obj) => {
-                        return (html +=
-                            '"' + htmlEscapeEntities(obj) + '",<br/>');
-                    }, "<br/>");
+                    numbersText = selectedMsisdn
+                        .slice(0, 5)
+                        .reduce((html, obj) => {
+                            return (html +=
+                                '"' + htmlEscapeEntities(obj) + '",<br/>');
+                        }, "<br/>");
                     numbersText += `và ${selectedMsisdn.length -
                         5} số khác... <br/>`;
                 }
@@ -651,6 +658,25 @@ export default {
             });
             this.spamTotal = spam;
             this.feeTotal = fee;
+        },
+
+        async selectAll() {
+            this.selectAllLoading = true;
+            this.$refs.table.selectAllCurrentPage();
+            await this.$nextTick();
+            this.spamTotal = 0;
+            this.feeTotal = 0;
+            try {
+                const { data } = await axios.post(
+                    "/statistic/msisdn-summary-type/get-total",
+                    this.tableFilter
+                );
+                this.spamTotal = data.data.spam_total;
+                this.feeTotal = data.data.fee_total;
+            } catch (e) {
+                console.log(e);
+            }
+            this.selectAllLoading = false;
         }
     }
 };
