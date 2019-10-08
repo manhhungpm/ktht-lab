@@ -9,6 +9,7 @@ return [
         'description' => 'Description'
     ],
     'export' => [
-        'filter' => 'Filter with'
+        'filter' => 'Filter with',
+        'name_file' => 'Search result'
     ]
 ];

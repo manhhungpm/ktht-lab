@@ -42,10 +42,6 @@ export default [
             {
                 title: "menu.statistic.spam",
                 route: "/statistic/spam"
-            },
-            {
-                title: "menu.statistic.spam_call_detail",
-                route: "/statistic/spam-call-detail"
             }
         ]
     },

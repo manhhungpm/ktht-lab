@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\Importable;
 
-class ListImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, WithValidation
+class BlackWhiteListImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, WithValidation
 {
     use Importable;
     private $data;
@@ -28,7 +28,6 @@ class ListImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatch
             'provider' => $row['provider'],
             'active' => $row['active'],
             'description' => $row['description'],
-            'url' => $row['url'],
             'manager_id'=> $this->managerIdDefault,
             'who_created' => $row['who_created'],
             'created_at' => $this->formatDate($row['created_at']),

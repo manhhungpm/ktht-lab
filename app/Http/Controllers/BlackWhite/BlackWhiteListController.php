@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\BlackWhite;
 
-use App\Exports\Blackwhite\ListExport;
+use App\Exports\Blackwhite\BlackWhiteListExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlackWhite\BlackWhiteList\AddBlackWhiteListRequest;
 use App\Http\Requests\BlackWhite\BlackWhiteList\EditBlackWhiteListRequest;
 use App\Http\Requests\Common\IdsRequest;
 use App\Http\Requests\Common\ImportRequest;
-use App\Imports\ListImport;
+use App\Imports\BlackWhiteListImport;
 use App\Repositories\BlackWhite\BlackWhiteListRepository;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
@@ -89,8 +89,8 @@ class BlackWhiteListController extends Controller
         ini_set('max_execution_time', '0');
         $locale = $request->cookie('locale');
         \Illuminate\Support\Facades\App::setLocale($locale);
-        $export = new ListExport($searchParams);
-        return $excel->download($export, 'Kết quả tìm kiếm' . '.xlsx');
+        $export = new BlackWhiteListExport($searchParams);
+        return $excel->download($export, trans('common.export.name_file') . '.xlsx');
     }
 
     public function import(ImportRequest $request)
@@ -98,7 +98,7 @@ class BlackWhiteListController extends Controller
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', '0');
 
-        $whiteImport = new ListImport();
+        $whiteImport = new BlackWhiteListImport();
         $path = $request->file('file');
         $this->_excel->import($whiteImport, $path);
 

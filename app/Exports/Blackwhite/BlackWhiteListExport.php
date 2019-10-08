@@ -2,19 +2,17 @@
 
 namespace App\Exports\Blackwhite;
 
-use App\Exports\Concerns\WithCustomProperties;
 use App\Exports\Concerns\WithCustomPropertiesHasFilter;
-use App\Repositories\Blackwhite\ListRepository;
+use App\Repositories\Blackwhite\BlackWhiteListRepository;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class ListExport implements FromCollection, WithHeadings, ShouldAutoSize, WithEvents, WithCustomPropertiesHasFilter, WithMapping
+class BlackWhiteListExport implements FromCollection, WithHeadings, ShouldAutoSize, WithEvents, WithCustomPropertiesHasFilter, WithMapping
 {
     use RegistersEventListeners;
 
@@ -25,8 +23,9 @@ class ListExport implements FromCollection, WithHeadings, ShouldAutoSize, WithEv
 
     public function __construct($searchParam)
     {
-        $this->list = new ListRepository();
+        $this->list = new BlackWhiteListRepository();
         $this->searchParam = $searchParam;
+//        dd($searchParam);
     }
 
     public function collection()
@@ -77,19 +76,19 @@ class ListExport implements FromCollection, WithHeadings, ShouldAutoSize, WithEv
 
     public function title(): string
     {
-        return "Kết quả tìm kiếm";
+        return trans('common.export.name_file');
     }
 
     public function dataFilter(): array
     {
         return [
-            'Type' => isset($this->searchParam['type']) ? $this->getMultiFilterType($this->searchParam['type']) : 'None',
-            'Provider' => isset($this->searchParam['provider']) ? $this->getMultiFilter($this->searchParam['provider']) : 'None',
-            'Manager' => isset($this->searchParam['manager']) ? $this->getMultiFilter($this->searchParam['manager']) : 'None',
-            'Who updated' => isset($this->searchParam['who_updated']) ? $this->getMultiFilter($this->searchParam['who_updated']) : 'None',
-            'When updated' => isset($this->searchParam['updated_at']) ? $this->searchParam['updated_at'] : 'None',
-            'Who created' => isset($this->searchParam['who_created']) ? $this->getMultiFilter($this->searchParam['who_created']) : 'None',
-            'When created' => isset($this->searchParam['created_at']) ? $this->searchParam['created_at'] : 'None',
+            trans('blackwhite.type') => isset($this->searchParam['type']) ? $this->getMultiFilterType($this->searchParam['type']) : 'None',
+            trans('blackwhite.provider') => isset($this->searchParam['provider']) ? $this->getMultiFilter($this->searchParam['provider']) : 'None',
+            trans('blackwhite.manager') => isset($this->searchParam['manager']) ? $this->getMultiFilter($this->searchParam['manager']) : 'None',
+            trans('common.table.who_updated') => isset($this->searchParam['who_updated']) ? $this->getMultiFilter($this->searchParam['who_updated']) : 'None',
+            trans('common.table.when_updated') => isset($this->searchParam['updated_at']) ? $this->searchParam['updated_at'][0].' -> '.$this->searchParam['updated_at'][1] : 'None',
+            trans('common.table.who_created') => isset($this->searchParam['who_created']) ? $this->getMultiFilter($this->searchParam['who_created']) : 'None',
+            trans('common.table.when_created') => isset($this->searchParam['created_at']) ? $this->searchParam['created_at'][0].' -> '.$this->searchParam['created_at'][1] : 'None',
         ];
     }
 
