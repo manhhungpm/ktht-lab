@@ -2,13 +2,22 @@
     <div>
         <div class="row">
             <div class="time-filter">
-                <month-range
+                <!--<month-range-->
+                <!--v-model="timeFilter"-->
+                <!--v-validate="'withinAYear'"-->
+                <!--:name="'monthRange'"-->
+                <!--:label="$t('label.time')"-->
+                <!--:error="errors.first('monthRange')"-->
+                <!--&gt;</month-range>-->
+                <the-date-range
                     v-model="timeFilter"
-                    v-validate="'withinAYear'"
-                    :name="'monthRange'"
-                    :label="$t('label.time')"
-                    :error="errors.first('monthRange')"
-                ></month-range>
+                    :label="'Chọn ngày'"
+                    :format="'dd/MM/yyyy'"
+                    :value-format="'yyyy-MM-dd'"
+                    :disabled-date="'greaterThanToday'"
+                    :name-shortcut="['last_7_days', 'last_30_days']"
+                    :shortcut="true"
+                ></the-date-range>
             </div>
             <div class="col-12">
                 <portlet title="Báo cáo số lượng cuộc gọi nghi ngờ spam">
@@ -40,12 +49,11 @@ export default {
         return {
             timeFilter: [
                 moment()
-                    .startOf("month")
-                    .subtract(12, "month")
+                    .startOf("day")
+                    .subtract(1, "days")
                     .format("YYYY-MM-DD"),
                 moment()
-                    .startOf("month")
-                    .subtract(1, "month")
+                    .startOf("day")
                     .format("YYYY-MM-DD")
             ],
             series: [
@@ -65,8 +73,9 @@ export default {
         };
     },
     watch: {
-        timeFilter() {
+        timeFilter(data) {
             this.$validator.validateAll().then(result => {
+                console.log(data);
                 if (result) {
                     this.getData();
                 }
@@ -82,12 +91,13 @@ export default {
                 const { data } = await axios.post(
                     "statistic/suspect-spam-chat/get-data",
                     {
-                        from: this.timeFilter[0],
-                        to: this.timeFilter[1]
+                        time_filter: this.timeFilter
                     }
                 );
-                let seriesData = Object.keys(data.data).map(key => {
-                    return [key, data.data[key]];
+                var arr = data.data;
+
+                let seriesData = Object.keys(arr).map(key => {
+                    return [key, arr[key]];
                 });
 
                 this.series[0].data = seriesData;

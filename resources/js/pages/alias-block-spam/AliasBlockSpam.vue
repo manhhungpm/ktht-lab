@@ -70,6 +70,7 @@
 import Portlet from "~/components/common/Portlet";
 import DataTable from "~/components/common/DataTable";
 import AliasBlockSpamFilter from "./partials/AliasBlockSpamFilter";
+import { NO, YES, NO_RESPONSE } from "../../constants/constant";
 export default {
     name: "AliasBlockSpam",
     middleware: "auth",
@@ -92,7 +93,7 @@ export default {
         columns() {
             return [
                 {
-                    data: "alias",
+                    data: "survey_phone",
                     title: this.$t("aliasblockspam.alias")
                 },
                 {
@@ -106,6 +107,10 @@ export default {
                     }
                 },
                 {
+                    data: "spam_alias",
+                    title: "Spamphone"
+                },
+                {
                     data: "content_feedback",
                     title: this.$t("aliasblockspam.content_feedback"),
                     orderable: false,
@@ -113,15 +118,15 @@ export default {
                         if (data != null) {
                             var content;
                             switch (data) {
-                                case 0:
+                                case NO:
                                     content =
-                                        '<span class="text-danger">No</span>';
+                                        '<span class="text-danger">Không</span>';
                                     break;
-                                case 1:
+                                case YES:
                                     content =
-                                        '<span class="text-success">Yes</span>';
+                                        '<span class="text-success">Có</span>';
                                     break;
-                                case 2:
+                                case NO_RESPONSE:
                                     content =
                                         '<span class="text-warning">Không phản hồi</span>';
                                     break;

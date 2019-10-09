@@ -20,7 +20,7 @@ class AliasBlockSpamController extends Controller
     public function listing(Request $request)
     {
         $params = getDataTableRequestParams($request);
-        $searchParams = $request->only('content_feedback','time_feedback');
+        $searchParams = $request->only('content_feedback', 'time_feedback', 'survey_phone', 'spam_alias');
 
         $total = $this->_aliasBlockSpamRepository->getList(
             $params['keyword'],

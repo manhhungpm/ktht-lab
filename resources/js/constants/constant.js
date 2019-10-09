@@ -38,7 +38,6 @@ export const UNLOCKED = 2;
 export const BYPASSED = 3;
 
 //Man hinh tra cuu thue bao chan spam
-export const ALL = -1;
 export const NO = 0;
 export const YES = 1;
 export const NO_RESPONSE = 2;

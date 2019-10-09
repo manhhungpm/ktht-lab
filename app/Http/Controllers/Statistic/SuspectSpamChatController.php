@@ -32,7 +32,7 @@ class SuspectSpamChatController extends Controller
 
         $arr = [
             'code' => CODE_SUCCESS,
-            'data' => $this->suspectSpamChatRepository->getData($request->only('from', 'to'))
+            'data' => $this->suspectSpamChatRepository->getData($request->only('time_filter'))
         ];
         return response()->json($arr);
     }

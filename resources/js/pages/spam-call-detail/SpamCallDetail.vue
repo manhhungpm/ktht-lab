@@ -218,30 +218,30 @@ export default {
                         }
                     }
                 },
-                {
-                    data: "duration_type.label",
-                    title: this.$t(
-                        "statistic_suspected_phone.table.time_range"
-                    ),
-                    orderable: false,
-                    render(data) {
-                        if (data != null) {
-                            var day = "";
-                            switch (parseInt(data)) {
-                                case THREE_DAYS:
-                                    day = "3 ngày";
-                                    break;
-                                case SEVEN_DAYS:
-                                    day = "7 ngày";
-                                    break;
-                                case THIRTY_DAY:
-                                    day = "30 ngày";
-                                    break;
-                            }
-                            return day;
-                        } else return "-";
-                    }
-                },
+                // {
+                //     data: "duration_type.label",
+                //     title: this.$t(
+                //         "statistic_suspected_phone.table.time_range"
+                //     ),
+                //     orderable: false,
+                //     render(data) {
+                //         if (data != null) {
+                //             var day = "";
+                //             switch (parseInt(data)) {
+                //                 case THREE_DAYS:
+                //                     day = "3 ngày";
+                //                     break;
+                //                 case SEVEN_DAYS:
+                //                     day = "7 ngày";
+                //                     break;
+                //                 case THIRTY_DAY:
+                //                     day = "30 ngày";
+                //                     break;
+                //             }
+                //             return day;
+                //         } else return "-";
+                //     }
+                // },
                 {
                     data: "num_call_out",
                     title: this.$t(

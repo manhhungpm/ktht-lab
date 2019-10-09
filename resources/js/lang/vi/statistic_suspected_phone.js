@@ -29,7 +29,7 @@ export default {
         confirm_unlock:
             "Bạn có chắc chắn <span class='text-success'> mở khóa </span> số điện thoại <span class='text-danger'> {number} </span> ?",
         confirm_bypass:
-            "Bạn có chắc chắn <span class='text-info'> bỏ qua </span> số điện thoại <span class='text-danger'> {number} </span> ?"
+            "Bạn có chắc chắn <span class='text-info'> loại bỏ </span> số điện thoại <span class='text-danger'> {number} </span> sau ra khỏi tập thuê bao nghi ngờ spam không ?"
     },
     placeholder: {
         phone_number: "Tìm kiếm số điện thoại",

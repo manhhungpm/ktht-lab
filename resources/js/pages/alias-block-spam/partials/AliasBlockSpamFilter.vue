@@ -12,6 +12,14 @@
             </div>
 
             <div class="col-6">
+                <form-control
+                    v-model="form.spam_alias"
+                    :label="$t('aliasblockspam.spam_alias')"
+                >
+                </form-control>
+            </div>
+
+            <div class="col-6">
                 <the-date-range
                     v-model="form.time_feedback"
                     :inline="false"
@@ -63,7 +71,8 @@ import TheDateRange from "~/components/common/TheDateRange";
 
 const defaultForm = {
     content_feedback: null,
-    time_feedback: null
+    time_feedback: null,
+    spam_alias: null
 };
 export default {
     name: "AliasBlockSpamFilter",
@@ -89,16 +98,16 @@ export default {
                 searchable: false,
                 options: [
                     {
-                        id: NO,
-                        text: "No"
+                        id: YES,
+                        text: this.$t("aliasblockspam.yes")
                     },
                     {
-                        id: YES,
-                        text: "Yes"
+                        id: NO,
+                        text: this.$t("aliasblockspam.no")
                     },
                     {
                         id: NO_RESPONSE,
-                        text: "Không phản hồi"
+                        text: this.$t("aliasblockspam.no_response")
                     }
                 ]
             }
@@ -130,6 +139,10 @@ export default {
         },
         filter() {
             let searchParams = {};
+
+            if (this.form.spam_alias) {
+                searchParams.spam_alias = this.form.spam_alias;
+            }
 
             if (this.form.time_feedback) {
                 searchParams.time_feedback = this.form.time_feedback;

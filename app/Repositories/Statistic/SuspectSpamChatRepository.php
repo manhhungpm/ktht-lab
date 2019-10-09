@@ -23,20 +23,26 @@ class SuspectSpamChatRepository extends BaseRepository
      */
     public function getData($filter)
     {
+        $query = $this->model;
+        $dateRange = $filter['time_filter'];
         $grid = [];
-        $period = CarbonPeriod::create($filter['from'], $filter['to']);
+        $period = CarbonPeriod::create($dateRange[0], $dateRange[1]);
+
         foreach ($period as $dt) {
-            $date = $dt->format('m/Y');
+            $date = $dt->format('d/m/Y');
             $grid[$date] = 0;
         }
 
-        $query = $this->model->select('month', 'value')
-            ->whereDate('month','>=',$filter['from'])
-            ->whereDate('month','<=',$filter['to'])
-            ->orderBy('month','asc')->get()->each(function ($obj) use (&$grid) {
-            $date = Carbon::createFromFormat('Y-m-d', $obj->month)->format('m/Y');
-            $grid[$date] = $obj->value;
-        });
+        $query =$query->select('month', 'value')
+            ->whereDate('month', '>=', $dateRange[0])
+            ->whereDate('month', '<=', $dateRange[1])
+            ->get()
+            ->each(function ($obj) use (&$grid) {
+                $date = Carbon::createFromFormat('Y-m-d', $obj->month)->format('d/m/Y');
+                $grid[$date] = $obj->value;
+            })
+        ;
+
         return $grid;
     }
 

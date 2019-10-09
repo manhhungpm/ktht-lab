@@ -12,15 +12,21 @@ class AliasBlockSpamRepository extends BaseRepository
         return AliasBlockSpam::class;
     }
 
-    public function getList($keyword = null, $search = [], $counting = false, $limit = 10, $offset = 0, $orderBy = 'alias', $orderType = 'desc'){
+    public function getList($keyword = null, $search = [], $counting = false, $limit = 10, $offset = 0, $orderBy = 'alias', $orderType = 'desc')
+    {
         $query = $this->model
             ->where(function ($query) use ($keyword) {
-                $query->where('alias', 'LIKE', "%$keyword%");
+                $query->where('survey_phone', 'LIKE', "%$keyword%");
             });
 
 //        dd($search);
         collect($search)->each(function ($item, $key) use ($query) {
             switch ($key) {
+                case 'spam_alias':
+                    if (isset($item)) {
+                        $query->where('spam_alias', $item);
+                    }
+                    break;
                 case 'content_feedback':
                     if (isset($item)) {
                         $query->whereIn('content_feedback', $item);
@@ -37,7 +43,7 @@ class AliasBlockSpamRepository extends BaseRepository
         });
 
         if (!$counting) {
-            $query->select('id', 'alias', 'content_feedback', 'time_feedback', 'content_survey');
+            $query->select('id', 'survey_phone', 'content_feedback', 'time_feedback', 'content_survey', 'spam_alias');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);

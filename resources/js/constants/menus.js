@@ -2,11 +2,11 @@ import * as ROLE from "~/constants/roles";
 import routes from "~/router/routes";
 
 export default [
-    {
-        title: "menu.dashboard",
-        icon: "flaticon-line-graph",
-        route: "/"
-    },
+    // {
+    //     title: "menu.dashboard",
+    //     icon: "flaticon-line-graph",
+    //     route: "/"
+    // },
     {
         title: "menu.management",
         icon: "flaticon-cogwheel",
