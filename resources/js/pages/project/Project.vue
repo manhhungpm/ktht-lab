@@ -17,7 +17,7 @@
                     ref="table"
                     :columns="columns"
                     url="/project/listing"
-                    :fixed-columns-left="1"
+                    :fixed-columns-left="2"
                     :fixed-columns-right="1"
                     :actions="actions"
                     :search-placeholder="$t('project.placeholder.search')"
