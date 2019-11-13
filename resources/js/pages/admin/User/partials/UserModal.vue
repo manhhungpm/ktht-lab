@@ -2,7 +2,7 @@
     <modal
         ref="modal"
         :title="
-            isEdit ? $t('admin.users.edit_user') : $t('admin.users.add_user')
+            isEdit ? $t('admin.users.edit') : $t('admin.users.add')
         "
         :on-hidden="onModalHidden"
     >
@@ -38,6 +38,9 @@
                 :data-vv-as="$t('admin.users.placeholder.display_name')"
             >
             </form-control>
+            <class-chosen :multiple="false"
+                          v-model="form.classes_result"
+                          :required="true"></class-chosen>
             <form-control
                 v-model="form.email"
                 v-validate="'required'"
@@ -75,19 +78,11 @@
                 :error="errors.first('password') || form.errors.get('password')"
                 :required="true"
             ></form-control>
-            <form-control
-                v-model="form.role"
-                v-validate="'required'"
-                :label="$t('admin.users.role')"
-                name="role"
-                :placeholder="$t('admin.users.placeholder.select_role')"
-                :type="'select'"
-                :select-options="roleOptions"
-                :error="errors.first('role') || form.errors.get('role')"
-                :required="true"
-                :data-vv-as="$t('admin.users.placeholder.select_role')"
-            >
-            </form-control>
+            <role-chosen
+                    v-model="form.role"
+                    :required="true"
+                    :multiple="true"
+            ></role-chosen>
             <div
                 class="form-group m-form__group"
                 :class="{
@@ -146,6 +141,8 @@ import {
     notifyAddSuccess,
     notifyNoPermission
 } from "~/helpers/bootstrap-notify";
+import ClassChosen from "../../../../components/elements/chosens/ClassChosen";
+import RoleChosen from "../../../../components/elements/chosens/RoleChosen";
 
 const defaultForm = {
     id: "",
@@ -153,17 +150,18 @@ const defaultForm = {
     display_name: "",
     email: "",
     mobile_phone: "",
-    role: [],
+    role: null,
     expired_at: "",
     who_created: "",
     who_updated: "",
     password: null,
-    test: null
+    classes_result: null,
+    classes: null
 };
 
 export default {
     name: "UserModal",
-    components: { FormControl },
+    components: {RoleChosen, ClassChosen, FormControl },
     props: {
         onActionSuccess: {
             type: Function,
@@ -193,15 +191,13 @@ export default {
     methods: {
         show(item = null) {
             if (item != null) {
-                var role_id = [];
-                for (var i = 0; i < item.user_role.length; i++) {
-                    role_id.push(item.user_role[i].role_id);
-                }
-                item.role = role_id.map(x => {
-                    return {
-                        id: x
-                    };
-                });
+                item.role = item.roles;
+
+                item.classes_result = {
+                    id: item.classes.id,
+                    text: item.classes.name,
+                    name: item.classes.name
+                };
 
                 this.form = new Form(item);
                 this.isEdit = true;
@@ -212,11 +208,10 @@ export default {
             this.$refs.modal.hide();
         },
         async addUser() {
-            var role_id = [];
-            for (var i = 0; i < this.form.role.length; i++) {
-                role_id.push(this.form.role[i].id);
-            }
-            this.form.role = role_id;
+            this.form.role = this.form.role.map(e => {
+                return e.id;
+            });
+            this.form.class_id = this.form.classes_result.id;
 
             try {
                 const res = await this.form.post("/admin/user/add");
@@ -238,11 +233,10 @@ export default {
             }
         },
         async editUser() {
-            var role_id = [];
-            for (var i = 0; i < this.form.role.length; i++) {
-                role_id.push(this.form.role[i].id);
-            }
-            this.form.role = role_id;
+            this.form.role = this.form.role.map(e => {
+                return e.id;
+            });
+            this.form.class_id = this.form.classes_result.id;
 
             try {
                 const res = await this.form.post("/admin/user/edit");

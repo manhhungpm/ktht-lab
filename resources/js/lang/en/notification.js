@@ -12,5 +12,6 @@ export default {
     export_error: "Export error",
     lock_success: "Successfully locked",
     unlock_success: "Successfully unlocked",
-    bypass_success: "Successfully bypassed"
+    bypass_success: "Successfully bypassed",
+    delete_success: "Delete Success"
 };

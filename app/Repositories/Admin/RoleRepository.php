@@ -25,7 +25,7 @@ class RoleRepository extends BaseRepository
             ->where('name', 'LIKE', "%$keyword%");
 
         if (!$counting) {
-            $query->select('id', 'name', 'active', 'updated_at', 'created_at', 'description');
+            $query->select('id', 'name', 'active', 'description');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);
@@ -67,7 +67,7 @@ class RoleRepository extends BaseRepository
     {
         $query = $this->model->where('id', $id);
         if ($query) {
-            $query->update(['active' => 1]);
+            $query->update(['active' => ACTIVE]);
             return $query;
         }
     }
@@ -76,7 +76,7 @@ class RoleRepository extends BaseRepository
     {
         $query = $this->model->where('id', $id);
         if ($query) {
-            $query->update(['active' => 0]);
+            $query->update(['active' => INACTIVE]);
             return $query;
         }
     }

@@ -22,7 +22,10 @@
             </div>
 
             <div class="col-md-4">
-                <manager-chosen v-model="form.manager"></manager-chosen>
+                <manager-chosen
+                    v-model="form.manager"
+                    :required="false"
+                ></manager-chosen>
             </div>
 
             <div class="col-md-4">
@@ -185,10 +188,6 @@ export default {
                 searchable: false,
                 options: [
                     {
-                        id: PROVIDER_ALL,
-                        text: "Tất cả"
-                    },
-                    {
                         id: PROVIDER_VIETTEL,
                         text: "Viettel"
                     },
@@ -289,6 +288,12 @@ export default {
             if (this.form.manager) {
                 searchParams.manager = this.form.manager.map(e => {
                     return e.id;
+                });
+            }
+
+            if (this.form.manager) {
+                searchParams.managerName = this.form.manager.map(e => {
+                    return e.name;
                 });
             }
 

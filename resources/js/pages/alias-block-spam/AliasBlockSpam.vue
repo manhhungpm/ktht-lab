@@ -107,8 +107,12 @@ export default {
                     }
                 },
                 {
+                    data: "time_survey",
+                    title: this.$t("aliasblockspam.time_survey")
+                },
+                {
                     data: "spam_alias",
-                    title: "Spamphone"
+                    title: this.$t("aliasblockspam.spam_alias")
                 },
                 {
                     data: "content_feedback",

@@ -6,6 +6,7 @@ export default {
     content_feedback: "Content feedback",
     time_feedback: "Time feedback",
     spam_alias: "Spam alias",
+    time_survey: "Time survey",
     placeholder: {
         content_feedback: "Enter content"
     },

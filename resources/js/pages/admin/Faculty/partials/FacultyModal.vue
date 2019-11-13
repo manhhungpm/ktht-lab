@@ -1,39 +1,39 @@
 <template>
     <modal
-        ref="modal"
-        :title="isEdit ? $t('admin.manager.edit') : $t('admin.manager.add')"
-        :on-hidden="onModalHidden"
+            ref="modal"
+            :title="isEdit ? $t('admin.faculty.edit') : $t('admin.faculty.add')"
+            :on-hidden="onModalHidden"
     >
         <form
-            class="m-form m-form--state m-form--label-align-right"
-            @submit.prevent="validateForm('form')"
+                class="m-form m-form--state m-form--label-align-right"
+                @submit.prevent="validateForm('form')"
         >
             <form-control
-                v-model="form.name"
-                v-validate="'required|max:100'"
-                :label="$t('admin.manager.name')"
-                name="name"
-                autocomplete="off"
-                :placeholder="$t('admin.manager.placeholder.name')"
-                :error="errors.first('name') || form.errors.get('name')"
-                :required="true"
-                :data-vv-as="$t('admin.manager.placeholder.name')"
+                    v-model="form.name"
+                    v-validate="'required|max:100'"
+                    :label="$t('admin.faculty.name')"
+                    name="name"
+                    autocomplete="off"
+                    :placeholder="$t('admin.faculty.placeholder.name')"
+                    :error="errors.first('name') || form.errors.get('name')"
+                    :required="true"
+                    :data-vv-as="$t('admin.faculty.placeholder.name')"
             >
             </form-control>
             <form-control
-                v-model="form.description"
-                v-validate="'required|max:500'"
-                :label="$t('admin.manager.description')"
-                name="description"
-                autocomplete="off"
-                :placeholder="$t('admin.manager.placeholder.description')"
-                :type="'area'"
-                :data-vv-as="$t('admin.manager.placeholder.description')"
-                :error="
+                    v-model="form.description"
+                    v-validate="'required|max:500'"
+                    :label="$t('admin.faculty.description')"
+                    name="description"
+                    autocomplete="off"
+                    :placeholder="$t('admin.faculty.placeholder.description')"
+                    :type="'area'"
+                    :data-vv-as="$t('admin.faculty.placeholder.description')"
+                    :error="
                     errors.first('description') ||
                         form.errors.get('description')
                 "
-                :required="true"
+                    :required="true"
             >
             </form-control>
         </form>
@@ -64,9 +64,8 @@ const defaultForm = {
     name: "",
     description: ""
 };
-
 export default {
-    name: "ManagerModal",
+    name: "FacultyModal",
     components: { FormControl },
     props: {
         onActionSuccess: {
@@ -97,9 +96,9 @@ export default {
             this.$validator.validateAll().then(result => {
                 if (result) {
                     if (this.isEdit) {
-                        this.editManager();
+                        this.editFaculty();
                     } else {
-                        this.addManager();
+                        this.addFaculty();
                     }
                 }
             });
@@ -109,9 +108,9 @@ export default {
             this.isEdit = false;
             this.$validator.reset();
         },
-        async addManager() {
+        async addFaculty() {
             try {
-                const res = await this.form.post("/admin/manager/add");
+                const res = await this.form.post("/admin/faculty/add");
                 const { data } = res;
 
                 if (data.code === SUCCESS) {
@@ -125,9 +124,9 @@ export default {
                 console.log(e);
             }
         },
-        async editManager() {
+        async editFaculty() {
             try {
-                const res = await this.form.post("/admin/manager/edit");
+                const res = await this.form.post("/admin/faculty/edit");
                 const { data } = res;
 
                 if (data.code === SUCCESS) {
@@ -142,7 +141,9 @@ export default {
             }
         }
     }
-};
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

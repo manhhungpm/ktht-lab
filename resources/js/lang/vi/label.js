@@ -18,5 +18,11 @@ export default {
     role: "Vai trò",
     time: "Thời gian",
     month_start: "Từ tháng",
-    month_end: "Đến tháng"
+    month_end: "Đến tháng",
+    class: "Lớp",
+    faculty: "Khoa",
+    provider: "Nhà cung cấp",
+    device_group: "Nhóm thiết bị",
+    store: "Nơi lưu trữ",
+    device_type: "Loại thiết bị",
 };

@@ -17,7 +17,7 @@
                                 <img
                                     alt=""
                                     :src="
-                                        require('~assets/img/logo/anticall.svg')
+                                        require('~assets/img/logo/logo3.svg')
                                     "
                                 />
                             </router-link>
@@ -88,7 +88,7 @@
                     >
                         <div class="m-stack__item m-topbar__nav-wrapper">
                             <ul class="m-topbar__nav m-nav m-nav--inline">
-                                <notification />
+                                <!--<notification />-->
                                 <language-chosen />
                                 <profile-actions />
                             </ul>

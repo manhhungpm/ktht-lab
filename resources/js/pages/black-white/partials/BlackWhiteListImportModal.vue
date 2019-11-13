@@ -56,7 +56,7 @@
                 >
                 <a
                     href="example/blackwhite_import_example.xlsx"
-                    download="File_import_mau.xlsx"
+                    download="Mau_them_dau_so_thue_bao.xlsx"
                     ><i
                         ><u>{{ $t("blackwhite.list.import_modal.file") }}</u></i
                     ></a

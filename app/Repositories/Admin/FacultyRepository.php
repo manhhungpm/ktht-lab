@@ -2,24 +2,23 @@
 
 namespace App\Repositories\Admin;
 
-use App\Models\Manager;
+use App\Models\Faculty;
 use App\Repositories\BaseRepository;
 
-class ManagerRepository extends BaseRepository
+class FacultyRepository extends BaseRepository
 {
     public function model()
     {
-        return Manager::class;
+        return Faculty::class;
     }
 
-    public function getList($keyword = null, $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'desc')
+    public function getList($keyword = null, $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
     {
         $query = $this->model
             ->where('name', 'LIKE', "%$keyword%");
 
         if (!$counting) {
-            $query->select('id', 'name', 'description', 'active', 'who_updated', 'updated_at', 'who_created', 'created_at');
-
+            $query->select('id', 'name', 'status', 'description', 'updated_at', 'created_at');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);
@@ -35,20 +34,18 @@ class ManagerRepository extends BaseRepository
         return $query->get();
     }
 
-    public function addManager($arr)
+    public function addFaculty($arr)
     {
         $query = $this->model;
-        $arr['active'] = '1';
-        $arr['who_created'] = \auth()->user()->name;
+        $arr['status'] = '1';
         $query->fill($arr);
         return $query->save();
     }
 
-    public function editManager($arr)
+    public function editFaculty($arr)
     {
         $query = $this->model->find($arr['id']);
         if ($query != null) {
-            $arr['who_updated'] = \auth()->user()->name;
             $query->fill($arr);
             if ($query->save()) {
                 return true;
@@ -62,7 +59,7 @@ class ManagerRepository extends BaseRepository
     {
         $query = $this->model->where('id', $id);
         if ($query) {
-            $query->update(['active' => 1]);
+            $query->update(['status' => ACTIVE]);
             return $query;
         }
     }
@@ -71,14 +68,14 @@ class ManagerRepository extends BaseRepository
     {
         $query = $this->model->where('id', $id);
         if ($query) {
-            $query->update(['active' => 0]);
+            $query->update(['status' => INACTIVE]);
             return $query;
         }
     }
 
     public function listingAll($isCounting = false, $keyword = null, $limit = 10, $offset = 0)
     {
-        $query = Manager::where('name', 'LIKE', "%$keyword%")->where('active', ACTIVE);
+        $query = Faculty::where('name', 'LIKE', "%$keyword%")->where('status', ACTIVE);
         if (!$isCounting) {
             $query->select('id', 'name')
                 ->skip($offset)

@@ -141,7 +141,8 @@ import {
     notifyNoRecord,
     notifyTryAgain,
     notifyActiveSuccess,
-    notifyDisableSuccess
+    notifyDisableSuccess,
+    notifyDeleteSuccess
 } from "~/helpers/bootstrap-notify";
 import BlackWhiteListFilter from "./partials/BlackWhiteListFilter";
 import BlackWhiteListImportModal from "./partials/BlackWhiteListImportModal";
@@ -282,13 +283,17 @@ export default {
                     className: "text-center tb-actions",
                     render(data) {
                         if (data.active === 1) {
-                            return generateTableAction(
-                                "disable",
-                                "handleDisable"
+                            return (
+                                generateTableAction(
+                                    "disable",
+                                    "handleDisable"
+                                ) +
+                                generateTableAction("delete", "handleDelete")
                             );
                         } else
                             return (
                                 generateTableAction("edit", "handleEdit") +
+                                generateTableAction("delete", "handleDelete") +
                                 generateTableAction("active", "handleActive")
                             );
                     }
@@ -311,6 +316,11 @@ export default {
                     type: "click",
                     name: "handleActive",
                     action: this.handleActive
+                },
+                {
+                    type: "click",
+                    name: "handleDelete",
+                    action: this.handleDelete
                 }
             ];
         }
@@ -321,6 +331,41 @@ export default {
         },
         handleEdit(table, rowData) {
             this.$refs.addModal.show(rowData);
+        },
+        handleDelete(table, rowData) {
+            console.log(rowData.id);
+            let $this = this;
+
+            bootbox.confirm({
+                title: this.$t("label.notification"),
+                message:
+                    'Bạn chắc chắn muốn xóa đấu số: "<span class="text-danger">' +
+                    htmlEscapeEntities(rowData.alias) +
+                    '</span>"?',
+                buttons: {
+                    cancel: {
+                        label: this.$t("button.cancel")
+                    },
+                    confirm: {
+                        label: this.$t("button.accept")
+                    }
+                },
+                callback: async function(result) {
+                    if (result) {
+                        let res = await axios.post("/blackwhite/list/delete", {
+                            id: [rowData.id]
+                        });
+                        const { data } = res;
+
+                        if (data.code == 0) {
+                            notifyDeleteSuccess();
+                            $this.$refs.table.reload();
+                        } else {
+                            notifyTryAgain();
+                        }
+                    }
+                }
+            });
         },
         addAlias() {
             this.$refs.addModal.show();

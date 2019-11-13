@@ -5,18 +5,35 @@ const NotFound = () =>
 
 const Login = () => import("~/pages/auth/Login.vue").then(m => m.default || m);
 
-const SsoLogin = () =>
-    import("~/pages/auth/SsoLogin.vue").then(m => m.default || m);
-
 const Dashboard = () => import("~/pages/index.vue").then(m => m.default || m);
 
 //Admin component
 const User = () =>
     import("~/pages/admin/User/users.vue").then(m => m.default || m);
-const Manager = () =>
-    import("~/pages/admin/Manager/managers.vue").then(m => m.default || m);
+const Class = () =>
+    import("~/pages/admin/Class/class.vue").then(m => m.default || m);
 const Role = () =>
     import("~/pages/admin/Role/roles.vue").then(m => m.default || m);
+const Faculty = () =>
+    import("~/pages/admin/Faculty/faculty.vue").then(m => m.default || m);
+
+//Device
+const DeviceGroup = () =>
+    import("~/pages/device/DeviceGroup/DeviceGroup.vue").then(m=>m.default || m);
+const DeviceType = () =>
+    import("~/pages/device/DeviceType/DeviceType.vue").then(m=>m.default || m);
+const Provider = () =>
+    import("~/pages/device/Provider/Provider.vue").then(m=>m.default || m);
+const Store = () =>
+    import("~/pages/device/Store/Store.vue").then(m=>m.default || m);
+
+//Project
+const Project = () =>
+    import("~/pages/project/Project.vue").then(m=>m.default || m);
+
+//Rent
+const Rent = () =>
+    import("~/pages/rent/Rent.vue").then(m=>m.default || m);
 
 //Highchart
 const StatisticTimeCall = () =>
@@ -33,26 +50,10 @@ const SpamCallDetail = () =>
         m => m.default || m
     );
 
-//Black white
-const BlackWhiteList = () =>
-    import("~/pages/black-white/BlackWhiteList.vue").then(m => m.default || m);
-
-//Block spam
-const AliasBlockSpam = () =>
-    import("~/pages/alias-block-spam/AliasBlockSpam.vue").then(
-        m => m.default || m
-    );
-
 export default {
     dashboard: { path: "/", name: "dashboard", component: Dashboard },
 
     login: { path: "/login", name: "login", component: Login },
-
-    sso_login: {
-        path: "/sso-login",
-        component: SsoLogin,
-        props: route => ({ query: route.query.token })
-    },
 
     not_found: { path: "*", name: "not_found", component: NotFound },
 
@@ -64,16 +65,61 @@ export default {
         meta: { title: i18n.t("admin.users.manage") }
     },
 
-    manager: {
-        path: "/admin/managers",
-        name: "admin.manager",
-        component: Manager
+    class: {
+        path: "/admin/class",
+        name: "admin.class",
+        component: Class
     },
 
     role: {
         path: "/admin/roles",
         name: "admin.role",
         component: Role
+    },
+
+    faculty: {
+        path: "/admin/faculty",
+        name: "admin.faculty",
+        component: Faculty
+    },
+
+    //Device route
+    device_group: {
+        path: "/device/group",
+        name: "device.group",
+        component: DeviceGroup
+    },
+
+    device_type: {
+        path: "/device/type",
+        name: "device.type",
+        component: DeviceType
+    },
+
+    provider: {
+        path: "/device/provider",
+        name: "device.provider",
+        component: Provider
+    },
+
+    store: {
+        path: "/device/store",
+        name: "device.store",
+        component: Store
+    },
+
+    //Project
+    project: {
+        path: "/project",
+        name: "project",
+        component: Project
+    },
+
+    //Project
+    rent: {
+        path: "/rent",
+        name: "rent",
+        component: Rent
     },
 
     //Statistic route
@@ -97,18 +143,4 @@ export default {
         name: "statistic.spam_call_detail",
         component: SpamCallDetail
     },
-
-    //Black white route
-    black_white_list: {
-        path: "/black-white-list",
-        name: "black_white.list.title",
-        component: BlackWhiteList
-    },
-
-    //Block spam
-    block_spam: {
-        path: "/alias-block-spam",
-        name: "alias_block_spam",
-        component: AliasBlockSpam
-    }
 };

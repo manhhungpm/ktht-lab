@@ -275,6 +275,7 @@ export default {
                     case "greaterThanToday":
                         pickerOpt.disabledDate = function(date) {
                             var day = new Date();
+                            day.setDate(day.getDate());
                             return date > day;
                         };
                         break;

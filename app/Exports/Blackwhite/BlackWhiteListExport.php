@@ -84,7 +84,7 @@ class BlackWhiteListExport implements FromCollection, WithHeadings, ShouldAutoSi
         return [
             trans('blackwhite.type') => isset($this->searchParam['type']) ? $this->getMultiFilterType($this->searchParam['type']) : 'None',
             trans('blackwhite.provider') => isset($this->searchParam['provider']) ? $this->getMultiFilter($this->searchParam['provider']) : 'None',
-            trans('blackwhite.manager') => isset($this->searchParam['manager']) ? $this->getMultiFilter($this->searchParam['manager']) : 'None',
+            trans('blackwhite.manager') => isset($this->searchParam['managerName']) ? $this->getMultiFilter($this->searchParam['managerName']) : 'None',
             trans('common.table.who_updated') => isset($this->searchParam['who_updated']) ? $this->getMultiFilter($this->searchParam['who_updated']) : 'None',
             trans('common.table.when_updated') => isset($this->searchParam['updated_at']) ? $this->searchParam['updated_at'][0].' -> '.$this->searchParam['updated_at'][1] : 'None',
             trans('common.table.who_created') => isset($this->searchParam['who_created']) ? $this->getMultiFilter($this->searchParam['who_created']) : 'None',

@@ -39,13 +39,13 @@ export default {
                 multiple: this.multiple,
                 idField: "id",
                 textField: "name",
-                ajax: "/admin/role/listing-all",
+                ajax: "/api/admin/role/listing-all",
                 hasAllOption: this.hasAllOption
             }
         };
     },
     watch: {
-        manager(val) {
+        role(val) {
             this.$emit("input", val);
         },
         value(newVal, oldVal) {

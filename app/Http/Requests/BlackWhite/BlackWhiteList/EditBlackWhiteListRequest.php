@@ -19,6 +19,9 @@ class EditBlackWhiteListRequest extends FormRequest
             ],
             'alias' => [
                 'required',
+                'max:15',
+                'numeric',
+                Rule::unique('alias_black_white_lists', 'alias')->ignore($this->input('id'))
             ],
             'description' => [
                 'max:255'

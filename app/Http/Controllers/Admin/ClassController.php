@@ -3,34 +3,32 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Manager\AddManagerRequest;
-use App\Http\Requests\Admin\Manager\EditManagerRequest;
-use App\Repositories\Admin\ManagerRepository;
+use App\Repositories\Admin\ClassRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
 
-class ManagerController extends Controller
+class ClassController extends Controller
 {
-    protected $managerRepository;
+    protected $_classRepository;
 
-    public function __construct(ManagerRepository $managerRepository)
+    public function __construct(ClassRepository $classRepository)
     {
         $this->middleware('auth');
-        $this->managerRepository = $managerRepository;
+        $this->_classRepository = $classRepository;
     }
 
     public function listing(Request $request)
     {
         $params = getDataTableRequestParams($request);
 
-        $total = $this->managerRepository->getList(
+        $total = $this->_classRepository->getList(
             $params['keyword'],
             true
         );
 
         $arr = array(
             'recordsTotal' => $total,
-            'data' => $this->managerRepository->getList(
+            'data' => $this->_classRepository->getList(
                 $params['keyword'],
                 false,
                 $params['length'],
@@ -45,30 +43,30 @@ class ManagerController extends Controller
         return response()->json($arr);
     }
 
-    public function add(AddManagerRequest $request)
+    public function add(Request $request)
     {
-        $result = $this->managerRepository->addManager($request->only('name', 'description'));
+        $result = $this->_classRepository->addClass($request->only('name', 'description','faculty_id'));
 
         return processCommonResponse($result);
     }
 
-    public function edit(EditManagerRequest $request)
+    public function edit(Request $request)
     {
-        $result = $this->managerRepository->editManager($request->only('name', 'description', 'id'));
+        $result = $this->_classRepository->editClass($request->only('name', 'description','faculty_id', 'id'));
 
         return processCommonResponse($result);
     }
 
     public function active(IdRequest $request)
     {
-        $result = $this->managerRepository->setActive($request->only( 'id'));
+        $result = $this->_classRepository->setActive($request->only('id'));
 
         return processCommonResponse($result);
     }
 
     public function disable(IdRequest $request)
     {
-        $result = $this->managerRepository->setDisable($request->only( 'id'));
+        $result = $this->_classRepository->setDisable($request->only('id'));
 
         return processCommonResponse($result);
     }
@@ -81,13 +79,12 @@ class ManagerController extends Controller
         $search = $request->input('search');
 
 
-        $data = $this->managerRepository->listingAll(false, $search, $length, $page * $length);
-        $total = $this->managerRepository->listingAll(true, $search);
+        $data = $this->_classRepository->listingAll(false, $search, $length, $page * $length);
+        $total = $this->_classRepository->listingAll(true, $search);
 
         return response()->json([
             'results' => $data,
             'total' => $total
         ]);
     }
-
 }

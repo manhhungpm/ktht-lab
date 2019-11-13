@@ -24,6 +24,7 @@
                         :chart-height="450"
                         :margin-top="50"
                         :exporting="true"
+                        :has-legend="true"
                     ></another-highcharts>
                 </portlet>
             </div>
@@ -45,6 +46,7 @@
                         :inverted="true"
                         :plot-options="stackedPlotOptions1"
                         :horizontal-margin="92"
+                        :title="'Phần trăm'"
                     ></highchart-stacked-column>
                 </portlet>
             </div>
@@ -123,18 +125,31 @@ export default {
             ],
             stackedPlotOptions1: {
                 column: {
-                    stacking: "percent"
+                    stacking: "percent",
+                    dataLabels: {
+                        enabled: true
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: "Phần trăm"
+                    }
                 }
             },
 
             //Highchart 5
             barSeries1: [{ data: [] }],
             barPlotOption1: {
-                series: {
-                    stacking: "normal"
-                },
                 column: {
-                    stacking: "percent"
+                    stacking: "percent",
+                    dataLabels: {
+                        enabled: true
+                    }
+                },
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
                 }
             },
             barCategories1: [],
@@ -143,10 +158,11 @@ export default {
             timeFilter: [
                 moment()
                     .startOf("day")
-                    .subtract(1, "days")
+                    .subtract(2, "days")
                     .format("YYYY-MM-DD"),
                 moment()
                     .startOf("day")
+                    .subtract(1, "days")
                     .format("YYYY-MM-DD")
             ]
         };
@@ -211,24 +227,28 @@ export default {
                             data: [
                                 {
                                     name:
-                                        "Số lượng thuê bao nhóm cuộc gọi bình thường",
+                                        "Số lượng thuê bao nhóm cuộc gọi bình thường: " +
+                                        series1,
                                     y: series1,
                                     sliced: true,
                                     selected: true
                                 },
                                 {
                                     name:
-                                        "Số lượng thuê bao nhóm nghi ngờ spam",
+                                        "Số lượng thuê bao nhóm nghi ngờ spam: " +
+                                        series2,
                                     y: series2
                                 },
                                 {
                                     name:
-                                        "Số lượng thuê bao nhóm nghề nghiệp đặc thù",
+                                        "Số lượng thuê bao nhóm nghề nghiệp đặc thù: " +
+                                        series3,
                                     y: series3
                                 },
                                 {
                                     name:
-                                        "Số lượng thuê bao nhóm tổng đài, telesale",
+                                        "Số lượng thuê bao nhóm tổng đài, telesale: " +
+                                        series4,
                                     y: series4
                                 }
                             ]

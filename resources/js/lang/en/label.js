@@ -19,5 +19,11 @@ export default {
     time: "Time",
     month_start: "Start month",
     month_end: "End month",
-    confirm: "Are you sure"
+    confirm: "Are you sure",
+    class: "Class",
+    faculty: "Faculty",
+    provider: "Provider",
+    device_group: "Device group",
+    store: "Store",
+    device_type: "Device type",
 };

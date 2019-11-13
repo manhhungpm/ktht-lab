@@ -85,7 +85,7 @@ export default {
         return {
             form: new Form(defaultForm),
             statusOptions: {
-                placeholder: i18n.t("brandname.list.placeholder.active"),
+                placeholder: i18n.t("admin.users.placeholder.select_status"),
                 multiple: true,
                 searchable: true,
                 options: [

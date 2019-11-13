@@ -30,6 +30,7 @@ div.dataTables_wrapper div.dataTables_filter input {
     top: -14px !important;
     width: unset !important;
     overflow-y: unset !important;
+    padding-right: 0px !important;
 }
 
 .DTFC_LeftWrapper {
@@ -54,6 +55,7 @@ div.dataTables_wrapper div.dataTables_filter input {
     top: -14px !important;
     width: unset !important;
     overflow-y: unset !important;
+    padding-right: 0px !important;
 }
 
 div.dataTables_wrapper div.dataTables_processing {

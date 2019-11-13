@@ -29,6 +29,14 @@ Route::group([
         includeRouteFiles(__DIR__ . '/Admin/');
     });
 
+    Route::group(['namespace' => 'Device', 'prefix' => '/device', 'as' => 'device.','middleware' => []], function () {
+        includeRouteFiles(__DIR__ . '/Device/');
+    });
+
+    Route::group(['namespace' => 'Project','middleware' => []], function () {
+        includeRouteFiles(__DIR__ . '/Project/');
+    });
+
     Route::group(['namespace' => 'BlackWhite', 'prefix' => '/blackwhite', 'as' => 'blackwhite.','middleware' => []], function () {
         includeRouteFiles(__DIR__ . '/BlackWhite/');
     });

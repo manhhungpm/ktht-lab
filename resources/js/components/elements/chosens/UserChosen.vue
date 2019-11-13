@@ -70,7 +70,7 @@ export default {
                 placeholder: this.$t("chosen.user.placeholder"),
                 idField: "id",
                 textField: "name",
-                ajax: "/admin/user/listing-all",
+                ajax: "/api/admin/user/listing-all",
                 hasAllOption: this.hasAllOption
             };
         }

@@ -38,7 +38,7 @@
         </div>
 
         <div class="col-md-12">
-            <the-portlet :title="$t('admin.users.title.datatable')">
+            <the-portlet :title="$t('admin.users.title')">
                 <v-button
                     slot="tool"
                     color="primary"
@@ -58,10 +58,10 @@
                     :actions="actions"
                     :search-placeholder="$t('admin.users.placeholder.name')"
                     :post-data="tableFilter"
-                    :fixed-columns-left="3"
+                    :fixed-columns-left="1"
                     :fixed-columns-right="1"
                     :searching="false"
-                    :order-column-index="6"
+                    :order-column-index="1"
                     :order-type="'desc'"
                 />
             </the-portlet>
@@ -108,15 +108,6 @@ export default {
         UserModal
     },
     middleware: "auth",
-    head() {
-        return {
-            title: this.$t("admin.users.manage")
-        };
-    },
-    meta: {
-        title: "admin.users.manage",
-        roles: [ROLE.ROLE_ADMIN, ROLE.ROLE_ROOT]
-    },
     data() {
         return {
             tableFilter: {
@@ -164,16 +155,21 @@ export default {
             return [
                 {
                     data: "name",
-                    title: this.$t("admin.users.datatable.column.name")
+                    title: this.$t("admin.users.name")
                 },
                 {
                     data: "display_name",
-                    title: this.$t("admin.users.datatable.column.display_name"),
+                    title: this.$t("admin.users.display_name"),
                     orderable: false
                 },
                 {
+                    data: "classes.name",
+                    title: this.$t("admin.users.class"),
+                    orderable: false,
+                },
+                {
                     data: "active",
-                    title: this.$t("admin.users.datatable.column.active"),
+                    title: this.$t("datatable.column.status"),
                     orderable: false,
                     render(data) {
                         if (data === 1) {
@@ -183,8 +179,8 @@ export default {
                     }
                 },
                 {
-                    data: "user_role",
-                    title: this.$t("admin.users.datatable.column.role"),
+                    data: "roles",
+                    title: this.$t("admin.users.role"),
                     orderable: false,
                     render(data) {
                         let html = "";
@@ -192,12 +188,12 @@ export default {
                             if (html === "") {
                                 html +=
                                     "<li>" +
-                                    htmlEscapeEntities(value.role.name) +
+                                    htmlEscapeEntities(value.name) +
                                     "</li>";
                             } else {
                                 html +=
                                     "<li>" +
-                                    htmlEscapeEntities(value.role.name) +
+                                    htmlEscapeEntities(value.name) +
                                     "</li>";
                             }
                         });
@@ -215,7 +211,7 @@ export default {
                     }
                 },
                 {
-                    data: "when_updated",
+                    data: "updated_at",
                     title: this.$t("datatable.column.when_updated"),
                     render(data) {
                         if (data != null) {
@@ -225,7 +221,7 @@ export default {
                 },
                 {
                     data: "expired_at",
-                    title: this.$t("admin.users.datatable.column.expired_at"),
+                    title: this.$t("admin.users.expired_at"),
                     render(data) {
                         if (data != null) {
                             return formatDate(data);

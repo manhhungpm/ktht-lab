@@ -74,14 +74,14 @@ class UserController extends Controller
 
     public function add(AddUserRequest $request)
     {
-        $result = $this->userRepository->addUser($request->only('name', 'display_name', 'email', 'mobile_phone', 'role', 'expired_at', 'active', 'who_created', 'password'));
+        $result = $this->userRepository->addUser($request->only('name', 'display_name', 'email', 'mobile_phone', 'role', 'expired_at', 'active', 'who_created', 'password','class_id'));
 
         return processCommonResponse($result);
     }
 
     public function edit(EditUserRequest $request)
     {
-        $result = $this->userRepository->editUser($request->only('id', 'display_name', 'email', 'mobile_phone', 'role', 'expired_at', 'who_updated', 'version'));
+        $result = $this->userRepository->editUser($request->only('id', 'display_name', 'email', 'mobile_phone', 'role', 'expired_at', 'who_updated', 'version','class_id'));
 
         return processCommonResponse($result);
     }

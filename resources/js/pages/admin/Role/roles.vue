@@ -19,10 +19,10 @@
                 :columns="columns"
                 url="/admin/role/listing"
                 :fixed-columns-left="1"
-                :fixed-columns-right="2"
+                :fixed-columns-right="1"
                 :actions="actions"
                 :search-placeholder="$t('admin.role.placeholder.search')"
-                :order-column-index="3"
+                :order-column-index="1"
                 :order-type="'desc'"
             >
             </data-table
@@ -68,25 +68,6 @@ export default {
                     title: this.$t("admin.role.description"),
                     orderable: false,
                     className: "wrap-text"
-                },
-                {
-                    data: "updated_at",
-                    title: this.$t("datatable.column.when_updated"),
-                    render(data) {
-                        if (data != null) {
-                            return data;
-                        } else return "-";
-                    }
-                },
-                {
-                    data: "created_at",
-                    title: this.$t("datatable.column.when_created"),
-                    orderable: false,
-                    render(data) {
-                        if (data != null) {
-                            return data;
-                        } else return "-";
-                    }
                 },
                 {
                     data: "active",

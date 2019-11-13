@@ -10,7 +10,7 @@
         >
             <form-control
                 v-model="form.alias"
-                v-validate="'required|max:15'"
+                v-validate="'required|max:15|numeric'"
                 name="alias"
                 :label="$t('blackwhite.list.alias')"
                 :placeholder="$t('blackwhite.list.placeholder.alias')"
@@ -57,6 +57,8 @@
                 :label="$t('label.description')"
                 :placeholder="$t('blackwhite.list.placeholder.description')"
                 name="description"
+                :data-vv-as="$t('blackwhite.list.placeholder.description')"
+                :error="errors.first('description')"
             ></form-control>
             <div
                 v-if="!hidden"
@@ -195,10 +197,6 @@ export default {
                 multiple: false,
                 searchable: false,
                 options: [
-                    {
-                        id: PROVIDER_ALL,
-                        text: "Tất cả"
-                    },
                     {
                         id: PROVIDER_VIETTEL,
                         text: "Viettel"

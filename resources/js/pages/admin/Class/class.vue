@@ -1,13 +1,12 @@
 <template>
     <div>
-        <portlet :title="$t('admin.manager.title')">
+        <portlet :title="$t('admin.class.title')">
             <v-button
-                slot="tool"
-                color="primary"
-                style-type="air"
-                class="m-btn
-                m-btn--icon"
-                @click.native="addManager"
+                    slot="tool"
+                    color="primary"
+                    style-type="air"
+                    class="m-btn m-btn--icon"
+                    @click.native="addClass"
             >
                 <span>
                     <i class="la la-plus"></i>
@@ -15,26 +14,27 @@
                 </span>
             </v-button>
             <data-table
-                ref="table"
-                :columns="columns"
-                url="/admin/manager/listing"
-                :fixed-columns-left="1"
-                :fixed-columns-right="2"
-                :actions="actions"
-                :search-placeholder="$t('admin.manager.placeholder.search')"
-                :order-column-index="4"
-                :order-type="'desc'"
+                    ref="table"
+                    :columns="columns"
+                    url="/admin/class/listing"
+                    :fixed-columns-left="1"
+                    :fixed-columns-right="1"
+                    :actions="actions"
+                    :search-placeholder="$t('admin.class.placeholder.search')"
+                    :order-column-index="1"
+                    :order-type="'desc'"
             >
-            </data-table
-        ></portlet>
-        <manager-modal
-            ref="addModal"
-            :on-action-success="updateItemSuccess"
-        ></manager-modal>
+            </data-table>
+        </portlet>
+        <class-modal
+                ref="addModal"
+                :on-action-success="updateItemSuccess"
+        ></class-modal>
     </div>
 </template>
 
 <script>
+import ClassModal from "./partials/ClassModal";
 import bootbox from "bootbox";
 import axios from "axios";
 import {
@@ -47,11 +47,11 @@ import {
     notifyActiveSuccess,
     notifyDisableSuccess
 } from "~/helpers/bootstrap-notify";
-import ManagerModal from "./partials/ManagerModal";
 import Portlet from "../../../components/common/Portlet";
+
 export default {
-    name: "Managers",
-    components: { Portlet, ManagerModal },
+    name: "Class",
+    components: {ClassModal,Portlet},
     middleware: "auth",
     data() {
         return {};
@@ -61,50 +61,16 @@ export default {
             return [
                 {
                     data: "name",
-                    title: this.$t("admin.manager.name")
+                    title: this.$t("admin.class.name")
                 },
                 {
                     data: "description",
-                    title: this.$t("admin.manager.description"),
+                    title: this.$t("admin.class.description"),
                     orderable: false,
                     className: "wrap-text"
                 },
                 {
-                    data: "who_updated",
-                    title: this.$t("datatable.column.who_updated"),
-                    orderable: false,
-                    render(data) {
-                        if (data != null) {
-                            return data;
-                        } else return "-";
-                    }
-                },
-                {
-                    data: "updated_at",
-                    title: this.$t("datatable.column.when_updated"),
-                    render(data) {
-                        if (data != null) {
-                            return data;
-                        } else return "-";
-                    }
-                },
-                {
-                    data: "who_created",
-                    title: this.$t("datatable.column.who_created"),
-                    orderable: false
-                },
-                {
-                    data: "created_at",
-                    title: this.$t("datatable.column.when_created"),
-                    orderable: false,
-                    render(data) {
-                        if (data != null) {
-                            return data;
-                        } else return "-";
-                    }
-                },
-                {
-                    data: "active",
+                    data: "status",
                     title: this.$t("datatable.column.status"),
                     render(data) {
                         if (data != null) {
@@ -119,7 +85,11 @@ export default {
                     }
                 },
                 {
-                    data: "active",
+                    data: "faculty.name",
+                    title: "Khoa"
+                },
+                {
+                    data: "status",
                     title: this.$t("common.action"),
                     orderable: false,
                     className: "text-center",
@@ -164,7 +134,7 @@ export default {
         updateItemSuccess() {
             this.$refs.table.reload();
         },
-        addManager() {
+        addClass() {
             this.$refs.addModal.show();
         },
         handleEdit(table, rowData) {
@@ -176,7 +146,7 @@ export default {
             bootbox.confirm({
                 title: this.$t("label.notification"),
                 message:
-                    'Bạn chắc chắn muốn kích hoạt "<span class="text-danger">' +
+                    'Bạn chắc chắn muốn kích hoạt khoa "<span class="text-danger">' +
                     htmlEscapeEntities(rowData.name) +
                     '</span>"?',
                 buttons: {
@@ -189,7 +159,7 @@ export default {
                 },
                 callback: async function(result) {
                     if (result) {
-                        let res = await axios.post("/admin/manager/active", {
+                        let res = await axios.post("/admin/class/active", {
                             id: rowData.id
                         });
                         const { data } = res;
@@ -210,7 +180,7 @@ export default {
             bootbox.confirm({
                 title: this.$t("label.notification"),
                 message:
-                    'Bạn chắc chắn muốn vô hiệu "<span class="text-danger">' +
+                    'Bạn chắc chắn muốn vô hiệu khoa "<span class="text-danger">' +
                     htmlEscapeEntities(rowData.name) +
                     '</span>"?',
                 buttons: {
@@ -223,7 +193,7 @@ export default {
                 },
                 callback: async function(result) {
                     if (result) {
-                        let res = await axios.post("/admin/manager/disable", {
+                        let res = await axios.post("/admin/class/disable", {
                             id: rowData.id
                         });
                         const { data } = res;

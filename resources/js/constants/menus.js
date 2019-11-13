@@ -2,11 +2,11 @@ import * as ROLE from "~/constants/roles";
 import routes from "~/router/routes";
 
 export default [
-    // {
-    //     title: "menu.dashboard",
-    //     icon: "flaticon-line-graph",
-    //     route: "/"
-    // },
+    {
+        title: "menu.dashboard",
+        icon: "flaticon-line-graph",
+        route: "/"
+    },
     {
         title: "menu.management",
         icon: "flaticon-cogwheel",
@@ -21,46 +21,54 @@ export default [
                 route: "/admin/roles"
             },
             {
-                title: "menu.admin.manager",
-                route: "/admin/managers"
+                title: "menu.admin.class",
+                route: "/admin/class"
+            },
+            {
+                title: "menu.admin.faculty",
+                route: "/admin/faculty"
             }
         ]
+    },
+    {
+        title: "menu.device.title",
+        icon: "flaticon-technology-2",
+        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
+        children: [
+            {
+                title: "menu.device.group",
+                route: "/device/group"
+            },
+            {
+                title: "menu.device.type",
+                route: "/device/type"
+            },
+            {
+                title: "menu.device.store",
+                route: "/device/store"
+            },
+            {
+                title: "menu.device.provider",
+                route: "/device/provider"
+            }
+        ]
+    },
+    {
+        title: "menu.project",
+        icon: "flaticon-list",
+        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
+        route: "/project"
     },
     {
         title: "menu.statistic.title",
         icon: "flaticon-graphic",
         roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
-        children: [
-            {
-                title: "menu.statistic.sum_call",
-                route: "/statistic/sum-call"
-            },
-            {
-                title: "menu.statistic.time_call",
-                route: "/statistic/time-call"
-            },
-            {
-                title: "menu.statistic.spam",
-                route: "/statistic/spam"
-            }
-        ]
+        route: "/statistic"
     },
     {
-        title: "menu.spam_call_detail",
-        icon: "flaticon-exclamation",
+        title: "menu.rent",
+        icon: "flaticon-calendar-with-a-clock-time-tools",
         roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
-        route: "/spam-call-detail"
-    },
-    {
-        title: "menu.black_white.list.title",
-        icon: "flaticon-list",
-        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
-        route: "/black-white-list"
-    },
-    {
-        title: "menu.alias_block_spam",
-        icon: "flaticon-search",
-        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
-        route: "/alias-block-spam"
+        route: "/rent"
     }
 ];

@@ -15,5 +15,6 @@ export default {
     export_error: "Có lỗi khi xuất file",
     lock_success: "Khóa thành công",
     unlock_success: "Mở khóa thành công",
-    bypass_success: "Bỏ qua thành công"
+    bypass_success: "Bỏ qua thành công",
+    delete_success: "Xóa thành công"
 };

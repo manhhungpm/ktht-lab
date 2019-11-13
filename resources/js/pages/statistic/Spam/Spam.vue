@@ -2,21 +2,17 @@
     <div>
         <div class="row">
             <div class="time-filter">
-                <!--<month-range-->
-                <!--v-model="timeFilter"-->
-                <!--v-validate="'withinAYear'"-->
-                <!--:name="'monthRange'"-->
-                <!--:label="$t('label.time')"-->
-                <!--:error="errors.first('monthRange')"-->
-                <!--&gt;</month-range>-->
                 <the-date-range
                     v-model="timeFilter"
+                    v-validate="'afterWithin30Days'"
                     :label="'Chọn ngày'"
                     :format="'dd/MM/yyyy'"
                     :value-format="'yyyy-MM-dd'"
                     :disabled-date="'greaterThanToday'"
                     :name-shortcut="['last_7_days', 'last_30_days']"
                     :shortcut="true"
+                    name="timerangeFilter"
+                    :error="errors.first('timerangeFilter')"
                 ></the-date-range>
             </div>
             <div class="col-12">

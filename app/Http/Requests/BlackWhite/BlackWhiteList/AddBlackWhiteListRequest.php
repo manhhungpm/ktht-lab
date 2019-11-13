@@ -16,6 +16,8 @@ class AddBlackWhiteListRequest extends FormRequest
         return [
             'alias' => [
                 'required',
+                'numeric',
+                'unique:alias_black_white_lists'
             ],
             'description' => [
                 'max:255'
@@ -29,6 +31,17 @@ class AddBlackWhiteListRequest extends FormRequest
             'manager' => [
                 'required',
             ]
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'alias' => trans('blackwhite.alias'),
+            'description' => trans('blackwhite.description'),
+            'type' => trans('blackwhite.type'),
+            'provider' => trans('blackwhite.provider'),
+            'manager' => trans('blackwhite.manager'),
         ];
     }
 }

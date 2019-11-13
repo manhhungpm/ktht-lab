@@ -83,7 +83,7 @@ export const notifyUpdateSuccess = objectName =>
 export const notifyDeleteSuccess = objectName =>
     notify(
         i18n.t("alert.notice"),
-        i18n.t("alert.delete_success", [objectName]),
+        i18n.t("notification.delete_success", [objectName]),
         "success"
     );
 export const notifyExportFail = objectName =>
