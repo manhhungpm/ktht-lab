@@ -13,6 +13,7 @@ use App\Http\Requests\Admin\User\ActiveUserRequest;
 use App\Http\Requests\Admin\User\AddUserRequest;
 use App\Http\Requests\Admin\User\DisableUserRequest;
 use App\Http\Requests\Admin\User\EditUserRequest;
+use App\Http\Requests\Admin\User\UpdatePasswordRequest;
 use App\Http\Requests\Common\IdRequest;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class UserController extends Controller
 
     function __construct(UserRepository $userRepository)
     {
-//        $this->middleware('auth');
+        $this->middleware('auth');
         $this->userRepository = $userRepository;
     }
 
@@ -73,14 +74,21 @@ class UserController extends Controller
 
     public function add(AddUserRequest $request)
     {
-        $result = $this->userRepository->addUser($request->only('name', 'display_name', 'email', 'mobile_phone', 'role', 'expired_at', 'active', 'who_created'));
+        $result = $this->userRepository->addUser($request->only('name', 'display_name', 'email', 'mobile_phone', 'role', 'expired_at', 'active', 'who_created', 'password','class_id'));
 
         return processCommonResponse($result);
     }
 
     public function edit(EditUserRequest $request)
     {
-        $result = $this->userRepository->editUser($request->only('id', 'display_name', 'email', 'mobile_phone', 'role', 'expired_at', 'who_updated'));
+        $result = $this->userRepository->editUser($request->only('id', 'display_name', 'email', 'mobile_phone', 'role', 'expired_at', 'who_updated', 'version','class_id'));
+
+        return processCommonResponse($result);
+    }
+
+    public function updatePassword(UpdatePasswordRequest $request)
+    {
+        $result = $this->userRepository->updatePassword($request->only('id', 'password'));
 
         return processCommonResponse($result);
     }

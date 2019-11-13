@@ -2,7 +2,7 @@
     <modal
         ref="modal"
         :title="
-            isEdit ? $t('admin.users.edit_user') : $t('admin.users.add_user')
+            isEdit ? $t('admin.users.edit') : $t('admin.users.add')
         "
         :on-hidden="onModalHidden"
     >
@@ -38,6 +38,9 @@
                 :data-vv-as="$t('admin.users.placeholder.display_name')"
             >
             </form-control>
+            <class-chosen :multiple="false"
+                          v-model="form.classes_result"
+                          :required="true"></class-chosen>
             <form-control
                 v-model="form.email"
                 v-validate="'required'"
@@ -55,7 +58,6 @@
                 v-validate="'required'"
                 :label="$t('admin.users.phone')"
                 name="mobile_phone"
-                autocomplete="off"
                 :placeholder="$t('admin.users.placeholder.phone')"
                 :error="
                     errors.first('mobile_phone') ||
@@ -66,19 +68,21 @@
             >
             </form-control>
             <form-control
-                v-model="form.role"
-                v-validate="'required'"
-                :label="$t('admin.users.role')"
-                name="role"
-                :placeholder="$t('admin.users.placeholder.select_role')"
-                :type="'select'"
-                :select-options="roleOptions"
-                :error="errors.first('role') || form.errors.get('role')"
+                v-if="!isEdit"
+                v-model="form.password"
+                v-validate="'required|isPassword:true'"
+                type="password"
+                :label="$t('admin.users.password')"
+                name="password"
+                :placeholder="$t('admin.users.placeholder.password')"
+                :error="errors.first('password') || form.errors.get('password')"
                 :required="true"
-                :data-vv-as="$t('admin.users.placeholder.select_role')"
-            >
-            </form-control>
-
+            ></form-control>
+            <role-chosen
+                    v-model="form.role"
+                    :required="true"
+                    :multiple="true"
+            ></role-chosen>
             <div
                 class="form-group m-form__group"
                 :class="{
@@ -137,7 +141,8 @@ import {
     notifyAddSuccess,
     notifyNoPermission
 } from "~/helpers/bootstrap-notify";
-import TheDateRange from "../../../../components/common/TheDateRange";
+import ClassChosen from "../../../../components/elements/chosens/ClassChosen";
+import RoleChosen from "../../../../components/elements/chosens/RoleChosen";
 
 const defaultForm = {
     id: "",
@@ -145,15 +150,18 @@ const defaultForm = {
     display_name: "",
     email: "",
     mobile_phone: "",
-    role: [],
+    role: null,
     expired_at: "",
     who_created: "",
-    who_updated: ""
+    who_updated: "",
+    password: null,
+    classes_result: null,
+    classes: null
 };
 
 export default {
     name: "UserModal",
-    components: { TheDateRange, FormControl },
+    components: {RoleChosen, ClassChosen, FormControl },
     props: {
         onActionSuccess: {
             type: Function,
@@ -183,26 +191,16 @@ export default {
     methods: {
         show(item = null) {
             if (item != null) {
-                this.isEdit = true;
+                item.role = item.roles;
 
-                var role_id = [];
-
-                for (var i = 0; i < item.user_role.length; i++) {
-                    role_id.push(item.user_role[i].role_id);
-                }
-
-                item.role = role_id.map(x => {
-                    return {
-                        id: x
-                    };
-                });
+                item.classes_result = {
+                    id: item.classes.id,
+                    text: item.classes.name,
+                    name: item.classes.name
+                };
 
                 this.form = new Form(item);
-            } else {
-                // const roleUser = 3;
-                // this.form.role[0] = {
-                //     id: roleUser
-                // };
+                this.isEdit = true;
             }
             this.$refs.modal.show();
         },
@@ -210,11 +208,10 @@ export default {
             this.$refs.modal.hide();
         },
         async addUser() {
-            var role_id = [];
-            for (var i = 0; i < this.form.role.length; i++) {
-                role_id.push(this.form.role[i].id);
-            }
-            this.form.role = role_id;
+            this.form.role = this.form.role.map(e => {
+                return e.id;
+            });
+            this.form.class_id = this.form.classes_result.id;
 
             try {
                 const res = await this.form.post("/admin/user/add");
@@ -236,11 +233,10 @@ export default {
             }
         },
         async editUser() {
-            var role_id = [];
-            for (var i = 0; i < this.form.role.length; i++) {
-                role_id.push(this.form.role[i].id);
-            }
-            this.form.role = role_id;
+            this.form.role = this.form.role.map(e => {
+                return e.id;
+            });
+            this.form.class_id = this.form.classes_result.id;
 
             try {
                 const res = await this.form.post("/admin/user/edit");
@@ -283,21 +279,6 @@ export default {
                 const { data } = res;
 
                 this.roleList = data.data;
-                const displayName = [
-                    "A2P",
-                    "Admin",
-                    "Brandname",
-                    "CC",
-                    "Csp",
-                    "Politic",
-                    "Roaming",
-                    "Root",
-                    "Sms2way",
-                    "User"
-                ];
-                this.roleList.forEach(function(value, index) {
-                    value.display_name = displayName[index];
-                });
             } catch (e) {
                 console.log(e);
             }
@@ -308,7 +289,8 @@ export default {
             for (var i = 0; i < this.roleList.length; i++) {
                 this.roleOptions.options.push({
                     id: this.roleList[i].id,
-                    text: this.roleList[i].display_name,
+                    text: this.roleList[i].name,
+                    // text: this.roleList[i].display_name,
                     display_name: this.roleList[i].display_name
                 });
             }

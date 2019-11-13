@@ -23,17 +23,34 @@ Route::group([
 
     includeRouteFiles(__DIR__ . '/Auth/');
     includeRouteFiles(__DIR__ . '/Dashboard/');
+    includeRouteFiles(__DIR__ . '/Common/');
 
     Route::group(['namespace' => 'Admin', 'prefix' => '/admin', 'as' => 'admin.','middleware' => []], function () {
         includeRouteFiles(__DIR__ . '/Admin/');
     });
 
-    Route::group(['namespace' => 'Brandname', 'prefix' => '/brandname', 'as' => 'brandname.','middleware' => []], function () {
-        includeRouteFiles(__DIR__ . '/Brandname/');
+    Route::group(['namespace' => 'Device', 'prefix' => '/device', 'as' => 'device.','middleware' => []], function () {
+        includeRouteFiles(__DIR__ . '/Device/');
     });
 
-});
+    Route::group(['namespace' => 'Project','middleware' => []], function () {
+        includeRouteFiles(__DIR__ . '/Project/');
+    });
 
-Route::group(['namespace' => 'Spam', 'prefix' => '/spam', 'as' => 'spam.', 'middleware' => ['api', 'auth:api']], function () {
-    includeRouteFiles(__DIR__ . '/Spam/');
+    Route::group(['namespace' => 'BlackWhite', 'prefix' => '/blackwhite', 'as' => 'blackwhite.','middleware' => []], function () {
+        includeRouteFiles(__DIR__ . '/BlackWhite/');
+    });
+
+    Route::group(['namespace' => 'Statistic', 'prefix' => '/statistic', 'as' => 'statistic.','middleware' => []], function () {
+        includeRouteFiles(__DIR__ . '/Statistic/');
+    });
+
+    Route::group(['namespace' => 'AliasBlockSpam','middleware' => []], function () {
+        includeRouteFiles(__DIR__ . '/AliasBlockSpam/');
+    });
+
+    Route::group(['namespace' => 'SpamCallDetail','middleware' => []], function () {
+        includeRouteFiles(__DIR__ . '/SpamCallDetail/');
+    });
+
 });

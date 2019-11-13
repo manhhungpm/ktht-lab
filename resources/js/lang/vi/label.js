@@ -12,5 +12,17 @@ export default {
     select_month_placeholder: "Chọn một tháng",
     sms_group: "Nhóm tin",
     sms_type: "Loại tin",
-    select_day: "Chọn ngày"
+    select_day: "Chọn ngày",
+    manager: "Đơn vị quản lý",
+    description: "Mô tả",
+    role: "Vai trò",
+    time: "Thời gian",
+    month_start: "Từ tháng",
+    month_end: "Đến tháng",
+    class: "Lớp",
+    faculty: "Khoa",
+    provider: "Nhà cung cấp",
+    device_group: "Nhóm thiết bị",
+    store: "Nơi lưu trữ",
+    device_type: "Loại thiết bị",
 };

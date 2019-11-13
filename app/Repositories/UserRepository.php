@@ -73,7 +73,8 @@ class UserRepository extends BaseRepository
         return false;
     }
 
-    public function authen($username){
+    public function authen($username)
+    {
         $user = User::where('name', $username)->first();
         if ($user) {
             $token = auth()->login($user);
@@ -93,7 +94,8 @@ class UserRepository extends BaseRepository
     public function getList($keyword = null, $search = [], $counting = false, $limit = 10, $offset = 0, $orderBy = 'when_updated', $orderType = 'desc')
     {
 
-        $query = User::select('id', 'name', 'display_name', 'active', 'expired_at', 'who_updated', 'when_updated', 'expired_at', 'email', 'mobile_phone');
+        $query = User::select('id', 'name', 'display_name','email',
+            'active', 'expired_at', 'who_updated', 'updated_at', 'expired_at', 'mobile_phone', 'version','created_at','who_created','class_id');
 
         //OK
         if (array_key_exists('status', $search) && ($search['status'] != "")) {
@@ -106,7 +108,7 @@ class UserRepository extends BaseRepository
                 ->orWhere('display_name', 'LIKE', "%$name%");
         }
 
-        if (array_key_exists('role',$search) && ($search['role'] != null)) {
+        if (array_key_exists('role', $search) && ($search['role'] != null)) {
             $query = $query->whereHas('userRole', function ($q) use ($search) {
                 $q->whereIn('role_id', $search['role']);
             });
@@ -114,7 +116,7 @@ class UserRepository extends BaseRepository
 
 
         if (!$counting) {
-            $query->with("userRole.role");
+            $query->with("roles:name,id")->with('classes');
 
             if ($limit > 0) {
                 $query->skip($offset)
@@ -135,7 +137,7 @@ class UserRepository extends BaseRepository
     {
         $query = new User();
 
-        $query = $query->where('id', $id)->update(['active' => 0]);
+        $query = $query->where('id', $id)->update(['active' => INACTIVE]);
 
         if ($query) {
             return true;
@@ -148,7 +150,7 @@ class UserRepository extends BaseRepository
     {
         $query = new User();
 
-        $query = $query->where('id', $id)->update(['active' => 1]);
+        $query = $query->where('id', $id)->update(['active' => ACTIVE]);
 
         if ($query) {
             return true;
@@ -159,11 +161,11 @@ class UserRepository extends BaseRepository
 
     public function addUser($arr)
     {
-//        dd($arr);
         $role = $arr['role'];
         $user = new User();
         $arr['who_created'] = \auth()->user()->name;
         $arr['active'] = '1';
+        $arr['password'] = Hash::make($arr['password']);
         $user->fill($arr);
         if ($user->save()) {
             if ($role != null) {
@@ -181,6 +183,7 @@ class UserRepository extends BaseRepository
         $user = User::find($arr['id']);
         if ($user != null) {
             $arr['who_updated'] = \auth()->user()->name;
+            $arr['version'] = $arr['version'] + 1;
             $user->fill($arr);
             if ($user->save()) {
                 $user->roles()->detach();
@@ -195,72 +198,9 @@ class UserRepository extends BaseRepository
     }
 
 
-    /**
-     * @param $arr
-     * @param $ip
-     * @return mixed
-     */
-    public function edit($arr, $ip)
-    {
-        $role = $arr['role'];
-        $user = $this->model->find($arr['id']);
-        if ($user != null) {
-            $user->fill($arr);
-            if ($user->save()) {
-                $user->roles()->detach();
-                if ($role != null) {
-                    $user->attachRole($role['id']);
-                }
-                return true;
-            }
-            return false;
-        }
-        return false;
-    }
-
-    /**
-     * @param $arr
-     * @param $ip
-     * @return bool
-     */
-    public function store($arr, $ip)
-    {
-        $role = $arr['role'];
-        $user = new $this->model;
-        $user->fill($arr);
-        $user->password = Hash::make($arr['password']);
-        if ($user->save()) {
-            if ($role != null) {
-                $user->attachRole($role['id']);
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @param $id
-     * @return bool
-     */
-    public function deleteById($id, $ip): bool
-    {
-
-        $user = $this->model->find($id);
-
-        if ($user != null) {
-            $user->roles()->detach();
-            if ($this->model->where('id', $id)->delete()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return false;
-    }
-
     public function updatePassword($arr)
     {
-        $user = $this->model->find($arr['id']);
+        $user = User::find($arr['id']);
         if ($user != null) {
             $user->password = Hash::make($arr['password']);
             return $user->save();

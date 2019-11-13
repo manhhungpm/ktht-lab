@@ -176,7 +176,7 @@ abstract class BaseRepository implements RepositoryContract
         if ($obj != null) {
             try {
                 if ($obj->delete()) {
-                    fireEventActionLog(DELETE, $this->model->getTable(), $obj->id, $obj[$this->objectName], json_encode($obj), null,$ip);
+//                    fireEventActionLog(DELETE, $this->model->getTable(), $obj->id, $obj[$this->objectName], json_encode($obj), null,$ip);
                 }
                 return true;
             } catch (QueryException $exception) {

@@ -30,6 +30,7 @@ div.dataTables_wrapper div.dataTables_filter input {
     top: -14px !important;
     width: unset !important;
     overflow-y: unset !important;
+    padding-right: 0px !important;
 }
 
 .DTFC_LeftWrapper {
@@ -54,6 +55,7 @@ div.dataTables_wrapper div.dataTables_filter input {
     top: -14px !important;
     width: unset !important;
     overflow-y: unset !important;
+    padding-right: 0px !important;
 }
 
 div.dataTables_wrapper div.dataTables_processing {
@@ -150,6 +152,10 @@ export default {
         selectable: {
             type: Boolean,
             default: false
+        },
+        countSelected: {
+            type: Boolean,
+            default: true
         }
         // selectStyle: {
         //   type: String,
@@ -176,7 +182,7 @@ export default {
             if (this.hasIndex) {
                 columns.unshift({
                     data: null,
-                    title: "STT",
+                    title: this.$t("datatable.column.index"),
                     orderable: false,
                     responsivePriority: 1,
                     className: "tb-number"
@@ -210,13 +216,16 @@ export default {
         rowsSelected(value) {
             if (this.selectable) {
                 const table = this.table.table().container();
-                $(table)
-                    .find("div.selected-count")
-                    .html(
-                        this.$t("datatable.select.count", {
-                            count: value.length
-                        })
-                    );
+                if (this.countSelected) {
+                    $(table)
+                        .find("div.selected-count")
+                        .html(
+                            this.$t("datatable.select.count", {
+                                count: value.length
+                            })
+                        );
+                }
+                this.$emit("onSelect");
             }
         },
         columns: {
@@ -305,11 +314,6 @@ export default {
                         .closest(".dataTables_wrapper")
                         .find(".dataTables_paginate");
                     pagination.toggle(this.api().page.info().pages > 0);
-
-                    setTimeout(() => {
-                        $this.relayout();
-                        $this.updateDataTableSelectAllCtrl();
-                    }, 100);
                 },
                 initComplete: function() {}
             };
@@ -358,6 +362,10 @@ export default {
 
             this.table.on("draw.dt", () => {
                 $(this.$el).tooltip({ selector: ".table-action" });
+                setTimeout(() => {
+                    $this.relayout();
+                    $this.updateDataTableSelectAllCtrl();
+                }, 500);
             });
 
             if (this.selectable) {
@@ -370,7 +378,7 @@ export default {
                 const $this = this;
                 const table = this.table.table().container();
                 $(table)
-                    .unbind("click")
+                    .off("click")
                     .on("click", "td:not(.tb-actions)", function(e) {
                         e.preventDefault();
                         if ($this.fixedColumnsLeft === 0) {
@@ -614,31 +622,32 @@ export default {
         },
         registerActions() {
             const vm = this;
-
             if (this.actions.length > 0) {
                 this.actions.forEach(action => {
-                    $(this.$el).on(
-                        action.type,
-                        '[data-action="' + action.name + '"]',
-                        function() {
-                            // $('.table-action').tooltip('hide')
-                            const td = $(this).closest("td");
-                            const tr = $(this).closest("tr");
-                            const row = $(vm.$el)
-                                .DataTable()
-                                .row(tr);
+                    $(this.$el)
+                        .off(action.type, '[data-action="' + action.name + '"]')
+                        .on(
+                            action.type,
+                            '[data-action="' + action.name + '"]',
+                            function() {
+                                // $('.table-action').tooltip('hide')
+                                const td = $(this).closest("td");
+                                const tr = $(this).closest("tr");
+                                const row = $(vm.$el)
+                                    .DataTable()
+                                    .row(tr);
 
-                            const data = $(vm.$el)
-                                .DataTable()
-                                .row(tr)
-                                .data();
-                            const cell = $(vm.$el)
-                                .DataTable()
-                                .cell(td);
+                                const data = $(vm.$el)
+                                    .DataTable()
+                                    .row(tr)
+                                    .data();
+                                const cell = $(vm.$el)
+                                    .DataTable()
+                                    .cell(td);
 
-                            action.action(vm.table, data, row, td, cell);
-                        }
-                    );
+                                action.action(vm.table, data, row, td, cell);
+                            }
+                        );
                 });
             }
         },
@@ -719,6 +728,23 @@ export default {
         },
         getSelectedRowsIds() {
             return this.rowsSelected;
+        },
+        selectAllCurrentPage() {
+            const table = this.table.table().container();
+            let selectAllBtn;
+            if (this.fixedColumnsLeft == 0) {
+                selectAllBtn = $(table).find('thead input[name="select_all"]');
+            } else {
+                selectAllBtn = $(table).find(
+                    ".DTFC_LeftHeadWrapper .dt-checkboxes-select-all"
+                );
+            }
+            if (selectAllBtn && selectAllBtn.prop("checked")) {
+                selectAllBtn.click();
+                selectAllBtn.click();
+            } else {
+                selectAllBtn.click();
+            }
         },
         nextPrePage() {
             this.table.page("previous").draw("page");

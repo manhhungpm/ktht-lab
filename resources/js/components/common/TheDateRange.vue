@@ -271,11 +271,11 @@ export default {
 
             //Disable date
             if (this.disableDate != null) {
-
                 switch (this.disableDate) {
                     case "greaterThanToday":
                         pickerOpt.disabledDate = function(date) {
                             var day = new Date();
+                            day.setDate(day.getDate());
                             return date > day;
                         };
                         break;

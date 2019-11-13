@@ -18,5 +18,12 @@ export default {
     add_request: "Add request",
     resend: "Resend request",
     delete: "Delete",
-    show_history: "Show history"
+    show_history: "Show history",
+    import: "Import",
+    update: "Update",
+    renew_password: "Renew Password",
+    lock: "Lock",
+    unlock: "Unlock",
+    bypass: "Bypass",
+    select_all: "Select all"
 };

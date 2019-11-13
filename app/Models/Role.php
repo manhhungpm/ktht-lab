@@ -10,8 +10,8 @@ class Role extends Model
 {
     use RoleTrait;
 
-    protected $fillable = ['name','active','id'];
-    protected $hidden = ['pivot'];
+    protected $fillable = ['name', 'active', 'id', 'description'];
+
     public $timestamps = false;
 
     //CONST
@@ -25,10 +25,13 @@ class Role extends Model
     public const SMS2WAY = 'sms2way';
     public const ROAMING = 'roaming';
 
-    public function userRole()
-    {
-        return $this->hasMany(UserRole::class,'role_id');
-    }
+    //new
+    public const LEADER = 'leader';
+
+//    public function userRole()
+//    {
+//        return $this->hasMany(UserRole::class, 'role_id');
+//    }
 
 
 }

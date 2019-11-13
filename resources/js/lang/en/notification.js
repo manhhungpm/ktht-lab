@@ -7,5 +7,11 @@ export default {
     no_disable_because_sms_type_active: "No permission to disable",
     no_disable_because_config_active: "No permission to disable",
     no_active_because_sms_type_disable: "No permission to active",
-    resend_success: "Resend success"
+    resend_success: "Resend success",
+    must_select_at_least_one_record: "Must select one record",
+    export_error: "Export error",
+    lock_success: "Successfully locked",
+    unlock_success: "Successfully unlocked",
+    bypass_success: "Successfully bypassed",
+    delete_success: "Delete Success"
 };

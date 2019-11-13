@@ -4,13 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Repositories\UserRepository;
 use App\User;
+use Carbon\Carbon;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use \phpCAS;
 
 class AuthController extends Controller
 {
-    protected $repo;
+    use AuthenticatesUsers;
+
+    public $maxAttempts = 5; // change to the max attempt you want.
+    public $decayMinutes = 5; // change to the minutes you want.
+    public function username()
+    {
+        return 'name';
+    }
+
 
     /**
      * AuthController constructor.
@@ -84,17 +95,30 @@ class AuthController extends Controller
      * )
      */
     public function login(Request $request)
-
     {
-//        if (!$token = $this->repo->authenticateWithSSO($request->input('name'), $request->input('password'))) {
-        if (!$token = $this->repo->authen($request->input('name'))) {
+        $credentials = request(['name', 'password']);
 
+        if ($this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+            return response()->json(['code' => CODE_ERROR,'message' => 'Đăng nhập thất bại quá nhiều. Đợi '.$this->decayMinutes.' phút để thử lại'], 400);
+        }
+
+        if (!$token = auth()->attempt($credentials)) {
+            $this->incrementLoginAttempts($request);
             return response()->json([
                 'code' => CODE_ERROR,
-                'message' => 'Unauthorized'
+                'message' =>  'Thông tin đăng nhập không đúng!'
             ], 401);
         }
-        return $this->respondWithToken($token);
+
+        if(Carbon::createFromFormat('Y-m-d H:i:s', auth()->user()->expired_at)->lt(Carbon::now()) || auth()->user()->active == 0 ){
+            return response()->json([
+                'code' => CODE_ERROR,
+                'message' =>  'Tài khoản hết hạn hoặc đã bị khóa!'
+            ], 401);
+        } else {
+            return $this->respondWithToken($token);
+        }
     }
 
     public function ssoLogin()
@@ -210,7 +234,7 @@ class AuthController extends Controller
 
     protected function initCas()
     {
-        $cas_host = env('CAS_HOST', '10.60.156.97:8225');
+        $cas_host = env('CAS_HOST', 'https://sso2.viettel.vn:8001');
         $cas_context = env('CAS_CONTEXT', '/sso');
         $cas_port = 443;
 

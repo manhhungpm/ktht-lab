@@ -10,7 +10,9 @@ export default {
             last_7_days: "Last 7 days",
             last_30_days: "Last 30 days",
             this_month: "This month",
-            last_month: "Last month"
+            last_month: "Last month",
+            this_year: "This year",
+            last_12_months: "Last 12 months"
         }
     },
     data_table: {
@@ -21,5 +23,11 @@ export default {
         range_separator: "-",
         start_placeholder: "From hour",
         end_placeholder: "To hour"
+    },
+    dropzone: {
+        title: "Choose file(s) to upload",
+        desc: "Click here to choose or drag & drop",
+        allowed_extension: "Allowed extension: ",
+        max_size: "Max file size: "
     }
 };

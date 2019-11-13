@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="row">
+        <div class="row" @keydown.enter.prevent="search">
             <div class="col-md-4">
-                <label>{{ $t("brandname.list.brandname") }}</label>
+                <label>{{ $t("admin.users.user_name") }}</label>
                 <input
                     v-model="form.name"
                     class="form-control"
-                    :placeholder="$t('brandname.list.placeholder.brandname')"
+                    :placeholder="$t('admin.users.user_name')"
                 />
             </div>
 
@@ -15,7 +15,7 @@
                     v-model="form.status"
                     :type="'select'"
                     :select-options="statusOptions"
-                    :label="this.$t('brandname.list.active')"
+                    :label="this.$t('admin.users.status')"
                 >
                 </form-control>
             </div>
@@ -85,7 +85,7 @@ export default {
         return {
             form: new Form(defaultForm),
             statusOptions: {
-                placeholder: i18n.t("brandname.list.placeholder.active"),
+                placeholder: i18n.t("admin.users.placeholder.select_status"),
                 multiple: true,
                 searchable: true,
                 options: [
@@ -156,20 +156,20 @@ export default {
                 const { data } = res;
 
                 this.roleList = data.data;
-                const displayName = [
-                    "A2P",
-                    "Admin",
-                    "CC",
-                    "Csp",
-                    "Politic",
-                    "Roaming",
-                    "Root",
-                    "Sms2way",
-                    "User"
-                ];
-                this.roleList.forEach(function(value, index) {
-                    value.display_name = displayName[index];
-                });
+                // const displayName = [
+                //     "A2P",
+                //     "Admin",
+                //     "CC",
+                //     "Csp",
+                //     "Politic",
+                //     "Roaming",
+                //     "Root",
+                //     "Sms2way",
+                //     "User"
+                // ];
+                // this.roleList.forEach(function(value, index) {
+                //     value.display_name = displayName[index];
+                // });
             } catch (e) {
                 console.log(e);
             }
@@ -180,7 +180,8 @@ export default {
             for (var i = 0; i < this.roleList.length; i++) {
                 this.roleOptions.options.push({
                     id: this.roleList[i].id,
-                    text: this.roleList[i].display_name,
+                    // text: this.roleList[i].display_name,
+                    text: this.roleList[i].name,
                     display_name: this.roleList[i].display_name
                 });
             }

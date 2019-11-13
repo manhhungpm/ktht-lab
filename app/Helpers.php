@@ -101,12 +101,8 @@ function processCommonResponse($result, $data = null)
         $code = CODE_SUCCESS;
     } else if($result === false) {
         $code = CODE_ERROR;
-    } else if($result === 2) {
-        $code = CODE_ERROR_ACTIVE_CONFIG_WHEN_SMS_TYPE_DISABLE;
-    } else if($result === 3) {
-        $code = CODE_ERROR_DISABLE_SMS_TYPE_WHEN_CONFIG_ACTIVE;
-    } else if($result ===4) {
-        $code = CODE_ERROR_DISABLE_SMS_GROUP_WHEN_SMS_TYPE_ACTIVE;
+    } else if($result ===3) {
+        $code = CODE_ERROR_DISABLE_MANAGER_WHEN_BLACKWHITELIST_ACTIVE;
     }
 
     return response()->json(array(
@@ -129,3 +125,15 @@ function formatDate($date)
     $dateFormat = date_create($date);
     return date_format($dateFormat, "d/m/Y");
 }
+
+function getFileUpload($file)
+{
+    $files = json_decode($file);
+
+    if (!empty($files)) {
+        return $files[0];
+    }
+
+    return null;
+}
+

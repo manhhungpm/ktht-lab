@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Models\Classes;
+use App\Models\Project;
+use App\Models\ProjectUser;
 use App\Models\Role;
 use App\Models\UserRole;
 use Illuminate\Notifications\Notifiable;
@@ -33,7 +36,8 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','display_name','mobile_phone','expired_at','active','who_created','who_updated'
+        'name', 'email', 'password', 'display_name', 'mobile_phone', 'expired_at', 'active', 'who_created', 'who_updated',
+        'version', 'class_id'
     ];
 
     /**
@@ -54,10 +58,8 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    protected $dateFormat = 'Y-m-d H:i:s.u';
+    protected $dateFormat = 'Y-m-d H:i:s';
 
-    const UPDATED_AT = 'when_updated';
-    const CREATED_AT = 'when_created';
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
@@ -114,9 +116,14 @@ class User extends Authenticatable implements JWTSubject
      */
     private $password;
 
-    public function userRole(){
-        return $this->hasMany(UserRole::class,'user_id');
+    public function userRole()
+    {
+        return $this->hasMany(UserRole::class, 'user_id');
     }
 
+    public function classes()
+    {
+        return $this->hasOne(Classes::class, 'id', 'class_id');
+    }
 
 }

@@ -93,6 +93,46 @@ export function customRule() {
         }
     });
 
+    VeeValidate.Validator.extend("afterWithin30Days", {
+        validate: value => {
+            if (value[0] && value[1]) {
+                // console.log(moment(value[0]))
+                return (
+                    moment(value[1], "YYYY-MM-DD").isSameOrBefore(
+                        moment(value[0], "YYYY-MM-DD").add(30, "days")
+                    ) &&
+                    moment(value[1], "YYYY-MM-DD").isSameOrAfter(
+                        moment(value[0], "YYYY-MM-DD")
+                    )
+                );
+            }
+            return true;
+        },
+        getMessage: () => {
+            return `Khoảng thời gian không được lớn hơn 30 ngày`;
+        }
+    });
+
+    VeeValidate.Validator.extend("withinAYear", {
+        validate: value => {
+            if (value[0] && value[1]) {
+                // console.log(moment(value[0]))
+                return (
+                    moment(value[1], "YYYY-MM-DD").isSameOrBefore(
+                        moment(value[0], "YYYY-MM-DD").add(1, "years")
+                    ) &&
+                    moment(value[1], "YYYY-MM-DD").isSameOrAfter(
+                        moment(value[0], "YYYY-MM-DD")
+                    )
+                );
+            }
+            return true;
+        },
+        getMessage: () => {
+            return `Khoảng thời gian không được lớn hơn 1 năm`;
+        }
+    });
+
     VeeValidate.Validator.extend("beforeToday", {
         validate: value => {
             if (value[0] && value[1]) {

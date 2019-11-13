@@ -13,4 +13,5 @@ Route::group(['prefix' => '/user', 'as' => 'user.'], function () {
     Route::post('add','UserController@add')->name('add');
     Route::post('edit','UserController@edit')->name('edit');
     Route::post('listing-all','UserController@listingAll')->name('listing-all');
+    Route::post('update-password','UserController@updatePassword')->name('update-password');
 });

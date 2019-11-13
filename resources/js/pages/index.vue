@@ -1,7 +1,7 @@
 <template>
     <div>
-        <overview-statistic />
-        <spam-block-statistic />
+        <!--<overview-statistic />-->
+        <!--<spam-block-statistic />-->
     </div>
 </template>
 
