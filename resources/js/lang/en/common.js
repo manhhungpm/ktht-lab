@@ -15,5 +15,6 @@ export default {
         fri: "Fri",
         sat: "Sat",
         sun: "Sun"
-    }
+    },
+    description: "Description"
 };

@@ -15,5 +15,6 @@ export default {
         fri: "T6",
         sat: "T7",
         sun: "CN"
-    }
+    },
+    description: "Mô tả"
 };

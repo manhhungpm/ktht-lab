@@ -6,7 +6,8 @@
  * Time: 23:59
  */
 
-Route::group(['prefix' => '/project', 'as' => 'project.', 'middleware' => 'role:' . \App\Models\Role::ROOT . '|' . \App\Models\Role::ADMIN], function () {
+Route::group(['prefix' => '/project', 'as' => 'project.', 'middleware' => 'role:' . \App\Models\Role::ROOT .
+    '|' . \App\Models\Role::ADMIN . '|' . \App\Models\Role::LEADER], function () {
     Route::post('listing', 'ProjectController@listing')->name('listing');
     Route::post('add', 'ProjectController@add')->name('add');
     Route::post('edit', 'ProjectController@edit')->name('edit');

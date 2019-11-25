@@ -26,9 +26,14 @@ export default {
         colors: {
             type: Array,
             default: () => [
-                "#5867dd",
-                "#f4516c",
+                "#2F96F1",
+                "#67B0F5",
+                "#97CAFA",
+                "#055ED1",
+                "#00459E",
                 "#34bfa3",
+                "#f4516c",
+                "#5867dd",
                 "#ffb822",
                 "#2f7ed8",
                 "#0d233a",
@@ -83,6 +88,14 @@ export default {
         horizontalMargin: {
             type: Number,
             default: 75
+        },
+        marginLeft: {
+            type: Number,
+            default: undefined
+        },
+        marginRight: {
+            type: Number,
+            default: undefined
         },
         marginTop: {
             type: Number,
@@ -170,9 +183,13 @@ export default {
                 chart: {
                     backgroundColor: "transparent",
                     marginTop: this.marginTop,
-                    marginBottom: this.hasLegend ? 200 : 75,
-                    marginLeft: this.horizontalMargin,
-                    marginRight: this.horizontalMargin,
+                    marginBottom: this.hasLegend ? 175 : 75,
+                    marginLeft: this.marginLeft
+                        ? this.marginLeft
+                        : this.horizontalMargin,
+                    marginRight: this.marginRight
+                        ? this.marginRight
+                        : this.horizontalMargin,
                     type: this.chartType,
                     height: this.chartHeight,
                     inverted: this.inverted
@@ -292,5 +309,3 @@ export default {
     }
 };
 </script>
-
-<style scoped></style>

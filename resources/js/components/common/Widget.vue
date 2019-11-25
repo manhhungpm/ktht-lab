@@ -1,20 +1,24 @@
 <template>
-    <div class="col-md-12 col-lg-6 col-xl-2">
+    <div class="col-md-12 col-lg-6 col-xl-2 dashboard-widget">
         <div class="m-widget24">
             <div class="m-widget24__item">
-                <h4 class="m-widget24__title wrap-text">{{ title }}: </h4>
-                <div style="margin-left: 90px; font-size: 30px ">
-                    <span class="" :class="typeClassText">
-                        {{ value }}
-                    </span>
+                <div class="widget-main-content">
+                    <h4 class="m-widget24__title wrap-text">{{ title }}:</h4>
+
+                    <div
+                        class=""
+                        :class="typeClassText"
+                        style="display:flex; justify-content: flex-start; margin-left: 1rem"
+                    >
+                        <div style="font-size: 25px ">{{ formattedValue }}</div>
+                    </div>
                 </div>
-                <span class="m-widget24__desc">
-                    {{ label }}
-                </span>
+
+                <slot name="description"> </slot>
                 <div v-for="item in itemOptions">
-                    <span class="" style="margin-left: 1.8rem">
-                        {{ item.name }}: {{ item.value }}
-                    </span>
+                    <li>
+                        {{ item.name }}: <b>{{ item.value }}</b>
+                    </li>
                 </div>
                 <div class="m--space-10"></div>
                 <template v-if="isProgressBar == true">
@@ -42,15 +46,13 @@
 </template>
 
 <script>
+import { formatNumber } from "~/helpers/formats";
+
 export default {
     name: "Widget",
     props: {
         value: {
             type: Number
-        },
-        label: {
-            type: String,
-            default: null
         },
         title: {
             type: String,
@@ -92,8 +94,13 @@ export default {
             type: Array,
             default: () => []
         }
+    },
+    computed: {
+        formattedValue() {
+            return formatNumber(this.value);
+        }
     }
 };
 </script>
 
-<style scoped></style>
+<style></style>

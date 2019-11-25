@@ -20,9 +20,12 @@
                 "
                 :end-placeholder="$t('component.date_picker.end_placeholder')"
                 :format="format"
+                :clearable="clearable"
                 :value-format="valueFormat"
                 :picker-options="pickerOptions"
                 :default-time="defaultTime"
+                :disabled="disabled"
+                :default-value="defaultValue"
             >
             </el-date-picker>
 
@@ -95,11 +98,27 @@ export default {
                 );
             }
         },
+        firstDayOfWeek: {
+            type: Number,
+            default: 1
+        },
         defaultTime: {
             type: Array,
             default: () => {
                 return ["00:00:00", "23:59:59"];
             }
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        defaultValue: {
+            type: String,
+            default: null
+        },
+        clearable: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -288,6 +307,7 @@ export default {
                         break;
                 }
             }
+            pickerOpt.firstDayOfWeek = this.firstDayOfWeek;
             return pickerOpt;
         }
     },

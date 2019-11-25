@@ -37,6 +37,10 @@ Route::group([
         includeRouteFiles(__DIR__ . '/Project/');
     });
 
+    Route::group(['namespace' => 'Rent','middleware' => []], function () {
+        includeRouteFiles(__DIR__ . '/Rent/');
+    });
+
     Route::group(['namespace' => 'BlackWhite', 'prefix' => '/blackwhite', 'as' => 'blackwhite.','middleware' => []], function () {
         includeRouteFiles(__DIR__ . '/BlackWhite/');
     });

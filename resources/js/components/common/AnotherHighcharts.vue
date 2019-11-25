@@ -28,11 +28,11 @@ export default {
         colors: {
             type: Array,
             default: () => [
-                "#5867dd",
-                "#f4516c",
                 "#34bfa3",
+                "#f4516c",
+                "#5867dd",
                 "#ffb822",
-                "#2f7ed8",
+                "#97CAFA",
                 "#0d233a",
                 "#8bbc21",
                 "#36a3f7",
@@ -43,7 +43,8 @@ export default {
                 "#716aca",
                 "#77a1e5",
                 "#c42525",
-                "#a6c96a"
+                "#a6c96a",
+                "#2f7ed8"
             ]
         },
         series: {
@@ -167,7 +168,11 @@ export default {
             let series = _.cloneDeep(this.series);
 
             Highcharts.setOptions({
-                lang: { numericSymbols: ["k", "M", "B", "T", "P", "E"] }
+                lang: {
+                    numericSymbols: ["k", "M", "B", "T", "P", "E"],
+                    thousandsSep: ",",
+                    decimalPoint: "."
+                }
             });
 
             let options = {
@@ -177,7 +182,7 @@ export default {
                 chart: {
                     backgroundColor: "transparent",
                     marginTop: this.marginTop,
-                    marginBottom: this.hasLegend ? 100 : 75,
+                    marginBottom: this.hasLegend ? 115 : 75,
                     marginLeft: this.horizontalMargin,
                     marginRight: this.horizontalMargin,
                     type: this.chartType,
@@ -236,7 +241,7 @@ export default {
                     categories: this.categories
                 },
                 yAxis: {
-                    min: this.chartType == "column" ? 0 : undefined,
+                    min: 0,
                     softMax: 100,
                     minRange: 1,
                     title: {

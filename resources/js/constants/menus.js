@@ -5,7 +5,8 @@ export default [
     {
         title: "menu.dashboard",
         icon: "flaticon-line-graph",
-        route: "/"
+        route: "/",
+        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
     },
     {
         title: "menu.management",
@@ -56,19 +57,19 @@ export default [
     {
         title: "menu.project",
         icon: "flaticon-list",
-        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
+        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN, ROLE.ROLE_LEADER],
         route: "/project"
     },
     {
         title: "menu.statistic.title",
         icon: "flaticon-graphic",
-        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
+        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN, ROLE.ROLE_LEADER],
         route: "/statistic"
     },
     {
         title: "menu.rent",
         icon: "flaticon-calendar-with-a-clock-time-tools",
-        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN],
+        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN, ROLE.ROLE_LEADER, ROLE.ROLE_USER],
         route: "/rent"
     }
 ];
