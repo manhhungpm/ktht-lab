@@ -36,19 +36,7 @@ const Rent = () =>
     import("~/pages/rent/Rent.vue").then(m=>m.default || m);
 
 //Highchart
-const StatisticTimeCall = () =>
-    import("~/pages/statistic/TimeCall/TimeCall.vue").then(m => m.default || m);
-
-const StatisticSumCall = () =>
-    import("~/pages/statistic/SumCall/SumCall.vue").then(m => m.default || m);
-
-const StatisticSpam = () =>
-    import("~/pages/statistic/Spam/Spam.vue").then(m => m.default || m);
-
-const SpamCallDetail = () =>
-    import("~/pages/spam-call-detail/SpamCallDetail.vue").then(
-        m => m.default || m
-    );
+const Statistic = () => import("~/pages/statistic/Statistic.vue").then(m=>m.default || m);
 
 export default {
     dashboard: { path: "/", name: "dashboard", component: Dashboard },
@@ -123,24 +111,29 @@ export default {
     },
 
     //Statistic route
-    statistic_time_call: {
-        path: "/statistic/time-call",
-        name: "statistic.time_call",
-        component: StatisticTimeCall
-    },
-    statistic_sum_call: {
-        path: "/statistic/sum-call",
-        name: "statistic.sum_call",
-        component: StatisticSumCall
-    },
-    statistic_spam: {
-        path: "/statistic/spam",
-        name: "statistic.spam",
-        component: StatisticSpam
-    },
-    statistic_spam_call_detail: {
-        path: "/spam-call-detail",
-        name: "statistic.spam_call_detail",
-        component: SpamCallDetail
+    // statistic_time_call: {
+    //     path: "/statistic/time-call",
+    //     name: "statistic.time_call",
+    //     component: StatisticTimeCall
+    // },
+    // statistic_sum_call: {
+    //     path: "/statistic/sum-call",
+    //     name: "statistic.sum_call",
+    //     component: StatisticSumCall
+    // },
+    // statistic_spam: {
+    //     path: "/statistic/spam",
+    //     name: "statistic.spam",
+    //     component: StatisticSpam
+    // },
+    // statistic_spam_call_detail: {
+    //     path: "/spam-call-detail",
+    //     name: "statistic.spam_call_detail",
+    //     component: SpamCallDetail
+    // },
+    statistic: {
+        path: "/statistic",
+        name: "statistic.title",
+        component: Statistic
     },
 };

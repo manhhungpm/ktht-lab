@@ -23,7 +23,7 @@
                         </div>
                         <div
                             id="m_accordion_5_item_3_body"
-                            class="m-accordion__item-body collapse"
+                            class="m-accordion__item-body collapse show"
                             role="tabpanel"
                             aria-labelledby="m_accordion_5_item_3_head"
                             data-parent="#m_accordion_5"

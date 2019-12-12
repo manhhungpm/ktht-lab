@@ -24,7 +24,15 @@ define('SELECT_All', -1);
 
 define('INACTIVE', 0);
 define('ACTIVE',1);
-define('DELETE',-1);
+//define('DELETE',-1);
 
 define("TYPE_WHITELIST",1);
 define("TYPE_BLACKLIST",0);
+
+//Action_log constant
+define('LOGIN', 'Login');
+define('LOGOUT', 'Logout');
+define('ADD', 'Add');
+define('UPDATE', 'Update');
+define('DELETE', 'Delete');
+define('STATISTIC','Statistic');

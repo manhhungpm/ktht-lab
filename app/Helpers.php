@@ -97,11 +97,11 @@ function processCommonResponse($result, $data = null)
 {
     $code = 0;
 
-    if($result === true){
+    if ($result === true) {
         $code = CODE_SUCCESS;
-    } else if($result === false) {
+    } else if ($result === false) {
         $code = CODE_ERROR;
-    } else if($result ===3) {
+    } else if ($result === 3) {
         $code = CODE_ERROR_DISABLE_MANAGER_WHEN_BLACKWHITELIST_ACTIVE;
     }
 
@@ -137,3 +137,20 @@ function getFileUpload($file)
     return null;
 }
 
+function fireEventActionLog($action_name = null, $class_name = null, $object_id = null, $object_name = null,
+                            $old_value = null, $new_value = null, $ip = null, $user_id = null, $username = null)
+{
+    $data = [
+        'user_id' => $user_id ? $user_id : \Illuminate\Support\Facades\Auth::user()->id,
+        'username' => $username ? $username : \Illuminate\Support\Facades\Auth::user()->name,
+        'action_name' => $action_name ? $action_name : '',
+        'created_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
+        'class_name' => $class_name ? $class_name : '',
+        'object_id' => $object_id,
+        'object_name' => $object_name ? $object_name : '',
+        'old_value' => $old_value,
+        'new_value' => $new_value,
+        'ip' => $ip,
+    ];
+    event(new \App\Events\ActionLog($data));
+}

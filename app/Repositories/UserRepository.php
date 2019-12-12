@@ -159,7 +159,7 @@ class UserRepository extends BaseRepository
         }
     }
 
-    public function addUser($arr)
+    public function addUser($arr,$ip)
     {
         $role = $arr['role'];
         $user = new User();
@@ -170,6 +170,7 @@ class UserRepository extends BaseRepository
         if ($user->save()) {
             if ($role != null) {
                 $user->roles()->attach($role);
+                fireEventActionLog(ADD, $user->getTable(), $user->id, $user->name, null, json_encode($user), $ip);
             }
             return true;
         }
@@ -177,10 +178,11 @@ class UserRepository extends BaseRepository
 
     }
 
-    public function editUser($arr)
+    public function editUser($arr,$ip)
     {
         $role = $arr['role'];
         $user = User::find($arr['id']);
+        $oldUser = json_encode($user);
         if ($user != null) {
             $arr['who_updated'] = \auth()->user()->name;
             $arr['version'] = $arr['version'] + 1;
@@ -189,6 +191,7 @@ class UserRepository extends BaseRepository
                 $user->roles()->detach();
                 if ($role != null) {
                     $user->roles()->attach($role);
+                    fireEventActionLog(UPDATE, $user->getTable(), $user->id, $user->name, $oldUser, json_encode($user), $ip);
                 }
                 return true;
             }
