@@ -51,14 +51,14 @@ class StoreController extends Controller
 
     public function add(Request $request)
     {
-        $result = $this->_storeRepository->addStore($request->only('name', 'description'));
+        $result = $this->_storeRepository->addStore($request->only('name', 'description'),$request->ip());
 
         return processCommonResponse($result);
     }
 
     public function edit(Request $request)
     {
-        $result = $this->_storeRepository->editStore($request->only('name', 'description', 'id'));
+        $result = $this->_storeRepository->editStore($request->only('name', 'description', 'id'),$request->ip());
 
         return processCommonResponse($result);
     }

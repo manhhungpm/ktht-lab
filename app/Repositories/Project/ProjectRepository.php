@@ -40,7 +40,7 @@ class ProjectRepository extends BaseRepository
         return $query->get();
     }
 
-    public function addProject($arr)
+    public function addProject($arr,$ip)
     {
 //        dd($arr);
         $query = $this->model;
@@ -50,15 +50,17 @@ class ProjectRepository extends BaseRepository
             if ($arr['user_id'] && $arr['device_type_id']) {
                 $query->user()->attach($arr['user_id']);
                 $query->deviceType()->attach($arr['device_type_id']);
+                fireEventActionLog(ADD, $query->getTable(), $query->id, $query->name, null, json_encode($query), $ip);
             }
             return true;
         }
         return false;
     }
 
-    public function editProject($arr)
+    public function editProject($arr,$ip)
     {
         $query = $this->model->find($arr['id']);
+        $oldUser = json_encode($query);
         if ($query != null) {
             $query->fill($arr);
             if ($query->save()) {
@@ -67,6 +69,7 @@ class ProjectRepository extends BaseRepository
                 if ($arr['user_id'] && $arr['device_type_id']) {
                     $query->user()->attach($arr['user_id']);
                     $query->deviceType()->attach($arr['device_type_id']);
+                    fireEventActionLog(UPDATE, $query->getTable(), $query->id, $query->name, $oldUser, json_encode($query), $ip);
                 }
                 return true;
             }

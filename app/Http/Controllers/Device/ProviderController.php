@@ -45,14 +45,14 @@ class ProviderController extends Controller
 
     public function add(Request $request)
     {
-        $result = $this->_providerRepository->addProvider($request->only('name','address', 'description'));
+        $result = $this->_providerRepository->addProvider($request->only('name','address', 'description'),$request->ip());
 
         return processCommonResponse($result);
     }
 
     public function edit(Request $request)
     {
-        $result = $this->_providerRepository->editProvider($request->only('name','address', 'description', 'id'));
+        $result = $this->_providerRepository->editProvider($request->only('name','address', 'description', 'id'),$request->ip());
 
         return processCommonResponse($result);
     }

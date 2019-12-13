@@ -45,14 +45,14 @@ class ClassController extends Controller
 
     public function add(Request $request)
     {
-        $result = $this->_classRepository->addClass($request->only('name', 'description','faculty_id'));
+        $result = $this->_classRepository->addClass($request->only('name', 'description','faculty_id'),$request->ip());
 
         return processCommonResponse($result);
     }
 
     public function edit(Request $request)
     {
-        $result = $this->_classRepository->editClass($request->only('name', 'description','faculty_id', 'id'));
+        $result = $this->_classRepository->editClass($request->only('name', 'description','faculty_id', 'id'),$request->ip());
 
         return processCommonResponse($result);
     }

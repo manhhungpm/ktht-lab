@@ -39,20 +39,23 @@ class StoreRepository extends BaseRepository
         return $query->get();
     }
 
-    public function addStore($arr)
+    public function addStore($arr,$ip)
     {
         $query = $this->model;
         $arr['status'] = '1';
         $query->fill($arr);
+        fireEventActionLog(ADD, $query->getTable(), $query->id, $query->name, null, json_encode($query), $ip);
         return $query->save();
     }
 
-    public function editStore($arr)
+    public function editStore($arr,$ip)
     {
         $query = $this->model->find($arr['id']);
+        $oldUser = json_encode($query);
         if ($query != null) {
             $query->fill($arr);
             if ($query->save()) {
+                fireEventActionLog(UPDATE, $query->getTable(), $query->id, $query->name, $oldUser, json_encode($query), $ip);
                 return true;
             }
             return false;

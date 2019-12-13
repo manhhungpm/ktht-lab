@@ -35,7 +35,7 @@ class RentRepository extends BaseRepository
         return $query->get();
     }
 
-    public function addRent($arr)
+    public function addRent($arr,$ip)
     {
 //        dd($arr);
         $query = $this->model;
@@ -47,15 +47,17 @@ class RentRepository extends BaseRepository
         if ($query->save()) {
             if ($arr['device_type_id']) {
                 $query->deviceType()->attach($arr['device_type_id']);
+                fireEventActionLog(ADD, $query->getTable(), $query->id, $arr['user']['name'], null, json_encode($query), $ip);
             }
             return true;
         }
         return false;
     }
 
-    public function editRent($arr)
+    public function editRent($arr,$ip)
     {
         $query = $this->model->find($arr['id']);
+        $oldUser = json_encode($query);
         if ($query != null) {
             $query->user_id = $arr['user']['id'];
             $query->start_date = $arr['date_range'][0];
@@ -65,6 +67,7 @@ class RentRepository extends BaseRepository
                 $query->deviceType()->detach();
                 if ($arr['device_type_id']) {
                     $query->deviceType()->attach($arr['device_type_id']);
+                    fireEventActionLog(UPDATE, $query->getTable(), $query->id, $arr['user']['name'], $oldUser, json_encode($query), $ip);
                 }
                 return true;
             }

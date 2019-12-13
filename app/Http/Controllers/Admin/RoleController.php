@@ -54,14 +54,14 @@ class RoleController extends Controller
 
     public function add(AddRoleRequest $request)
     {
-        $result = $this->_roleRepository->addRole($request->only('name', 'description'));
+        $result = $this->_roleRepository->addRole($request->only('name', 'description'),$request->ip());
 
         return processCommonResponse($result);
     }
 
     public function edit(EditRoleRequest $request)
     {
-        $result = $this->_roleRepository->editRole($request->only('name', 'description', 'id'));
+        $result = $this->_roleRepository->editRole($request->only('name', 'description', 'id'),$request->ip());
 
         return processCommonResponse($result);
     }

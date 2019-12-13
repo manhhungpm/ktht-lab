@@ -45,14 +45,14 @@ class FacultyController extends Controller
 
     public function add(Request $request)
     {
-        $result = $this->_facultyRepository->addFaculty($request->only('name', 'description'));
+        $result = $this->_facultyRepository->addFaculty($request->only('name', 'description'),$request->ip());
 
         return processCommonResponse($result);
     }
 
     public function edit(Request $request)
     {
-        $result = $this->_facultyRepository->editFaculty($request->only('name', 'description', 'id'));
+        $result = $this->_facultyRepository->editFaculty($request->only('name', 'description', 'id'),$request->ip());
 
         return processCommonResponse($result);
     }

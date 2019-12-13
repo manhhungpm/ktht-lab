@@ -51,14 +51,14 @@ class DeviceGroupController extends Controller
 
     public function add(Request $request)
     {
-        $result = $this->_deviceGroupRepository->addDeviceGroup($request->only('name', 'display_name', 'provider_id', 'description'));
+        $result = $this->_deviceGroupRepository->addDeviceGroup($request->only('name', 'display_name', 'provider_id', 'description'),$request->ip());
 
         return processCommonResponse($result);
     }
 
     public function edit(Request $request)
     {
-        $result = $this->_deviceGroupRepository->editDeviceGroup($request->only('name', 'display_name', 'provider_id', 'description', 'id'));
+        $result = $this->_deviceGroupRepository->editDeviceGroup($request->only('name', 'display_name', 'provider_id', 'description', 'id'),$request->ip());
 
         return processCommonResponse($result);
     }
