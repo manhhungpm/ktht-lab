@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\LoggedIn;
+use App\Events\LoggedOut;
 use App\Repositories\UserRepository;
 use App\User;
 use Carbon\Carbon;
@@ -117,6 +119,7 @@ class AuthController extends Controller
                 'message' =>  'Tài khoản hết hạn hoặc đã bị khóa!'
             ], 401);
         } else {
+            event(new LoggedIn(auth()->user()));
             return $this->respondWithToken($token);
         }
     }
@@ -195,6 +198,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
+        event(new LoggedOut(auth()->user()));
         return response()->json(['message' => 'Successfully logged out']);
     }
 

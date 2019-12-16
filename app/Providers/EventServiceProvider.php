@@ -19,6 +19,12 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
 
+        'App\Events\LoggedIn' => [
+            'App\Listeners\LogSuccessfulLogin',
+        ],
+        'App\Events\LoggedOut' => [
+            'App\Listeners\LogSuccessfulLogout',
+        ],
         'App\Events\ActionLog' => [
             'App\Listeners\ActionLogListener',
         ],

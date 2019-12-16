@@ -1,24 +1,22 @@
 <template>
     <div>
-        <!--<overview-statistic />-->
-        <!--<spam-block-statistic />-->
+        <dashboard></dashboard>
     </div>
 </template>
 
 <script>
-import OverviewStatistic from "../components/elements/statistics/OverviewStatistic";
-import SpamBlockStatistic from "../components/elements/statistics/SpamBlockStatistic";
+    import Dashboard from "~/pages/dashboard/Dashboard";
 
-export default {
-    components: { SpamBlockStatistic, OverviewStatistic },
-    head() {
-        return {
-            title: this.$t("menu.dashboard")
-        };
-    },
-    middleware: ["auth"],
-    meta: {
-        title: "menu.dashboard"
-    }
-};
+    export default {
+        components: {Dashboard},
+        head() {
+            return {
+                title: this.$t("menu.dashboard")
+            };
+        },
+        middleware: ["auth"],
+        meta: {
+            title: "menu.dashboard"
+        }
+    };
 </script>
