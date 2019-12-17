@@ -18,7 +18,7 @@
                     :columns="columns"
                     url="/rent/listing"
                     :fixed-columns-left="2"
-                    :fixed-columns-right="1"
+                    :fixed-columns-right="3"
                     :actions="actions"
                     :search-placeholder="$t('rent.placeholder.search')"
                     :order-column-index="2"
@@ -85,6 +85,27 @@
                                     html +=
                                         "<li>" +
                                         htmlEscapeEntities(value.name) +
+                                        "</li>";
+                                }
+                            });
+                            return html;
+                        }
+                    },
+                    {
+                        data: "device_type",
+                        title: "Số lượng",
+                        render(data) {
+                            let html = "";
+                            data.map(function (value) {
+                                if (html === "") {
+                                    html +=
+                                        "<li>" +
+                                        htmlEscapeEntities(value.pivot.amount) +
+                                        "</li>";
+                                } else {
+                                    html +=
+                                        "<li>" +
+                                        htmlEscapeEntities(value.pivot.amount) +
                                         "</li>";
                                 }
                             });

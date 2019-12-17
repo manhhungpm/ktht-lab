@@ -27,8 +27,11 @@ class DeviceGroupController extends Controller
     {
         $params = getDataTableRequestParams($request);
 
+        $searchParams = $request->only('status', 'provider');
+
         $total = $this->_deviceGroupRepository->getList(
             $params['keyword'],
+            $searchParams,
             true
         );
 
@@ -36,6 +39,7 @@ class DeviceGroupController extends Controller
             'recordsTotal' => $total,
             'data' => $this->_deviceGroupRepository->getList(
                 $params['keyword'],
+                $searchParams,
                 false,
                 $params['length'],
                 $params['start'],

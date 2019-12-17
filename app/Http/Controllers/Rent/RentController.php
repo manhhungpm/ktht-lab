@@ -45,14 +45,14 @@ class RentController extends Controller
 
     public function add(Request $request)
     {
-        $result = $this->_rentRepository->addRent($request->only('user', 'description', 'date_range', 'device_type_id'),$request->ip());
+        $result = $this->_rentRepository->addRent($request->only('user', 'description', 'date_range', 'device_type_id', 'amount'), $request->ip());
 
         return processCommonResponse($result);
     }
 
     public function edit(Request $request)
     {
-        $result = $this->_rentRepository->editRent($request->only('user', 'description', 'date_range', 'device_type_id', 'id'),$request->ip());
+        $result = $this->_rentRepository->editRent($request->only('user', 'description', 'date_range', 'device_type_id', 'id', 'amount'), $request->ip());
 
         return processCommonResponse($result);
     }

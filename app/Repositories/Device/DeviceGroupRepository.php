@@ -18,14 +18,30 @@ class DeviceGroupRepository extends BaseRepository
         return DeviceGroup::class;
     }
 
-    public function getList($keyword = null, $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
+    public function getList($keyword = null, $search = [], $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
     {
-        $query = $this->model
+        $query = $this->model->select('id', 'name', 'display_name', 'status', 'description', 'updated_at', 'created_at', 'provider_id')
             ->where('name', 'LIKE', "%$keyword%");
 
+        collect($search)->each(function ($item, $key) use ($query) {
+            switch ($key) {
+                case 'provider':
+                    if(isset($item)) {
+                        $query->where('provider_id', $item);
+                    }
+                    break;
+                case 'status':
+                    if (isset($item)) {
+                        $query->whereIn('status', $item);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+
         if (!$counting) {
-            $query->select('id', 'name', 'display_name', 'status', 'description', 'updated_at', 'created_at', 'provider_id')
-                ->with('provider');
+            $query->with('provider');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);
@@ -41,7 +57,7 @@ class DeviceGroupRepository extends BaseRepository
         return $query->get();
     }
 
-    public function addDeviceGroup($arr,$ip)
+    public function addDeviceGroup($arr, $ip)
     {
         $query = $this->model;
         $arr['status'] = '1';
@@ -50,7 +66,7 @@ class DeviceGroupRepository extends BaseRepository
         return $query->save();
     }
 
-    public function editDeviceGroup($arr,$ip)
+    public function editDeviceGroup($arr, $ip)
     {
         $query = $this->model->find($arr['id']);
         $oldUser = json_encode($query);

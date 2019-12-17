@@ -1,35 +1,82 @@
 <template>
-    <div>
-        <portlet :title="$t('device.device_group.title')">
-            <v-button
-                    slot="tool"
-                    color="primary"
-                    style-type="air"
-                    class="m-btn m-btn--icon"
-                    @click.native="addDeviceGroup"
-            >
+    <div class="row">
+        <div class="col-md-12">
+            <div class="m-portlet__body">
+                <div
+                        id="m_accordion_5"
+                        class="m-accordion m-accordion--default m-accordion--toggle-arrow"
+                        role="tablist"
+                >
+                    <div class="m-accordion__item m-accordion__item--brand">
+                        <div
+                                id="m_accordion_5_item_3_head"
+                                class="m-accordion__item-head collapsed"
+                                role="tab"
+                                data-toggle="collapse"
+                                href="#m_accordion_5_item_3_body"
+                                aria-expanded="true"
+                        >
+                                <span class="m-accordion__item-title">
+                                    {{ $t("label.search_information") }}</span
+                                >
+                            <span class="m-accordion__item-mode"></span>
+                        </div>
+                        <div
+                                id="m_accordion_5_item_3_body"
+                                class="m-accordion__item-body collapse show"
+                                role="tabpanel"
+                                aria-labelledby="m_accordion_5_item_3_head"
+                                data-parent="#m_accordion_5"
+                        >
+                            <div class="m-accordion__item-content">
+                                <device-group-filter
+                                        :is-required-to-export="
+                                            isRequiredToExport
+                                        "
+                                        @search="search"
+                                        @isExportFileSuccessfully="
+                                            isExportFileSuccessfully
+                                        "
+                                ></device-group-filter>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <portlet :title="$t('device.device_group.title')">
+                <v-button
+                        slot="tool"
+                        color="primary"
+                        style-type="air"
+                        class="m-btn m-btn--icon"
+                        @click.native="addDeviceGroup"
+                >
                 <span>
                     <i class="la la-plus"></i>
                     <span>{{ $t("button.add") }}</span>
                 </span>
-            </v-button>
-            <data-table
-                    ref="table"
-                    :columns="columns"
-                    url="/device/device-group/listing"
-                    :fixed-columns-left="1"
-                    :fixed-columns-right="1"
-                    :actions="actions"
-                    :search-placeholder="$t('device.device_group.placeholder.search')"
-                    :order-column-index="1"
-                    :order-type="'desc'"
-            >
-            </data-table>
-        </portlet>
-        <device-group-modal
-                ref="addModal"
-                :on-action-success="updateItemSuccess"
-        ></device-group-modal>
+                </v-button>
+                <data-table
+                        ref="table"
+                        :columns="columns"
+                        url="/device/device-group/listing"
+                        :fixed-columns-left="1"
+                        :fixed-columns-right="1"
+                        :actions="actions"
+                        :search-placeholder="$t('device.device_group.placeholder.search')"
+                        :order-column-index="1"
+                        :order-type="'desc'"
+                        :post-data="tableFilter"
+                >
+                </data-table>
+            </portlet>
+            <device-group-modal
+                    ref="addModal"
+                    :on-action-success="updateItemSuccess"
+            ></device-group-modal>
+        </div>
     </div>
 </template>
 
@@ -48,13 +95,21 @@
     } from "~/helpers/bootstrap-notify";
     import Portlet from "../../../components/common/Portlet";
     import DeviceGroupModal from "./partials/DeviceGroupModal";
+    import DeviceGroupFilter from "./partials/DeviceGroupFilter";
 
     export default {
         name: "DeviceGroup",
-        components: {DeviceGroupModal, Portlet},
+        components: {DeviceGroupFilter, DeviceGroupModal, Portlet},
         middleware: "auth",
         data() {
-            return {};
+            return {
+                tableFilter: {
+                    provider: null,
+                    status: null
+                },
+                exportLoading: false,
+                isRequiredToExport: false
+            };
         },
         computed: {
             columns() {
@@ -135,6 +190,19 @@
             }
         },
         methods: {
+            async search(value) {
+                this.tableFilter = value;
+                await this.$nextTick();
+                this.$refs.table.reload();
+            },
+            async exportFile() {
+                this.exportLoading = true;
+                this.isRequiredToExport = true;
+            },
+            isExportFileSuccessfully() {
+                this.exportLoading = false;
+                this.isRequiredToExport = false;
+            },
             updateItemSuccess() {
                 this.$refs.table.reload();
             },

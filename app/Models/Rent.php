@@ -19,6 +19,7 @@ class Rent extends Model
 
     public function deviceType()
     {
-        return $this->belongsToMany(DeviceType::class,'device_rent','rent_id','device_type_id');
+        return $this->belongsToMany(DeviceType::class,'device_rent','rent_id',
+            'device_type_id')->withPivot('amount');
     }
 }

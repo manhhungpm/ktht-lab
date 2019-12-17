@@ -35,9 +35,10 @@ class RentRepository extends BaseRepository
         return $query->get();
     }
 
-    public function addRent($arr,$ip)
+    public function addRent($arr, $ip)
     {
-//        dd($arr);
+//        dd($arr['amount']);
+
         $query = $this->model;
         $arr['status'] = '1';
         $query->user_id = $arr['user']['id'];
@@ -46,7 +47,13 @@ class RentRepository extends BaseRepository
         $query->fill($arr);
         if ($query->save()) {
             if ($arr['device_type_id']) {
-                $query->deviceType()->attach($arr['device_type_id']);
+
+//                $query->deviceType()->attach($arr['device_type_id']);
+
+                foreach ($arr['device_type_id'] as $key => $id){
+                    $query->deviceType()->attach($id, array('amount'=>$arr['amount'][$key]));
+                }
+
                 fireEventActionLog(ADD, $query->getTable(), $query->id, $arr['user']['name'], null, json_encode($query), $ip);
             }
             return true;
@@ -54,7 +61,7 @@ class RentRepository extends BaseRepository
         return false;
     }
 
-    public function editRent($arr,$ip)
+    public function editRent($arr, $ip)
     {
         $query = $this->model->find($arr['id']);
         $oldUser = json_encode($query);
@@ -66,7 +73,12 @@ class RentRepository extends BaseRepository
             if ($query->save()) {
                 $query->deviceType()->detach();
                 if ($arr['device_type_id']) {
-                    $query->deviceType()->attach($arr['device_type_id']);
+
+//                    $query->deviceType()->attach($arr['device_type_id']);
+                    foreach ($arr['device_type_id'] as $key => $id){
+                        $query->deviceType()->attach($id, array('amount'=>$arr['amount'][$key]));
+                    }
+
                     fireEventActionLog(UPDATE, $query->getTable(), $query->id, $arr['user']['name'], $oldUser, json_encode($query), $ip);
                 }
                 return true;

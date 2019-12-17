@@ -12,10 +12,84 @@
             <user-chosen :multiple="false" v-model="form.user"
                          :required="true"></user-chosen>
 
-            <device-type-chosen :multiple="true" v-model="form.device_type"
-                                :required="true"></device-type-chosen>
+            <!--<device-type-chosen :multiple="true" v-model="form.device_type"-->
+            <!--:required="true"></device-type-chosen>-->
+
+
+            <div
+                    class="multiple-input-wrap col-12"
+                    :class="{ 'error-repeat-form-wrap': noMultiple }"
+            >
+                <label
+                        class="multiple-input-heading"
+                        :class="{ 'error-repeat-form-title': noMultiple }"
+                >
+                    <span>Chọn loại và số lượng thiết bị mượn</span>
+                </label>
+                <div class="m--margin-left-20">
+                    <div
+                            v-for="(input,
+                            index) in form.multi_device_details"
+                            :key="index"
+                            class="form-group m-form__group row"
+                    >
+                        <div class="col-md-4">
+                            <device-type-chosen :multiple="false" v-model="input.device_type"
+                                                :required="true" ></device-type-chosen>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Số lượng <span class="text-danger">(*)</span></label>
+                            <el-input-number v-model="input.amount"></el-input-number>
+                        </div>
+
+                        <div
+                                class="col-2 form-group m-form__group full-height-col" style="margin-top: 28px"
+                        >
+                            <div class="delete-button-wrap">
+                                <a
+                                        href="javascript:;"
+                                        class="text-danger"
+                                        @click="
+                                            deleteDetails(
+                                                form.multi_device_details,
+                                                index
+                                            )
+                                        "
+                                >
+                                    {{ $t("button.delete") }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                            class="m-form__group form-group m--margin-bottom-10"
+                    >
+                        <a
+                                href="javascript:;"
+                                class=""
+                                @click="
+                                    addDetails(form.multi_device_details, {
+                                        device_type: null,
+                                        amount: null
+                                    })
+                                "
+                        >{{ $t("button.add") }}
+                        </a>
+                    </div>
+                </div>
+                <div
+                        v-if="noMultiple"
+                        class="form-control-feedback error-repeat-form error-repeat-form-title"
+                        style="margin-left:15px;"
+                >
+                    Loại và số lượng thiết bị không được để trống
+                </div>
+            </div>
+
 
             <the-date-range
+                    style="margin-top: 15px"
                     :inline="false"
                     :label="$t('rent.date_range')"
                     v-model="form.date_range"
@@ -66,11 +140,17 @@
     import TheDateRange from "../../../components/common/TheDateRange";
 
     const defaultForm = {
-        id:  null,
+        id: null,
         user: null,
         description: null,
         date_range: null,
-        device_type: null
+        device_type: null,
+        multi_device_details: [
+            {
+                device_type: null,
+                amount: null
+            }
+        ],
     };
     export default {
         name: "RentModal",
@@ -89,12 +169,45 @@
                 isEdit: false
             };
         },
-        computed: {},
+        computed: {
+            noMultiple() {
+                return this.form.multi_device_details.length == 0;
+            }
+        },
         methods: {
+            addDetails(array, item) {
+                array.push(item);
+            },
+            deleteDetails(array, index) {
+                array.splice(index, 1);
+            },
             show(item = null) {
                 if (item != null) {
-                    console.log(item)
-                    item.date_range = [item.start_date,item.due_date];
+                    // console.log(item)
+
+                    //
+                    item.multi_device_details = [];
+                    var arr = [];
+                    item.device_type.forEach(function(value) {
+                        arr.push({
+                            device_type: {
+                                name: value.name,
+                                text: value.name,
+                                id: value.id,
+                            },
+                            amount: value.pivot.amount
+                        });
+                    });
+                    // console.log(arr);
+                    item.multi_device_details = arr;
+                    console.log(item.multi_device_details)
+                    console.log(arr)
+                    arr.forEach(function (value, index, array) {
+                          item.multi_device_details[index].device_type = value.device_type
+                    })
+                    //
+
+                    item.date_range = [item.start_date, item.due_date];
                     this.isEdit = true;
                     this.form = new Form(item);
                 }
@@ -119,11 +232,21 @@
                 this.isEdit = false;
                 this.$validator.reset();
             },
-            async addRent() {
-
-                this.form.device_type_id = this.form.device_type.map(function (e) {
-                    return e['id'];
+            setupDataPost(){
+                this.form.device_type_id = this.form.multi_device_details.map(function (e) {
+                    return e['device_type']['id'];
                 })
+                this.form.amount = this.form.multi_device_details.map(function (e) {
+                    return e.amount
+                })
+                // console.log(this.form)
+            },
+            async addRent() {
+                this.setupDataPost();
+
+                // this.form.device_type_id = this.form.device_type.map(function (e) {
+                //     return e['id'];
+                // })
                 //
                 // this.form.user_id = this.form.user_result.map(function (e) {
                 //     return e['id'];
@@ -145,9 +268,10 @@
                 }
             },
             async editRent() {
-                this.form.device_type_id = this.form.device_type.map(function (e) {
-                    return e['id'];
-                })
+                this.setupDataPost();
+                // this.form.device_type_id = this.form.device_type.map(function (e) {
+                //     return e['id'];
+                // })
                 //
                 // this.form.user_id = this.form.user_result.map(function (e) {
                 //     return e['id'];
