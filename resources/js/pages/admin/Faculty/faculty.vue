@@ -3,19 +3,6 @@
         <portlet :title="$t('admin.faculty.title')">
             <v-button
                     slot="tool"
-                    color="success"
-                    style-type="air"
-                    class="m-btn m-btn--icon"
-                    @click.native="importFaculty"
-                    style="margin-right: 5px"
-            >
-                        <span>
-                            <i class="la la-cloud-upload"></i>
-                            <span>{{ $t("button.import") }}</span>
-                        </span>
-            </v-button>
-            <v-button
-                    slot="tool"
                     color="primary"
                     style-type="air"
                     class="m-btn m-btn--icon"
@@ -216,8 +203,7 @@
                         }
                     }
                 });
-            },
-            importFaculty(){}
+            }
         }
     };
 </script>

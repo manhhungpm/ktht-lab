@@ -8,10 +8,13 @@
 
 namespace App\Http\Controllers\Project;
 
+use App\Exports\Project\ProjectExport;
 use App\Http\Controllers\Controller;
 use App\Repositories\Project\ProjectRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
+use Maatwebsite\Excel\Excel;
+
 
 class ProjectController extends Controller
 {
@@ -27,8 +30,11 @@ class ProjectController extends Controller
     {
         $params = getDataTableRequestParams($request);
 
+        $searchParams = $request->only('status', 'user', 'device_type');
+
         $total = $this->_projectRepository->getList(
             $params['keyword'],
+            $searchParams,
             true
         );
 
@@ -36,6 +42,7 @@ class ProjectController extends Controller
             'recordsTotal' => $total,
             'data' => $this->_projectRepository->getList(
                 $params['keyword'],
+                $searchParams,
                 false,
                 $params['length'],
                 $params['start'],
@@ -51,14 +58,14 @@ class ProjectController extends Controller
 
     public function add(Request $request)
     {
-        $result = $this->_projectRepository->addProject($request->only('name', 'description', 'user_id', 'device_type_id', 'description'),$request->ip());
+        $result = $this->_projectRepository->addProject($request->only('name', 'description', 'user_id', 'device_type_id', 'description'), $request->ip());
 
         return processCommonResponse($result);
     }
 
     public function edit(Request $request)
     {
-        $result = $this->_projectRepository->editProject($request->only('name', 'description', 'user_id', 'device_type_id', 'id'),$request->ip());
+        $result = $this->_projectRepository->editProject($request->only('name', 'description', 'user_id', 'device_type_id', 'id'), $request->ip());
 
         return processCommonResponse($result);
     }
@@ -92,5 +99,16 @@ class ProjectController extends Controller
             'results' => $data,
             'total' => $total
         ]);
+    }
+
+    public function export(Request $request, Excel $excel)
+    {
+        $searchParams = $request->only('status', 'user', 'device_type', 'device_type_name', 'user_name');
+        ini_set('memory_limit', '2048M');
+        ini_set('max_execution_time', '0');
+        $locale = $request->cookie('locale');
+        \Illuminate\Support\Facades\App::setLocale($locale);
+        $export = new ProjectExport($searchParams);
+        return $excel->download($export, 'Báo cáo dự án' . '.xlsx');
     }
 }

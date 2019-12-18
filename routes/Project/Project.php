@@ -14,4 +14,5 @@ Route::group(['prefix' => '/project', 'as' => 'project.', 'middleware' => 'role:
     Route::post('active', 'ProjectController@active')->name('active');
     Route::post('disable', 'ProjectController@disable')->name('disable');
     Route::post('listing-all', 'ProjectController@listingAll')->name('listing-all');
+    Route::post('export', 'ProjectController@export')->name('export');
 });

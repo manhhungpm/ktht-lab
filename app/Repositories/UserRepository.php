@@ -116,7 +116,7 @@ class UserRepository extends BaseRepository
 
 
         if (!$counting) {
-            $query->with("roles:name,id")->with('classes');
+            $query->with("roles:roles.id,name")->with('classes');
 
             if ($limit > 0) {
                 $query->skip($offset)

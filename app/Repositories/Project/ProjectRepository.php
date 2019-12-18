@@ -18,13 +18,40 @@ class ProjectRepository extends BaseRepository
         return Project::class;
     }
 
-    public function getList($keyword = null, $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
+    public function getList($keyword = null, $search = [], $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
     {
-        $query = $this->model
+        $query = $this->model->select('id', 'name', 'description', 'status', 'created_at', 'updated_at')
             ->where('name', 'LIKE', "%$keyword%");
 
+//        dd($search);
+        collect($search)->each(function ($item, $key) use ($query) {
+            switch ($key) {
+                case 'user':
+                    if (isset($item)){
+                        $query = $query->whereHas('user', function ($q) use ($item) {
+                            $q->whereIn('user_id', $item);
+                        });
+                    }
+                    break;
+                case 'device_type':
+                    if (isset($item)){
+                        $query = $query->whereHas('deviceType', function ($q) use ($item) {
+                            $q->whereIn('device_id', $item);
+                        });
+                    }
+                    break;
+                case 'status':
+                    if (isset($item)) {
+                        $query->whereIn('status', $item);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+
         if (!$counting) {
-            $query->select('id', 'name', 'description', 'status', 'created_at', 'updated_at')->with('user')->with('deviceType');
+            $query->with('user')->with('deviceType');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);
@@ -40,7 +67,7 @@ class ProjectRepository extends BaseRepository
         return $query->get();
     }
 
-    public function addProject($arr,$ip)
+    public function addProject($arr, $ip)
     {
 //        dd($arr);
         $query = $this->model;
@@ -57,7 +84,7 @@ class ProjectRepository extends BaseRepository
         return false;
     }
 
-    public function editProject($arr,$ip)
+    public function editProject($arr, $ip)
     {
         $query = $this->model->find($arr['id']);
         $oldUser = json_encode($query);

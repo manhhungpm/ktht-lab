@@ -181,7 +181,7 @@
             deleteDetails(array, index) {
                 array.splice(index, 1);
             },
-            show(item = null) {
+            async show(item = null) {
                 if (item != null) {
                     // console.log(item)
 
@@ -198,13 +198,14 @@
                             amount: value.pivot.amount
                         });
                     });
+                    await this.$nextTick();
                     // console.log(arr);
                     item.multi_device_details = arr;
-                    console.log(item.multi_device_details)
-                    console.log(arr)
-                    arr.forEach(function (value, index, array) {
-                          item.multi_device_details[index].device_type = value.device_type
-                    })
+                    // console.log(item.multi_device_details)
+                    // console.log(arr)
+                    // arr.forEach(function (value, index, array) {
+                    //       item.multi_device_details[index].device_type = value.device_type
+                    // })
                     //
 
                     item.date_range = [item.start_date, item.due_date];
