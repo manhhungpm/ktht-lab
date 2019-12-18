@@ -2,7 +2,7 @@
     <div>
         <div class="row" @keydown.enter.prevent="search">
             <div class="col-md-6">
-                <provider-chosen v-model="form.provider" :multiple="true" :required="false"></provider-chosen>
+                <faculty-chosen v-model="form.faculty" :multiple="true" :required="false"></faculty-chosen>
             </div>
 
             <div class="col-md-6">
@@ -28,18 +28,18 @@
                         <span>{{ $t("button.search") }}</span>
                     </span>
                 </v-button>
-                <v-button
-                        color="info"
-                        style-type="air"
-                        class="m-btn m-btn--icon"
-                        style="margin-right: 5px"
-                        @click.native="exportFile"
-                >
-                    <span>
-                        <i class="la la-cloud-download"></i>
-                        <span>{{ $t("button.export") }}</span>
-                    </span>
-                </v-button>
+                <!--<v-button-->
+                        <!--color="info"-->
+                        <!--style-type="air"-->
+                        <!--class="m-btn m-btn&#45;&#45;icon"-->
+                        <!--style="margin-right: 5px"-->
+                        <!--@click.native="exportFile"-->
+                <!--&gt;-->
+                    <!--<span>-->
+                        <!--<i class="la la-cloud-download"></i>-->
+                        <!--<span>{{ $t("button.export") }}</span>-->
+                    <!--</span>-->
+                <!--</v-button>-->
                 <v-button
                         color="accent"
                         style-type="air"
@@ -62,15 +62,16 @@
     import {downloadFile} from "~/helpers/downloadFile";
     import {notify, notifyTryAgain} from "~/helpers/bootstrap-notify";
     import TheDateRange from "~/components/common/TheDateRange";
-    import ProviderChosen from "../../../../components/elements/chosens/ProviderChosen";
+    import FacultyChosen from "../../../../components/elements/chosens/FacultyChosen";
 
     const defaultForm = {
-        provider: null,
+        faculty: null,
         status: null
     };
+
     export default {
-        name: "DeviceGroupFilter",
-        components: {ProviderChosen, TheDateRange},
+        name: "ClassFilter",
+        components: {FacultyChosen, TheDateRange},
         props: {
             onActionSuccess: {
                 type: Function,
@@ -136,17 +137,12 @@
                     });
                 }
 
-                if (this.form.provider) {
-                    searchParams.provider = this.form.provider.map(e => {
+                if (this.form.faculty) {
+                    searchParams.faculty = this.form.faculty.map(e => {
                         return e.id;
                     });
                 }
 
-                if(this.form.provider){
-                    searchParams.provider_name = this.form.provider.map(e => {
-                        return e.name;
-                    });
-                }
                 return searchParams;
             },
             async exportFile() {
@@ -177,3 +173,7 @@
         }
     }
 </script>
+
+<style scoped>
+
+</style>

@@ -6,7 +6,8 @@ return [
         'who_updated' => 'Người cập nhật',
         'when_created' => 'Thời gian tạo',
         'when_updated' => 'Thời gian cập nhật',
-        'description' => 'Mô tả'
+        'description' => 'Mô tả',
+        'status' => 'Trạng thái'
     ],
     'export' => [
         'filter' => 'Lọc theo',

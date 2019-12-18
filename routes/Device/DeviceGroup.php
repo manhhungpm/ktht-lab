@@ -13,4 +13,5 @@ Route::group(['prefix' => '/device-group', 'as' => 'device-group.', 'middleware'
     Route::post('active', 'DeviceGroupController@active')->name('active');
     Route::post('disable', 'DeviceGroupController@disable')->name('disable');
     Route::post('listing-all', 'DeviceGroupController@listingAll')->name('listing-all');
+    Route::post('export', 'DeviceGroupController@export')->name('export');
 });

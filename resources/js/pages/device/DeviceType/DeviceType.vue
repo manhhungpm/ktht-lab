@@ -1,35 +1,95 @@
 <template>
-    <div>
-        <portlet :title="$t('device.device_type.title')">
-            <v-button
-                    slot="tool"
-                    color="primary"
-                    style-type="air"
-                    class="m-btn m-btn--icon"
-                    @click.native="addDeviceType"
-            >
+    <div class="row">
+        <div class="col-md-12">
+            <div class="m-portlet__body">
+                <div
+                        id="m_accordion_5"
+                        class="m-accordion m-accordion--default m-accordion--toggle-arrow"
+                        role="tablist"
+                >
+                    <div class="m-accordion__item m-accordion__item--brand">
+                        <div
+                                id="m_accordion_5_item_3_head"
+                                class="m-accordion__item-head collapsed"
+                                role="tab"
+                                data-toggle="collapse"
+                                href="#m_accordion_5_item_3_body"
+                                aria-expanded="true"
+                        >
+                                <span class="m-accordion__item-title">
+                                    {{ $t("label.search_information") }}</span
+                                >
+                            <span class="m-accordion__item-mode"></span>
+                        </div>
+                        <div
+                                id="m_accordion_5_item_3_body"
+                                class="m-accordion__item-body collapse show"
+                                role="tabpanel"
+                                aria-labelledby="m_accordion_5_item_3_head"
+                                data-parent="#m_accordion_5"
+                        >
+                            <div class="m-accordion__item-content">
+                                <device-type-filter
+                                        :is-required-to-export="
+                                            isRequiredToExport
+                                        "
+                                        @search="search"
+                                        @isExportFileSuccessfully="
+                                            isExportFileSuccessfully
+                                        "
+                                ></device-type-filter>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <portlet :title="$t('device.device_type.title')">
+                <v-button
+                        slot="tool"
+                        color="success"
+                        style-type="air"
+                        class="m-btn m-btn--icon"
+                        @click.native="importAlias"
+                        style="margin-right: 5px"
+                >
+                        <span>
+                            <i class="la la-cloud-upload"></i>
+                            <span>{{ $t("button.import") }}</span>
+                        </span>
+                </v-button>
+                <v-button
+                        slot="tool"
+                        color="primary"
+                        style-type="air"
+                        class="m-btn m-btn--icon"
+                        @click.native="addDeviceType"
+                >
                 <span>
                     <i class="la la-plus"></i>
                     <span>{{ $t("button.add") }}</span>
                 </span>
-            </v-button>
-            <data-table
-                    ref="table"
-                    :columns="columns"
-                    url="/device/device-type/listing"
-                    :fixed-columns-left="1"
-                    :fixed-columns-right="1"
-                    :actions="actions"
-                    :search-placeholder="$t('device.device_type.placeholder.search')"
-                    :order-column-index="1"
-                    :order-type="'desc'"
-            >
-            </data-table>
-        </portlet>
-        <device-type-modal
-                ref="addModal"
-                :on-action-success="updateItemSuccess"
-        ></device-type-modal>
+                </v-button>
+                <data-table
+                        ref="table"
+                        :columns="columns"
+                        url="/device/device-type/listing"
+                        :fixed-columns-left="1"
+                        :fixed-columns-right="1"
+                        :actions="actions"
+                        :search-placeholder="$t('device.device_type.placeholder.search')"
+                        :order-column-index="1"
+                        :order-type="'desc'"
+                        :post-data="tableFilter"
+                >
+                </data-table>
+            </portlet>
+            <device-type-modal
+                    ref="addModal"
+                    :on-action-success="updateItemSuccess"
+            ></device-type-modal>
+        </div>
     </div>
 </template>
 
@@ -48,12 +108,22 @@
     } from "~/helpers/bootstrap-notify";
     import Portlet from "../../../components/common/Portlet";
     import DeviceTypeModal from "./partials/DeviceTypeModal";
+    import DeviceTypeFilter from "./partials/DeviceTypeFilter";
+
     export default {
         name: "DeviceType",
-        components: {DeviceTypeModal, Portlet},
+        components: {DeviceTypeFilter, DeviceTypeModal, Portlet},
         middleware: "auth",
         data() {
-            return {};
+            return {
+                tableFilter: {
+                    device_group:null,
+                    store: null,
+                    status: null
+                },
+                exportLoading: false,
+                isRequiredToExport: false
+            };
         },
         computed: {
             columns() {
@@ -77,7 +147,7 @@
                         title: this.$t("device.device_type.store"),
                     },
                     {
-                        data: "device_group.name",
+                        data: "device_group.display_name",
                         title: this.$t("device.device_type.device_group"),
                     },
                     {
@@ -86,7 +156,7 @@
                         render(data) {
                             if (data != null) {
                                 if (data == 1) {
-                                    return `<span class='text-success'>Kích hoạt</span>`;
+                                    return `<span class='text-success'>Hoạt động</span>`;
                                 } else {
                                     return `<span class='text-danger'>Vô hiệu</span>`;
                                 }
@@ -138,6 +208,19 @@
             }
         },
         methods: {
+            async search(value) {
+                this.tableFilter = value;
+                await this.$nextTick();
+                this.$refs.table.reload();
+            },
+            async exportFile() {
+                this.exportLoading = true;
+                this.isRequiredToExport = true;
+            },
+            isExportFileSuccessfully() {
+                this.exportLoading = false;
+                this.isRequiredToExport = false;
+            },
             updateItemSuccess() {
                 this.$refs.table.reload();
             },
@@ -214,7 +297,10 @@
                         }
                     }
                 });
-            }
+            },
+            importAlias() {
+                // this.$refs.importModal.show();
+            },
         }
     }
 </script>

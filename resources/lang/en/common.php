@@ -6,7 +6,8 @@ return [
         'who_updated' => 'Who updated',
         'when_created' => 'When created',
         'when_updated' => 'When updated',
-        'description' => 'Description'
+        'description' => 'Description',
+        'status' => 'Status'
     ],
     'export' => [
         'filter' => 'Filter with',

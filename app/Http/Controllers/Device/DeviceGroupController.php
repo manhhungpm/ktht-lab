@@ -8,10 +8,12 @@
 
 namespace App\Http\Controllers\Device;
 
+use App\Exports\Device\DeviceGroup\DeviceGroupExport;
 use App\Http\Controllers\Controller;
 use App\Repositories\Device\DeviceGroupRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
+use Maatwebsite\Excel\Excel;
 
 class DeviceGroupController extends Controller
 {
@@ -96,5 +98,16 @@ class DeviceGroupController extends Controller
             'results' => $data,
             'total' => $total
         ]);
+    }
+
+    public function export(Request $request, Excel $excel)
+    {
+        $searchParams = $request->only('status', 'provider','provider_name');
+        ini_set('memory_limit', '2048M');
+        ini_set('max_execution_time', '0');
+        $locale = $request->cookie('locale');
+        \Illuminate\Support\Facades\App::setLocale($locale);
+        $export = new DeviceGroupExport($searchParams);
+        return $excel->download($export, 'Báo cáo nhóm thiết bị'.'.xlsx');
     }
 }

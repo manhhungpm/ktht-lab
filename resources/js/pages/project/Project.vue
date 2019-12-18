@@ -116,7 +116,7 @@
                         render(data) {
                             if (data != null) {
                                 if (data == 1) {
-                                    return `<span class='text-success'>Kích hoạt</span>`;
+                                    return `<span class='text-success'>Hoạt động</span>`;
                                 } else {
                                     return `<span class='text-danger'>Vô hiệu</span>`;
                                 }

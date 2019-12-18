@@ -27,7 +27,7 @@ class DeviceGroupRepository extends BaseRepository
             switch ($key) {
                 case 'provider':
                     if(isset($item)) {
-                        $query->where('provider_id', $item);
+                        $query->whereIn('provider_id', $item);
                     }
                     break;
                 case 'status':

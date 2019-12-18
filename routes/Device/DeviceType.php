@@ -13,4 +13,5 @@ Route::group(['prefix' => '/device-type', 'as' => 'device-type.', 'middleware' =
     Route::post('active', 'DeviceTypeController@active')->name('active');
     Route::post('disable', 'DeviceTypeController@disable')->name('disable');
     Route::post('listing-all', 'DeviceTypeController@listingAll')->name('listing-all');
+    Route::post('export', 'DeviceTypeController@export')->name('export');
 });

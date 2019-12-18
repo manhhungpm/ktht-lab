@@ -48,6 +48,19 @@
             <portlet :title="$t('device.device_group.title')">
                 <v-button
                         slot="tool"
+                        color="success"
+                        style-type="air"
+                        class="m-btn m-btn--icon"
+                        @click.native="importAlias"
+                        style="margin-right: 5px"
+                >
+                        <span>
+                            <i class="la la-cloud-upload"></i>
+                            <span>{{ $t("button.import") }}</span>
+                        </span>
+                </v-button>
+                <v-button
+                        slot="tool"
                         color="primary"
                         style-type="air"
                         class="m-btn m-btn--icon"
@@ -138,7 +151,7 @@
                         render(data) {
                             if (data != null) {
                                 if (data == 1) {
-                                    return `<span class='text-success'>Kích hoạt</span>`;
+                                    return `<span class='text-success'>Hoạt động</span>`;
                                 } else {
                                     return `<span class='text-danger'>Vô hiệu</span>`;
                                 }
@@ -279,7 +292,10 @@
                         }
                     }
                 });
-            }
+            },
+            importAlias() {
+                // this.$refs.importModal.show();
+            },
         }
     }
 </script>

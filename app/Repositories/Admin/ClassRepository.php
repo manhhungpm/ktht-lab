@@ -12,13 +12,30 @@ class ClassRepository extends BaseRepository
         return Classes::class;
     }
 
-    public function getList($keyword = null, $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
+    public function getList($keyword = null, $search = [], $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
     {
-        $query = $this->model
+        $query = $this->model->select('id', 'name', 'status', 'description', 'updated_at', 'created_at', 'faculty_id')
             ->where('name', 'LIKE', "%$keyword%");
 
+        collect($search)->each(function ($item, $key) use ($query) {
+            switch ($key) {
+                case 'faculty':
+                    if(isset($item)) {
+                        $query->whereIn('faculty_id', $item);
+                    }
+                    break;
+                case 'status':
+                    if (isset($item)) {
+                        $query->whereIn('status', $item);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+
         if (!$counting) {
-            $query->with('faculty')->select('id', 'name', 'status', 'description', 'updated_at', 'created_at','faculty_id');
+            $query->with('faculty');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);
@@ -34,7 +51,7 @@ class ClassRepository extends BaseRepository
         return $query->get();
     }
 
-    public function addClass($arr,$ip)
+    public function addClass($arr, $ip)
     {
         $query = $this->model;
         $arr['status'] = '1';
@@ -43,7 +60,7 @@ class ClassRepository extends BaseRepository
         return $query->save();
     }
 
-    public function editClass($arr,$ip)
+    public function editClass($arr, $ip)
     {
         $query = $this->model->find($arr['id']);
         $oldUser = json_encode($query);

@@ -26,4 +26,5 @@ export default {
     device_group: "Device group",
     store: "Store",
     device_type: "Device type",
+    status: "Status"
 };

@@ -1,11 +1,16 @@
 <template>
     <div>
         <div class="row" @keydown.enter.prevent="search">
-            <div class="col-md-6">
-                <provider-chosen v-model="form.provider" :multiple="true" :required="false"></provider-chosen>
+            <div class="col-md-4">
+                <store-chosen v-model="form.store" :multiple="true" :required="false"></store-chosen>
             </div>
 
-            <div class="col-md-6">
+
+            <div class="col-md-4">
+                <device-group-chosen v-model="form.device_group" :multiple="true" :required="false"></device-group-chosen>
+            </div>
+
+            <div class="col-md-4">
                 <form-control
                         v-model="form.status"
                         :type="'select'"
@@ -62,15 +67,17 @@
     import {downloadFile} from "~/helpers/downloadFile";
     import {notify, notifyTryAgain} from "~/helpers/bootstrap-notify";
     import TheDateRange from "~/components/common/TheDateRange";
-    import ProviderChosen from "../../../../components/elements/chosens/ProviderChosen";
+    import StoreChosen from "../../../../components/elements/chosens/StoreChosen";
+    import DeviceGroupChosen from "../../../../components/elements/chosens/DeviceGroupChosen";
 
     const defaultForm = {
-        provider: null,
+        store: null,
+        device_group: null,
         status: null
     };
     export default {
-        name: "DeviceGroupFilter",
-        components: {ProviderChosen, TheDateRange},
+        name: "DeviceTypeFilter",
+        components: {DeviceGroupChosen, StoreChosen, TheDateRange},
         props: {
             onActionSuccess: {
                 type: Function,
@@ -136,14 +143,26 @@
                     });
                 }
 
-                if (this.form.provider) {
-                    searchParams.provider = this.form.provider.map(e => {
+                if (this.form.store) {
+                    searchParams.store = this.form.store.map(e => {
                         return e.id;
                     });
                 }
 
-                if(this.form.provider){
-                    searchParams.provider_name = this.form.provider.map(e => {
+                if (this.form.device_group) {
+                    searchParams.device_group = this.form.device_group.map(e => {
+                        return e.id;
+                    });
+                }
+
+                if(this.form.store){
+                    searchParams.store_name = this.form.store.map(e => {
+                        return e.name;
+                    });
+                }
+
+                if(this.form.device_group){
+                    searchParams.device_group_name = this.form.device_group.map(e => {
                         return e.name;
                     });
                 }
@@ -153,13 +172,13 @@
                 let searchParams = this.filter();
 
                 let {data} = await axios.post(
-                    "/device/device-group/listing",
+                    "/device/device-type/listing",
                     searchParams
                 );
                 if (data != 0) {
                     try {
                         let res = await axios.post(
-                            "/device/device-group/export",
+                            "/device/device-type/export",
                             searchParams,
                             {
                                 responseType: "blob"

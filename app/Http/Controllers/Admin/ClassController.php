@@ -21,8 +21,11 @@ class ClassController extends Controller
     {
         $params = getDataTableRequestParams($request);
 
+        $searchParams = $request->only('status', 'faculty');
+
         $total = $this->_classRepository->getList(
             $params['keyword'],
+            $searchParams,
             true
         );
 
@@ -30,6 +33,7 @@ class ClassController extends Controller
             'recordsTotal' => $total,
             'data' => $this->_classRepository->getList(
                 $params['keyword'],
+                $searchParams,
                 false,
                 $params['length'],
                 $params['start'],

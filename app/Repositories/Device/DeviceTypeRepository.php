@@ -18,15 +18,38 @@ class DeviceTypeRepository extends BaseRepository
         return DeviceType::class;
     }
 
-    public function getList($keyword = null, $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
+    public function getList($keyword = null, $search = [], $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
     {
         $query = $this->model
+            ->select('id', 'name', 'display_name', 'amount', 'status', 'description', 'updated_at', 'created_at',
+                'store_id', 'device_group_id')
             ->where('name', 'LIKE', "%$keyword%");
 
+        collect($search)->each(function ($item, $key) use ($query) {
+            switch ($key) {
+                case 'store':
+                    if (isset($item)) {
+                        $query->whereIn('store_id', $item);
+                    }
+                    break;
+
+                case 'device_group':
+                    if (isset($item)) {
+                        $query->whereIn('device_group_id', $item);
+                    }
+                    break;
+                case 'status':
+                    if (isset($item)) {
+                        $query->whereIn('status', $item);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+
         if (!$counting) {
-            $query->select('id', 'name', 'display_name', 'amount', 'status', 'description', 'updated_at', 'created_at',
-                'store_id', 'device_group_id')
-                ->with('store')->with('deviceGroup');
+            $query->with('deviceGroup')->with('store');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);
@@ -42,7 +65,7 @@ class DeviceTypeRepository extends BaseRepository
         return $query->get();
     }
 
-    public function addDeviceType($arr,$ip)
+    public function addDeviceType($arr, $ip)
     {
         $query = $this->model;
         $arr['status'] = '1';
@@ -51,7 +74,7 @@ class DeviceTypeRepository extends BaseRepository
         return $query->save();
     }
 
-    public function editDeviceType($arr,$ip)
+    public function editDeviceType($arr, $ip)
     {
         $query = $this->model->find($arr['id']);
         $oldUser = json_encode($query);

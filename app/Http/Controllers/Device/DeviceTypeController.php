@@ -8,11 +8,12 @@
 
 namespace App\Http\Controllers\Device;
 
+use App\Exports\Device\DeviceType\DeviceTypeExport;
 use App\Http\Controllers\Controller;
-use App\Repositories\Device\DeviceGroupRepository;
 use App\Repositories\Device\DeviceTypeRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
+use Maatwebsite\Excel\Excel;
 
 class DeviceTypeController extends Controller
 {
@@ -28,8 +29,12 @@ class DeviceTypeController extends Controller
     {
         $params = getDataTableRequestParams($request);
 
+        $searchParams = $request->only('status', 'device_group', 'store');
+
+
         $total = $this->_deviceTypeRepository->getList(
             $params['keyword'],
+            $searchParams,
             true
         );
 
@@ -37,6 +42,7 @@ class DeviceTypeController extends Controller
             'recordsTotal' => $total,
             'data' => $this->_deviceTypeRepository->getList(
                 $params['keyword'],
+                $searchParams,
                 false,
                 $params['length'],
                 $params['start'],
@@ -52,14 +58,14 @@ class DeviceTypeController extends Controller
 
     public function add(Request $request)
     {
-        $result = $this->_deviceTypeRepository->addDeviceType($request->only('name', 'display_name', 'amount', 'store_id', 'device_group_id', 'description'),$request->ip());
+        $result = $this->_deviceTypeRepository->addDeviceType($request->only('name', 'display_name', 'amount', 'store_id', 'device_group_id', 'description'), $request->ip());
 
         return processCommonResponse($result);
     }
 
     public function edit(Request $request)
     {
-        $result = $this->_deviceTypeRepository->editDeviceType($request->only('name', 'display_name', 'amount', 'store_id', 'device_group_id', 'description', 'id'),$request->ip());
+        $result = $this->_deviceTypeRepository->editDeviceType($request->only('name', 'display_name', 'amount', 'store_id', 'device_group_id', 'description', 'id'), $request->ip());
 
         return processCommonResponse($result);
     }
@@ -93,5 +99,16 @@ class DeviceTypeController extends Controller
             'results' => $data,
             'total' => $total
         ]);
+    }
+
+    public function export(Request $request, Excel $excel)
+    {
+        $searchParams = $request->only('status', 'store', 'store_name', 'device_group', 'device_group_name');
+        ini_set('memory_limit', '2048M');
+        ini_set('max_execution_time', '0');
+        $locale = $request->cookie('locale');
+        \Illuminate\Support\Facades\App::setLocale($locale);
+        $export = new DeviceTypeExport($searchParams);
+        return $excel->download($export, 'Báo cáo loại thiết bị' . '.xlsx');
     }
 }
