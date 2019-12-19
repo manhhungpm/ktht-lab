@@ -16,44 +16,47 @@ use Illuminate\Http\Request;
 Route::post('auth/login', 'AuthController@login')->name('login');
 
 
-
 Route::group([
-    'middleware' => ['api', 'auth:api','role:admin|user']
+    'middleware' => ['api', 'auth:api', 'role:admin|user']
 ], function () {
 
     includeRouteFiles(__DIR__ . '/Auth/');
     includeRouteFiles(__DIR__ . '/Dashboard/');
     includeRouteFiles(__DIR__ . '/Common/');
 
-    Route::group(['namespace' => 'Admin', 'prefix' => '/admin', 'as' => 'admin.','middleware' => []], function () {
+    Route::group(['namespace' => 'Admin', 'prefix' => '/admin', 'as' => 'admin.', 'middleware' => []], function () {
         includeRouteFiles(__DIR__ . '/Admin/');
     });
 
-    Route::group(['namespace' => 'Device', 'prefix' => '/device', 'as' => 'device.','middleware' => []], function () {
+    Route::group(['namespace' => 'Device', 'prefix' => '/device', 'as' => 'device.', 'middleware' => []], function () {
         includeRouteFiles(__DIR__ . '/Device/');
     });
 
-    Route::group(['namespace' => 'Project','middleware' => []], function () {
+    Route::group(['namespace' => 'Project', 'middleware' => []], function () {
         includeRouteFiles(__DIR__ . '/Project/');
     });
 
-    Route::group(['namespace' => 'Rent','middleware' => []], function () {
+    Route::group(['namespace' => 'Rent', 'middleware' => []], function () {
         includeRouteFiles(__DIR__ . '/Rent/');
     });
 
-    Route::group(['namespace' => 'BlackWhite', 'prefix' => '/blackwhite', 'as' => 'blackwhite.','middleware' => []], function () {
+    Route::group(['namespace' => 'BlackWhite', 'prefix' => '/blackwhite', 'as' => 'blackwhite.', 'middleware' => []], function () {
         includeRouteFiles(__DIR__ . '/BlackWhite/');
     });
 
-    Route::group(['namespace' => 'Statistic', 'prefix' => '/statistic', 'as' => 'statistic.','middleware' => []], function () {
+    Route::group(['namespace' => 'Statistic', 'prefix' => '/statistic', 'as' => 'statistic.', 'middleware' => []], function () {
         includeRouteFiles(__DIR__ . '/Statistic/');
     });
 
-    Route::group(['namespace' => 'AliasBlockSpam','middleware' => []], function () {
+    Route::group(['namespace' => 'Widget', 'middleware' => []], function () {
+        includeRouteFiles(__DIR__ . '/Widget/');
+    });
+
+    Route::group(['namespace' => 'AliasBlockSpam', 'middleware' => []], function () {
         includeRouteFiles(__DIR__ . '/AliasBlockSpam/');
     });
 
-    Route::group(['namespace' => 'SpamCallDetail','middleware' => []], function () {
+    Route::group(['namespace' => 'SpamCallDetail', 'middleware' => []], function () {
         includeRouteFiles(__DIR__ . '/SpamCallDetail/');
     });
 

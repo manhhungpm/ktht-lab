@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-12 col-lg-6 col-xl-2 dashboard-widget">
+    <div class="col-md-12 col-lg-6 col-xl-3">
         <div class="m-widget24">
             <div class="m-widget24__item">
                 <div class="widget-main-content">
@@ -8,7 +8,7 @@
                     <div
                         class=""
                         :class="typeClassText"
-                        style="display:flex; justify-content: flex-start; margin-left: 1rem"
+                        style="display:flex; justify-content: flex-start; margin-left: 23px"
                     >
                         <div style="font-size: 25px ">{{ formattedValue }}</div>
                     </div>
