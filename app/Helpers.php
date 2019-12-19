@@ -154,3 +154,7 @@ function fireEventActionLog($action_name = null, $class_name = null, $object_id 
     ];
     event(new \App\Events\ActionLog($data));
 }
+
+function spaceRemove($str){
+    return trim($str);
+}

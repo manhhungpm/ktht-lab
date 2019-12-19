@@ -3,18 +3,23 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\ImportRequest;
+use App\Imports\Classes\ClassImport;
 use App\Repositories\Admin\ClassRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
+use Maatwebsite\Excel\Excel;
 
 class ClassController extends Controller
 {
     protected $_classRepository;
+    protected $_excel;
 
-    public function __construct(ClassRepository $classRepository)
+    public function __construct(ClassRepository $classRepository, Excel $excel)
     {
         $this->middleware('auth');
         $this->_classRepository = $classRepository;
+        $this->_excel = $excel;
     }
 
     public function listing(Request $request)
@@ -90,5 +95,16 @@ class ClassController extends Controller
             'results' => $data,
             'total' => $total
         ]);
+    }
+
+    public function import(ImportRequest $request)
+    {
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', '0');
+
+        $classImport = new ClassImport();
+        $path = $request->file('file');
+        $this->_excel->import($classImport, $path);
+
     }
 }

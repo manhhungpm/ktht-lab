@@ -10,6 +10,8 @@ namespace App\Http\Controllers\Device;
 
 use App\Exports\Device\DeviceType\DeviceTypeExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\ImportRequest;
+use App\Imports\DeviceType\DeviceTypeImport;
 use App\Repositories\Device\DeviceTypeRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
@@ -18,11 +20,13 @@ use Maatwebsite\Excel\Excel;
 class DeviceTypeController extends Controller
 {
     protected $_deviceTypeRepository;
+    protected $_excel;
 
-    public function __construct(DeviceTypeRepository $deviceTypeRepository)
+    public function __construct(DeviceTypeRepository $deviceTypeRepository,Excel $excel)
     {
         $this->middleware('auth');
         $this->_deviceTypeRepository = $deviceTypeRepository;
+        $this->_excel = $excel;
     }
 
     public function listing(Request $request)
@@ -110,5 +114,16 @@ class DeviceTypeController extends Controller
         \Illuminate\Support\Facades\App::setLocale($locale);
         $export = new DeviceTypeExport($searchParams);
         return $excel->download($export, 'Báo cáo loại thiết bị' . '.xlsx');
+    }
+
+    public function import(ImportRequest $request)
+    {
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', '0');
+
+        $deviceTypeImport = new DeviceTypeImport();
+        $path = $request->file('file');
+        $this->_excel->import($deviceTypeImport, $path);
+
     }
 }

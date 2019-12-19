@@ -32,6 +32,7 @@ export default {
         add: "Thêm mới loại thiết bị",
         edit: "Cập nhật loại thiết bị",
         title: "Danh sách loại thiết bị",
+        import: "Import loại thiết bị",
         name: "Tên loại",
         amount: "Số lượng",
         store: "Nơi lưu trữ",
@@ -44,7 +45,20 @@ export default {
             display_name: "Nhập tên hiển thị",
             description: "Nhập mô tả",
             amount: "Nhập số lượng"
-        }
+        },
+        import_modal: {
+            error: "Lỗi",
+            readmore: "Xem thêm",
+            wait_import:
+                "Quá trình Import có thể mất một khoảng thời gian, vui lòng không thoát tab làm việc",
+            report: "Ghi chú",
+            import:
+                "Import loại thiết bị từ file excel( có file mẫu import bên dưới)",
+            example_file: "File mẫu import",
+            file: "File mẫu",
+            note: "Chú ý",
+            select_file: "Chọn file tải lên"
+        },
     },
     store: {
         add: "Thêm mới nơi lưu trữ",

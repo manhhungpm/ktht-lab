@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Rent;
 
+use App\Exports\Rent\RentExport;
 use App\Http\Controllers\Controller;
 use App\Repositories\Rent\RentRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
+use Maatwebsite\Excel\Excel;
 
 class RentController extends Controller
 {
@@ -21,8 +23,11 @@ class RentController extends Controller
     {
         $params = getDataTableRequestParams($request);
 
+        $searchParams = $request->only('status', 'due_date', 'start_date', 'device_type');
+
         $total = $this->_rentRepository->getList(
             $params['keyword'],
+            $searchParams,
             true
         );
 
@@ -30,6 +35,7 @@ class RentController extends Controller
             'recordsTotal' => $total,
             'data' => $this->_rentRepository->getList(
                 $params['keyword'],
+                $searchParams,
                 false,
                 $params['length'],
                 $params['start'],
@@ -69,5 +75,16 @@ class RentController extends Controller
         $result = $this->_rentRepository->setDisable($request->only('id'));
 
         return processCommonResponse($result);
+    }
+
+    public function export(Request $request, Excel $excel)
+    {
+        $searchParams = $request->only('status', 'device_type', 'device_type_name', 'start_date', 'due_date');
+        ini_set('memory_limit', '2048M');
+        ini_set('max_execution_time', '0');
+        $locale = $request->cookie('locale');
+        \Illuminate\Support\Facades\App::setLocale($locale);
+        $export = new RentExport($searchParams);
+        return $excel->download($export, 'Báo cáo mượn trả' . '.xlsx');
     }
 }

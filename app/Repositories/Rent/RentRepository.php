@@ -12,14 +12,39 @@ class RentRepository extends BaseRepository
         return Rent::class;
     }
 
-    public function getList($keyword = null, $counting = false, $limit = 10, $offset = 0, $orderBy = 'id', $orderType = 'asc')
+    public function getList($keyword = null, $search = [], $counting = false, $limit = 10, $offset = 0, $orderBy = 'id', $orderType = 'asc')
     {
-        $query = $this->model
+        $query = $this->model->select('id', 'user_id', 'description', 'status', 'due_date', 'updated_at', 'created_at', 'start_date')
             ->where('description', 'LIKE', "%$keyword%");
 
+        collect($search)->each(function ($item, $key) use ($query) {
+            switch ($key) {
+                case 'start_date':
+                    if(isset($item)) {
+                        $query->whereDate('start_date','>=',$item[0])->whereDate('start_date','<=',$item[1]);
+                    }
+                    break;
+                case 'due_date':
+                    if(isset($item)) {
+                        $query->whereDate('due_date','>=',$item[0])->whereDate('due_date','<=',$item[1]);
+                    }
+                    break;
+                case 'device_type':
+                    if(isset($item)) {
+                    }
+                    break;
+                case 'status':
+                    if (isset($item)) {
+                        $query->whereIn('status', $item);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+
         if (!$counting) {
-            $query->select('id', 'user_id', 'description', 'status', 'due_date', 'updated_at', 'created_at', 'start_date')
-                ->with('user')->with('deviceType');
+            $query->with('user')->with('deviceType');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);
@@ -50,8 +75,8 @@ class RentRepository extends BaseRepository
 
 //                $query->deviceType()->attach($arr['device_type_id']);
 
-                foreach ($arr['device_type_id'] as $key => $id){
-                    $query->deviceType()->attach($id, array('amount'=>$arr['amount'][$key]));
+                foreach ($arr['device_type_id'] as $key => $id) {
+                    $query->deviceType()->attach($id, array('amount' => $arr['amount'][$key]));
                 }
 
                 fireEventActionLog(ADD, $query->getTable(), $query->id, $arr['user']['name'], null, json_encode($query), $ip);
@@ -75,8 +100,8 @@ class RentRepository extends BaseRepository
                 if ($arr['device_type_id']) {
 
 //                    $query->deviceType()->attach($arr['device_type_id']);
-                    foreach ($arr['device_type_id'] as $key => $id){
-                        $query->deviceType()->attach($id, array('amount'=>$arr['amount'][$key]));
+                    foreach ($arr['device_type_id'] as $key => $id) {
+                        $query->deviceType()->attach($id, array('amount' => $arr['amount'][$key]));
                     }
 
                     fireEventActionLog(UPDATE, $query->getTable(), $query->id, $arr['user']['name'], $oldUser, json_encode($query), $ip);

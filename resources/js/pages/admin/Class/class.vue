@@ -89,6 +89,8 @@
                     ref="addModal"
                     :on-action-success="updateItemSuccess"
             ></class-modal>
+            <class-import-modal ref="importModal"
+                                :on-action-success="updateItemSuccess"></class-import-modal>
         </div>
     </div>
 </template>
@@ -109,10 +111,11 @@
     } from "~/helpers/bootstrap-notify";
     import Portlet from "../../../components/common/Portlet";
     import ClassFilter from "./partials/ClassFilter";
+    import ClassImportModal from "./partials/ClassImportModal";
 
     export default {
         name: "Class",
-        components: {ClassFilter, ClassModal, Portlet},
+        components: {ClassImportModal, ClassFilter, ClassModal, Portlet},
         middleware: "auth",
         data() {
             return {
@@ -290,10 +293,9 @@
                 });
             },
             importClass() {
+                this.$refs.importModal.show();
 
             }
         }
     };
 </script>
-
-<style scoped></style>

@@ -7,4 +7,5 @@ Route::group(['prefix' => '/rent', 'as' => 'rent.', 'middleware' => 'role:' . \A
     Route::post('edit', 'RentController@edit')->name('edit');
     Route::post('active', 'RentController@active')->name('active');
     Route::post('disable', 'RentController@disable')->name('disable');
+    Route::post('export', 'RentController@export')->name('export');
 });

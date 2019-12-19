@@ -1,35 +1,82 @@
 <template>
-    <div>
-        <portlet :title="$t('rent.title')">
-            <v-button
-                    slot="tool"
-                    color="primary"
-                    style-type="air"
-                    class="m-btn m-btn--icon"
-                    @click.native="addRent"
-            >
+    <div class="row">
+        <div class="col-md-12">
+            <div class="m-portlet__body">
+                <div
+                        id="m_accordion_5"
+                        class="m-accordion m-accordion--default m-accordion--toggle-arrow"
+                        role="tablist"
+                >
+                    <div class="m-accordion__item m-accordion__item--brand">
+                        <div
+                                id="m_accordion_5_item_3_head"
+                                class="m-accordion__item-head collapsed"
+                                role="tab"
+                                data-toggle="collapse"
+                                href="#m_accordion_5_item_3_body"
+                                aria-expanded="true"
+                        >
+                                <span class="m-accordion__item-title">
+                                    {{ $t("label.search_information") }}</span
+                                >
+                            <span class="m-accordion__item-mode"></span>
+                        </div>
+                        <div
+                                id="m_accordion_5_item_3_body"
+                                class="m-accordion__item-body collapse show"
+                                role="tabpanel"
+                                aria-labelledby="m_accordion_5_item_3_head"
+                                data-parent="#m_accordion_5"
+                        >
+                            <div class="m-accordion__item-content">
+                                <rent-filter
+                                        :is-required-to-export="
+                                            isRequiredToExport
+                                        "
+                                        @search="search"
+                                        @isExportFileSuccessfully="
+                                            isExportFileSuccessfully
+                                        "
+                                ></rent-filter>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <portlet :title="$t('rent.title')">
+                <v-button
+                        slot="tool"
+                        color="primary"
+                        style-type="air"
+                        class="m-btn m-btn--icon"
+                        @click.native="addRent"
+                >
                 <span>
                     <i class="la la-plus"></i>
                     <span>{{ $t("button.add") }}</span>
                 </span>
-            </v-button>
-            <data-table
-                    ref="table"
-                    :columns="columns"
-                    url="/rent/listing"
-                    :fixed-columns-left="2"
-                    :fixed-columns-right="3"
-                    :actions="actions"
-                    :search-placeholder="$t('rent.placeholder.search')"
-                    :order-column-index="2"
-                    :order-type="'desc'"
-            >
-            </data-table>
-        </portlet>
-        <rent-modal
-                ref="addModal"
-                :on-action-success="updateItemSuccess"
-        ></rent-modal>
+                </v-button>
+                <data-table
+                        ref="table"
+                        :columns="columns"
+                        url="/rent/listing"
+                        :fixed-columns-left="2"
+                        :fixed-columns-right="3"
+                        :actions="actions"
+                        :search-placeholder="$t('rent.placeholder.search')"
+                        :order-column-index="2"
+                        :order-type="'desc'"
+                        :post-data="tableFilter"
+                >
+                </data-table>
+            </portlet>
+            <rent-modal
+                    ref="addModal"
+                    :on-action-success="updateItemSuccess"
+            ></rent-modal>
+        </div>
     </div>
 </template>
 
@@ -47,13 +94,23 @@
         notifyDisableSuccess
     } from "~/helpers/bootstrap-notify";
     import RentModal from "./partials/RentModal";
+    import RentFilter from "./partials/RentFilter";
 
     export default {
         name: "Rent",
-        components: {RentModal},
+        components: {RentFilter, RentModal},
         middleware: "auth",
         data() {
-            return {};
+            return {
+                tableFilter: {
+                    start_date: null,
+                    due_date: null,
+                    device_type: null,
+                    status: null
+                },
+                exportLoading: false,
+                isRequiredToExport: false
+            };
         },
         computed: {
             columns() {
@@ -176,6 +233,19 @@
             }
         },
         methods: {
+            async search(value) {
+                this.tableFilter = value;
+                await this.$nextTick();
+                this.$refs.table.reload();
+            },
+            async exportFile() {
+                this.exportLoading = true;
+                this.isRequiredToExport = true;
+            },
+            isExportFileSuccessfully() {
+                this.exportLoading = false;
+                this.isRequiredToExport = false;
+            },
             updateItemSuccess() {
                 this.$refs.table.reload();
             },

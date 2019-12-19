@@ -7,4 +7,5 @@ Route::group(['prefix' => '/class', 'as' => 'class.', 'middleware' => 'role:' . 
     Route::post('active', 'ClassController@active')->name('active');
     Route::post('disable', 'ClassController@disable')->name('disable');
     Route::post('listing-all', 'ClassController@listingAll')->name('listing-all');
+    Route::post('import', 'ClassController@import')->name('import');
 });

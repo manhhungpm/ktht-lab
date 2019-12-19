@@ -51,7 +51,7 @@
                         color="success"
                         style-type="air"
                         class="m-btn m-btn--icon"
-                        @click.native="importAlias"
+                        @click.native="importDeviceType"
                         style="margin-right: 5px"
                 >
                         <span>
@@ -89,6 +89,8 @@
                     ref="addModal"
                     :on-action-success="updateItemSuccess"
             ></device-type-modal>
+            <device-type-import-modal ref="importModal"
+                                      :on-action-success="updateItemSuccess"></device-type-import-modal>
         </div>
     </div>
 </template>
@@ -109,15 +111,16 @@
     import Portlet from "../../../components/common/Portlet";
     import DeviceTypeModal from "./partials/DeviceTypeModal";
     import DeviceTypeFilter from "./partials/DeviceTypeFilter";
+    import DeviceTypeImportModal from "./partials/DeviceTypeImportModal";
 
     export default {
         name: "DeviceType",
-        components: {DeviceTypeFilter, DeviceTypeModal, Portlet},
+        components: {DeviceTypeImportModal, DeviceTypeFilter, DeviceTypeModal, Portlet},
         middleware: "auth",
         data() {
             return {
                 tableFilter: {
-                    device_group:null,
+                    device_group: null,
                     store: null,
                     status: null
                 },
@@ -298,13 +301,9 @@
                     }
                 });
             },
-            importAlias() {
-                // this.$refs.importModal.show();
+            importDeviceType() {
+                this.$refs.importModal.show();
             },
         }
     }
 </script>
-
-<style scoped>
-
-</style>

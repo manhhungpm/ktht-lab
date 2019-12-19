@@ -32,6 +32,7 @@ export default {
         add: "Add device type",
         edit: "Edit device type",
         title: "List device type",
+        import: "Import device type",
         name: "Name",
         amount: "Amount",
         store: "Store",
@@ -44,7 +45,20 @@ export default {
             display_name: "Enter display name",
             description: "Enter description",
             amount: "Enter amount"
-        }
+        },
+        import_modal: {
+            error: "Error",
+            readmore: "Readmore",
+            wait_import:
+                "Wait a minute, don't close tab",
+            report: "Report",
+            import:
+                "Import(file example below)",
+            example_file: "Example file",
+            file: "File",
+            note: "Note",
+            select_file: "Select file"
+        },
     },
     store: {
         add: "Add store",

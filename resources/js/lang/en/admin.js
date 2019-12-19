@@ -62,6 +62,19 @@ export default {
             search: "Enter class name",
             name: "Enter name",
             description: "Enter description"
-        }
+        },
+        import_modal: {
+            error: "Error",
+            readmore: "Readmore",
+            wait_import:
+                "Wait a minute, don't close tab",
+            report: "Report",
+            import:
+                "Import(file example below)",
+            example_file: "Example file",
+            file: "File",
+            note: "Note",
+            select_file: "Select file"
+        },
     }
 };
