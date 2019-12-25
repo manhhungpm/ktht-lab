@@ -44,7 +44,7 @@ Route::group([
         includeRouteFiles(__DIR__ . '/BlackWhite/');
     });
 
-    Route::group(['namespace' => 'Statistic', 'prefix' => '/statistic', 'as' => 'statistic.', 'middleware' => []], function () {
+    Route::group(['namespace' => 'Statistic', 'middleware' => []], function () {
         includeRouteFiles(__DIR__ . '/Statistic/');
     });
 

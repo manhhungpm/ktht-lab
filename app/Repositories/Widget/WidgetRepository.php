@@ -23,12 +23,17 @@ class WidgetRepository extends BaseRepository
         //Thiết bị
         $grid['total_device_type'] = DeviceType::count();
         $grid['has_rent_device'] = DeviceRent::select('amount')->get()->sum('amount');
-        $idWarning = Rent::select('id')->whereDate('due_date','<=',date('Y-m-d H:i:s'))->where('status',1)->get()->toArray();
-        $grid['has_rent_device_warning'] = DeviceRent::whereIn('rent_id',$idWarning)->get()->sum('amount');
+        $idWarning = Rent::select('id')->whereDate('due_date', '<=', date('Y-m-d H:i:s'))->where('status', 1)->get()->toArray();
+//        dd($idWarning);
+        $arrIdWarning = array_map(function ($item) {
+            return $item['id'];
+        }, $idWarning);
+//        dd($arrIdWarning);
+        $grid['has_rent_device_warning'] = DeviceRent::whereIn('rent_id', $arrIdWarning)->get()->sum('amount');
 
         //Dự án
         $grid['total_project'] = Project::count();
-        $grid['has_doing_project'] = Project::where('status',ACTIVE)->get()->count();
+        $grid['has_doing_project'] = Project::where('status', ACTIVE)->get()->count();
 
         //Nhóm thiết bị
         $grid['total_device_group'] = DeviceGroup::count();

@@ -182,7 +182,7 @@ export default {
                 chart: {
                     backgroundColor: "transparent",
                     marginTop: this.marginTop,
-                    marginBottom: this.hasLegend ? 115 : 75,
+                    marginBottom: this.hasLegend ? 100 : 75,
                     marginLeft: this.horizontalMargin,
                     marginRight: this.horizontalMargin,
                     type: this.chartType,

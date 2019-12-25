@@ -3,18 +3,18 @@
         <div class="m-widget24">
             <div class="m-widget24__item">
                 <div class="widget-main-content">
-                    <h4 class="m-widget24__title wrap-text">{{ title }}:</h4>
+                    <h4 class="m-widget24__title wrap-text" style="font-size: 20px">{{ title }}:</h4>
 
                     <div
                         class=""
                         :class="typeClassText"
-                        style="display:flex; justify-content: flex-start; margin-left: 23px"
+                        style="display:flex; justify-content: center;"
                     >
-                        <div style="font-size: 25px ">{{ formattedValue }}</div>
+                        <div style="font-size: 40px ">{{ formattedValue }}</div>
                     </div>
                 </div>
 
-                <slot name="description"> </slot>
+                <slot name="description" style="font-size: 12px"> </slot>
                 <div v-for="item in itemOptions">
                     <li>
                         {{ item.name }}: <b>{{ item.value }}</b>

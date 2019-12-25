@@ -11,7 +11,7 @@
                         <span
                                 slot="description"
                                 class="m-widget24__desc"
-                        >Nhóm thiết bị có nhiều thiết bị nhất là EDF</span
+                        >Nhiều thiết bị nhất: Nhóm ABC</span
                         >
                     </widget>
                     <widget
@@ -23,7 +23,7 @@
                         <span
                                 slot="description"
                                 class="m-widget24__desc"
-                        >Nhà cung cấp nhiều thiết bị nhất là ABC</span
+                        >Cung cấp nhiều nhất: Đơn vị DEF</span
                         >
                     </widget>
                     <widget
@@ -75,7 +75,19 @@
                 </portlet>
             </div>
             <div class="col-md-6">
-                <portlet :title="'Biểu đồ số lượng thiết bị của các dự án'"></portlet>
+                <portlet :title="'Biểu đồ số lượng thiết bị của các dự án'">
+                    <another-highcharts
+                            :series="series"
+                            :has-legend="false"
+                            :categories="categories"
+                            :chart-type="'column'"
+                            :tooltip-format="'Số thiết bị:<b> {point.y}</b>'"
+                            :plot-options="plotOptions"
+                            :exporting="true"
+                            :colors="['#34bfa3']"
+                            :chart-height="450"
+                    ></another-highcharts>
+                </portlet>
             </div>
             <div class="col-md-12">
                 <portlet :title="$t('dashboard.title_log')">
@@ -98,6 +110,7 @@
 <script>
 
     import AnotherHighcharts from "../../components/common/AnotherHighcharts";
+
     const defaultWidget = {
         total_device_type: null,
         total_project: null,
@@ -190,14 +203,9 @@
                         allowPointSelect: true,
                         cursor: "pointer",
                         dataLabels: {
-                            distance: -50,
-                            format: "{point.percentage:.2f} %",
+                            distance: 20,
+                            format: "{point.name}: {point.percentage:.2f} %",
                             enabled: true,
-                            filter: {
-                                property: "percentage",
-                                operator: ">",
-                                value: 4
-                            },
                             style: {
                                 color: "#fff"
                             }
@@ -210,6 +218,18 @@
                         animation: {
                             duration: 1000
                         }
+                    }
+                },
+                //Column
+                series: [
+                    {
+                        data: [],
+                    }
+                ],
+                categories: [],
+                plotOptions: {
+                    column: {
+                        minPointLength: 3
                     }
                 },
             }
@@ -290,6 +310,8 @@
         },
         mounted() {
             this.getDataWidget()
+            this.getDataHighchartPie()
+            this.getDataHighchartColumn();
         },
         methods: {
             showDetailChange(table, rowData) {
@@ -304,8 +326,6 @@
 
                     let arr = data.data;
 
-                    // console.log(arr.data['has_doing_project']);
-
                     this.dataWidget.has_doing_project = arr.data['has_doing_project']
                     this.dataWidget.total_provider = arr.data['total_provider']
                     this.dataWidget.total_device_group = arr.data['total_device_group']
@@ -316,6 +336,56 @@
                 }
                 catch (e) {
                     console.log(e)
+                }
+            },
+            async getDataHighchartPie() {
+                try {
+                    let data = await axios.post("/statistic/get-data-pie")
+
+                    let arr = data.data
+
+                    this.pieSeries = [
+                        {
+                            colorByPoint: true,
+                            data: [
+                                {
+                                    name: "SL TB còn",
+                                    y: arr.data['device_remain'],
+                                    sliced: true,
+                                    selected: true
+                                },
+                                {
+                                    name:
+                                        "SL TB mượn",
+                                    y: arr.data['device_rent']
+                                }
+                            ]
+                        }
+                    ];
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            },
+            async getDataHighchartColumn(){
+                try {
+                    let $this = this;
+
+                    let data = await axios.post("/statistic/get-data-column")
+
+                    let arr = data.data.data
+
+                    arr.project_name.forEach(function (e)  {
+                        $this.categories.push(e.name)
+                    })
+
+                    arr.project_device.forEach(function (e) {
+                        $this.series[0].data.push(e);
+                    })
+                    console.log(arr.project_device)
+
+                } catch (e) {
+                    console.log(e);
                 }
             }
         }
