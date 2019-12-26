@@ -97,6 +97,7 @@ class UserRepository extends BaseRepository
         $query = User::select('id', 'name', 'display_name','email',
             'active', 'expired_at', 'who_updated', 'updated_at', 'expired_at', 'mobile_phone', 'version','created_at','who_created','class_id');
 
+
         //OK
         if (array_key_exists('status', $search) && ($search['status'] != "")) {
             $query = $query->whereIn('active', $search['status']);
@@ -112,6 +113,11 @@ class UserRepository extends BaseRepository
             $query = $query->whereHas('userRole', function ($q) use ($search) {
                 $q->whereIn('role_id', $search['role']);
             });
+        }
+
+        if (array_key_exists('class', $search) && ($search['class'] != "")) {
+//            dd($search['class']);
+            $query = $query->whereIn('class_id', $search['class']);
         }
 
 

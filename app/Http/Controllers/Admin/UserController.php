@@ -31,7 +31,7 @@ class UserController extends Controller
     public function listing(Request $request)
     {
         $params = getDataTableRequestParams($request);
-        $searchParams = $request->only('status', 'name', 'role');
+        $searchParams = $request->only('status', 'name', 'role','class');
 
         $total = $this->userRepository->getList(
             $params['keyword'],
