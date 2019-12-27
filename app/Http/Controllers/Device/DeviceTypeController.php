@@ -10,7 +10,9 @@ namespace App\Http\Controllers\Device;
 
 use App\Exports\Device\DeviceType\DeviceTypeExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Device\DeviceType\EditDeviceTypeRequest;
 use App\Http\Requests\Common\ImportRequest;
+use App\Http\Requests\Device\DeviceType\AddDeviceTypeRequest;
 use App\Imports\DeviceType\DeviceTypeImport;
 use App\Repositories\Device\DeviceTypeRepository;
 use Illuminate\Http\Request;
@@ -60,14 +62,14 @@ class DeviceTypeController extends Controller
         return response()->json($arr);
     }
 
-    public function add(Request $request)
+    public function add(AddDeviceTypeRequest $request)
     {
         $result = $this->_deviceTypeRepository->addDeviceType($request->only('name', 'display_name', 'amount', 'store_id', 'device_group_id', 'description'), $request->ip());
 
         return processCommonResponse($result);
     }
 
-    public function edit(Request $request)
+    public function edit(EditDeviceTypeRequest $request)
     {
         $result = $this->_deviceTypeRepository->editDeviceType($request->only('name', 'display_name', 'amount', 'store_id', 'device_group_id', 'description', 'id'), $request->ip());
 

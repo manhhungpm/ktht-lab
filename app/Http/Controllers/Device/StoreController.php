@@ -9,6 +9,8 @@
 namespace App\Http\Controllers\Device;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Device\Store\AddStoreRequest;
+use App\Http\Requests\Device\Store\EditStoreRequest;
 use App\Repositories\Device\StoreRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
@@ -49,14 +51,14 @@ class StoreController extends Controller
         return response()->json($arr);
     }
 
-    public function add(Request $request)
+    public function add(AddStoreRequest $request)
     {
         $result = $this->_storeRepository->addStore($request->only('name', 'description'),$request->ip());
 
         return processCommonResponse($result);
     }
 
-    public function edit(Request $request)
+    public function edit(EditStoreRequest $request)
     {
         $result = $this->_storeRepository->editStore($request->only('name', 'description', 'id'),$request->ip());
 

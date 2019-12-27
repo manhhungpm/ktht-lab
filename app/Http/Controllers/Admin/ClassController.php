@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Classes\AddClassRequest;
+use App\Http\Requests\Admin\Classes\EditClassRequest;
 use App\Http\Requests\Common\ImportRequest;
 use App\Imports\Classes\ClassImport;
 use App\Repositories\Admin\ClassRepository;
@@ -52,14 +54,14 @@ class ClassController extends Controller
         return response()->json($arr);
     }
 
-    public function add(Request $request)
+    public function add(AddClassRequest $request)
     {
         $result = $this->_classRepository->addClass($request->only('name', 'description','faculty_id'),$request->ip());
 
         return processCommonResponse($result);
     }
 
-    public function edit(Request $request)
+    public function edit(EditClassRequest $request)
     {
         $result = $this->_classRepository->editClass($request->only('name', 'description','faculty_id', 'id'),$request->ip());
 

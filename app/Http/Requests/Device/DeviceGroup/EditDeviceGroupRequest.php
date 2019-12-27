@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Admin\Manager;
+namespace App\Http\Requests\Device\DeviceGroup;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class EditManagerRequest extends FormRequest
+class EditDeviceGroupRequest extends FormRequest
 {
     public function authorize()
     {
@@ -20,12 +20,21 @@ class EditManagerRequest extends FormRequest
             ],
             'name' => [
                 'required',
-                Rule::unique('managers', 'name')->ignore($this->input('id'))
+                Rule::unique('group_devices', 'name')->ignore($this->input('id'))
             ],
             'description' => [
                 'required',
-                'max:255'
             ],
+            'provider_id' => [
+                'required'
+            ]
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name' => trans('common.name'),
         ];
     }
 }

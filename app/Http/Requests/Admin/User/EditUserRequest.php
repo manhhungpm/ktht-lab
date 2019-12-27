@@ -24,6 +24,15 @@ class EditUserRequest extends FormRequest{
             ],
             'mobile_phone' => [
                 'required'
+            ],
+            'role' => [
+                'required'
+            ],
+            'class_id' => [
+                'required'
+            ],
+            'expired_at'=> [
+                'required'
             ]
         ];
     }

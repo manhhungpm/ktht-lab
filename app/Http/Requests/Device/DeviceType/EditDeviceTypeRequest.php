@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Admin\Role;
+namespace App\Http\Requests\Device\DeviceType;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class EditRoleRequest extends FormRequest
+class EditDeviceTypeRequest extends FormRequest
 {
     public function authorize()
     {
@@ -20,7 +20,19 @@ class EditRoleRequest extends FormRequest
             ],
             'name' => [
                 'required',
-                Rule::unique('roles', 'name')->ignore($this->input('id'))
+                Rule::unique('devices', 'name')->ignore($this->input('id'))
+            ],
+            'display_name'=> [
+                'required',
+            ],
+            'amount' => [
+                'required',
+            ],
+            'store_id' => [
+                'required',
+            ],
+            'device_group_id' => [
+                'required',
             ],
             'description' => [
                 'required',
@@ -35,3 +47,4 @@ class EditRoleRequest extends FormRequest
         ];
     }
 }
+

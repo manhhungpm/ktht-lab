@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Role;
+namespace App\Http\Requests\Device\Store;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddRoleRequest extends FormRequest
+class AddStoreRequest extends FormRequest
 {
     public function authorize()
     {
@@ -16,7 +16,7 @@ class AddRoleRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                'unique:roles',
+                'unique:stores',
             ],
             'description' => [
                 'required',

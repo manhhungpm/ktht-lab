@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Admin\Role;
+namespace App\Http\Requests\Admin\Classes;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class AddRoleRequest extends FormRequest
+class AddClassRequest extends FormRequest
 {
     public function authorize()
     {
@@ -16,11 +17,14 @@ class AddRoleRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                'unique:roles',
+                Rule::unique('classes', 'name')
             ],
             'description' => [
                 'required',
             ],
+            'faculty_id' =>[
+                'required'
+            ]
         ];
     }
 

@@ -10,6 +10,8 @@ namespace App\Http\Controllers\Project;
 
 use App\Exports\Project\ProjectExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Project\AddProjectRequest;
+use App\Http\Requests\Project\EditProjectRequest;
 use App\Repositories\Project\ProjectRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
@@ -56,14 +58,14 @@ class ProjectController extends Controller
         return response()->json($arr);
     }
 
-    public function add(Request $request)
+    public function add(AddProjectRequest $request)
     {
-        $result = $this->_projectRepository->addProject($request->only('name', 'description', 'user_id', 'device_type_id', 'description'), $request->ip());
+        $result = $this->_projectRepository->addProject($request->only('name', 'user_id', 'device_type_id', 'description'), $request->ip());
 
         return processCommonResponse($result);
     }
 
-    public function edit(Request $request)
+    public function edit(EditProjectRequest $request)
     {
         $result = $this->_projectRepository->editProject($request->only('name', 'description', 'user_id', 'device_type_id', 'id'), $request->ip());
 

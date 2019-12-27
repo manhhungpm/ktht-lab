@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Admin\Role;
+namespace App\Http\Requests\Device\Provider;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class AddRoleRequest extends FormRequest
+class EditProviderRequest extends FormRequest
 {
     public function authorize()
     {
@@ -14,9 +15,15 @@ class AddRoleRequest extends FormRequest
     public function rules()
     {
         return [
+            'id' => [
+                'required'
+            ],
             'name' => [
                 'required',
-                'unique:roles',
+                Rule::unique('providers', 'name')->ignore($this->input('id'))
+            ],
+            'address' => [
+                'required'
             ],
             'description' => [
                 'required',

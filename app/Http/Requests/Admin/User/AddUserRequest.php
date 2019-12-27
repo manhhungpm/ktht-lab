@@ -28,7 +28,26 @@ class AddUserRequest extends FormRequest
             ],
             'mobile_phone' => [
                 'required'
+            ],
+            'password' => [
+                'required'
+            ],
+            'role' => [
+                'required'
+            ],
+            'class_id' => [
+                'required'
+            ],
+            'expired_at'=> [
+                'required'
             ]
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name' => trans('common.name'),
         ];
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Device;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Device\Provider\AddProviderRequest;
+use App\Http\Requests\Device\Provider\EditProviderRequest;
 use App\Repositories\Device\ProviderRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
@@ -43,14 +45,14 @@ class ProviderController extends Controller
         return response()->json($arr);
     }
 
-    public function add(Request $request)
+    public function add(AddProviderRequest $request)
     {
         $result = $this->_providerRepository->addProvider($request->only('name','address', 'description'),$request->ip());
 
         return processCommonResponse($result);
     }
 
-    public function edit(Request $request)
+    public function edit(EditProviderRequest $request)
     {
         $result = $this->_providerRepository->editProvider($request->only('name','address', 'description', 'id'),$request->ip());
 

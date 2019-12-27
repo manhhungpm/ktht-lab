@@ -44,10 +44,19 @@
                     :data-vv-as="$t('device.device_type.placeholder.amount')"
             >
             </form-control>
-            <device-group-chosen :multiple="false" :required="true"
-                                 v-model="form.device_group_result"></device-group-chosen>
-            <store-chosen :multiple="false" :required="true"
-                          v-model="form.store_result"></store-chosen>
+            <device-group-chosen :multiple="false"
+                                 :required="true"
+                                 v-model="form.device_group_result"
+                                 name="device_group"
+                                 v-validate="'required'"
+                                 :error="errors.first('device_group') || form.errors.get('device_group')"
+            ></device-group-chosen>
+            <store-chosen :multiple="false"
+                          :required="true"
+                          v-model="form.store_result"
+                          name="store"
+                          v-validate="'required'"
+                          :error="errors.first('store') || form.errors.get('store')"></store-chosen>
             <form-control
                     v-model="form.description"
                     v-validate="'required|max:500'"

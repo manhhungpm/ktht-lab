@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Faculty\AddFacultyRequest;
+use App\Http\Requests\Admin\Faculty\EditFacultyRequest;
 use App\Repositories\Admin\FacultyRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
@@ -43,14 +45,14 @@ class FacultyController extends Controller
         return response()->json($arr);
     }
 
-    public function add(Request $request)
+    public function add(AddFacultyRequest $request)
     {
         $result = $this->_facultyRepository->addFaculty($request->only('name', 'description'),$request->ip());
 
         return processCommonResponse($result);
     }
 
-    public function edit(Request $request)
+    public function edit(EditFacultyRequest $request)
     {
         $result = $this->_facultyRepository->editFaculty($request->only('name', 'description', 'id'),$request->ip());
 

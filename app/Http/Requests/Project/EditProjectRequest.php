@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Admin\Role;
+namespace App\Http\Requests\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class AddRoleRequest extends FormRequest
+class EditProjectRequest extends FormRequest
 {
     public function authorize()
     {
@@ -14,9 +15,18 @@ class AddRoleRequest extends FormRequest
     public function rules()
     {
         return [
+            'id' => [
+                'required'
+            ],
             'name' => [
                 'required',
-                'unique:roles',
+                Rule::unique('projects', 'name')->ignore($this->input('id'))
+            ],
+            'user_id' => [
+                'required',
+            ],
+            'device_type_id' => [
+                'required',
             ],
             'description' => [
                 'required',
@@ -31,3 +41,4 @@ class AddRoleRequest extends FormRequest
         ];
     }
 }
+

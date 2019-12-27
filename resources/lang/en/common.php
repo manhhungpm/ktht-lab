@@ -12,5 +12,7 @@ return [
     'export' => [
         'filter' => 'Filter with',
         'name_file' => 'Search result'
-    ]
+    ],
+    'name' => 'Name',
+    'description' => 'Description'
 ];

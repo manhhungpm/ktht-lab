@@ -43,7 +43,6 @@ import DateFilterMonth from "./elements/filter/DateFilterMonth";
  | Elements
  |--------------------------------------------------------------------------
  */
-import SpamLabelChosen from "./elements/chosens/SpamLabelChosen";
 import UserChosen from "./elements/chosens/UserChosen";
 
 // Components that are registered global.
@@ -76,7 +75,6 @@ import UserChosen from "./elements/chosens/UserChosen";
     LanguageChosen,
     ProfileActions,
 
-    SpamLabelChosen,
     UserChosen,
     TimeRangeFilter
 ].forEach(Component => {

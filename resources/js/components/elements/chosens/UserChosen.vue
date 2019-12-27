@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group m-form__group">
+    <div class="form-group m-form__group" :class="{ 'has-danger': error }">
         <select2
             ref="input"
             v-model="user"
@@ -27,6 +27,7 @@
             "
             :disabled="isDisabled"
         ></select2>
+        <div v-if="error" class="form-control-feedback">{{error}}</div>
     </div>
 </template>
 
@@ -36,7 +37,7 @@ export default {
     props: {
         error: {
             type: String,
-            default: ""
+            default: null
         },
         value: {
             type: [Object, Array],

@@ -1,8 +1,8 @@
 <template>
     <form-control
             v-model="classes"
-            :label="'Chọn lớp'"
-            :data-vv-as="$t('label.sms_group')"
+            :label="$t('label.class')"
+            :data-vv-as="$t('label.class')"
             name="classes"
             :required="required"
             type="select"

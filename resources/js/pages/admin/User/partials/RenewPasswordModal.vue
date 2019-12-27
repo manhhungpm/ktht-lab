@@ -26,7 +26,7 @@
             <form-control
                 ref="password"
                 v-model="form.password"
-                v-validate="'required|max:128'"
+                v-validate="'required|max:128|isPassword:true'"
                 :label="$t('admin.users.password')"
                 :data-vv-as="$t('admin.users.password')"
                 name="password"

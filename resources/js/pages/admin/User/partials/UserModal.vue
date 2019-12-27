@@ -13,7 +13,7 @@
             <form-control
                 v-if="isEdit !== true"
                 v-model="form.name"
-                v-validate="'required'"
+                v-validate="'required|max:100'"
                 name="name"
                 :label="$t('admin.users.user_name')"
                 autocomplete="off"
@@ -40,7 +40,11 @@
             </form-control>
             <class-chosen :multiple="false"
                           v-model="form.classes_result"
-                          :required="true"></class-chosen>
+                          :required="true"
+                          name="class"
+                          v-validate="'required'"
+                          :error="errors.first('class') || form.errors.get('class')"
+            ></class-chosen>
             <form-control
                 v-model="form.email"
                 v-validate="'required'"
@@ -79,9 +83,12 @@
                 :required="true"
             ></form-control>
             <role-chosen
-                    v-model="form.role"
-                    :required="true"
-                    :multiple="true"
+                v-model="form.role"
+                :required="true"
+                :multiple="true"
+                name="role"
+                v-validate="'required'"
+                :error="errors.first('role') || form.errors.get('role')"
             ></role-chosen>
             <div
                 class="form-group m-form__group"
@@ -92,7 +99,7 @@
                 }"
             >
                 <label
-                    >{{ $t("admin.users.expired_at") }}
+                >{{ $t("admin.users.expired_at") }}
                     <span class="text-danger">(*)</span></label
                 >
                 <el-date-picker
@@ -129,172 +136,173 @@
 </template>
 
 <script>
-import Form from "vform";
-import axios from "axios";
+    import Form from "vform";
+    import axios from "axios";
 
-import { FORM_LABEL_WIDTH } from "~/constants/constant";
-import FormControl from "~/components/common/FormControl";
-import { SUCCESS } from "~/constants/code";
-import {
-    notifyTryAgain,
-    notifyUpdateSuccess,
-    notifyAddSuccess,
-    notifyNoPermission
-} from "~/helpers/bootstrap-notify";
-import ClassChosen from "../../../../components/elements/chosens/ClassChosen";
-import RoleChosen from "../../../../components/elements/chosens/RoleChosen";
+    import {FORM_LABEL_WIDTH} from "~/constants/constant";
+    import FormControl from "~/components/common/FormControl";
+    import {SUCCESS} from "~/constants/code";
+    import {
+        notifyTryAgain,
+        notifyUpdateSuccess,
+        notifyAddSuccess,
+        notifyNoPermission
+    } from "~/helpers/bootstrap-notify";
+    import ClassChosen from "../../../../components/elements/chosens/ClassChosen";
+    import RoleChosen from "../../../../components/elements/chosens/RoleChosen";
 
-const defaultForm = {
-    id: "",
-    name: "",
-    display_name: "",
-    email: "",
-    mobile_phone: "",
-    role: null,
-    expired_at: "",
-    who_created: "",
-    who_updated: "",
-    password: null,
-    classes_result: null,
-    classes: null
-};
+    const defaultForm = {
+        id: "",
+        name: "",
+        display_name: "",
+        email: "",
+        mobile_phone: "",
+        role: null,
+        expired_at: "",
+        who_created: "",
+        who_updated: "",
+        password: null,
+        classes_result: null,
+        classes: null
+    };
 
-export default {
-    name: "UserModal",
-    components: {RoleChosen, ClassChosen, FormControl },
-    props: {
-        onActionSuccess: {
-            type: Function,
-            default: () => {}
-        }
-    },
-    data() {
-        return {
-            form: new Form(defaultForm),
-            formLabelWidth: FORM_LABEL_WIDTH,
-            isEdit: false,
-            roleOptions: {
-                placeholder: "Chọn role",
-                multiple: true,
-                searchable: true,
-                options: [],
-                textField: "display_name",
-                idField: "id"
+    export default {
+        name: "UserModal",
+        components: {RoleChosen, ClassChosen, FormControl},
+        props: {
+            onActionSuccess: {
+                type: Function,
+                default: () => {
+                }
+            }
+        },
+        data() {
+            return {
+                form: new Form(defaultForm),
+                formLabelWidth: FORM_LABEL_WIDTH,
+                isEdit: false,
+                roleOptions: {
+                    placeholder: "Chọn role",
+                    multiple: true,
+                    searchable: true,
+                    options: [],
+                    textField: "display_name",
+                    idField: "id"
+                },
+                roleList: []
+            };
+        },
+        computed: {},
+        mounted() {
+            this.loadingData();
+        },
+        methods: {
+            show(item = null) {
+                if (item != null) {
+                    item.role = item.roles;
+
+                    item.classes_result = {
+                        id: item.classes.id,
+                        text: item.classes.name,
+                        name: item.classes.name
+                    };
+
+                    this.form = new Form(item);
+                    this.isEdit = true;
+                }
+                this.$refs.modal.show();
             },
-            roleList: []
-        };
-    },
-    computed: {},
-    mounted() {
-        this.loadingData();
-    },
-    methods: {
-        show(item = null) {
-            if (item != null) {
-                item.role = item.roles;
+            closeModal() {
+                this.$refs.modal.hide();
+            },
+            async addUser() {
+                this.form.role = this.form.role.map(e => {
+                    return e.id;
+                });
+                this.form.class_id = this.form.classes_result.id;
 
-                item.classes_result = {
-                    id: item.classes.id,
-                    text: item.classes.name,
-                    name: item.classes.name
-                };
+                try {
+                    const res = await this.form.post("/admin/user/add");
+                    const {data} = res;
 
-                this.form = new Form(item);
-                this.isEdit = true;
-            }
-            this.$refs.modal.show();
-        },
-        closeModal() {
-            this.$refs.modal.hide();
-        },
-        async addUser() {
-            this.form.role = this.form.role.map(e => {
-                return e.id;
-            });
-            this.form.class_id = this.form.classes_result.id;
-
-            try {
-                const res = await this.form.post("/admin/user/add");
-                const { data } = res;
-
-                if (data.code === SUCCESS) {
-                    notifyAddSuccess();
-                    this.closeModal();
-                    this.onActionSuccess();
-                } else {
-                    notifyTryAgain();
-                }
-            } catch (e) {
-                const { status } = e.response;
-
-                if (status != 403) {
-                    notifyNoPermission();
-                }
-            }
-        },
-        async editUser() {
-            this.form.role = this.form.role.map(e => {
-                return e.id;
-            });
-            this.form.class_id = this.form.classes_result.id;
-
-            try {
-                const res = await this.form.post("/admin/user/edit");
-                const { data } = res;
-
-                if (data.code === SUCCESS) {
-                    notifyUpdateSuccess();
-                    this.closeModal();
-                    this.onActionSuccess();
-                } else {
-                    notifyTryAgain();
-                }
-            } catch (e) {
-                const { status } = e.response;
-
-                if (status != 403) {
-                    notifyNoPermission();
-                }
-            }
-        },
-        validateForm() {
-            this.$validator.validateAll().then(result => {
-                if (result) {
-                    if (this.isEdit) {
-                        this.editUser();
+                    if (data.code === SUCCESS) {
+                        notifyAddSuccess();
+                        this.closeModal();
+                        this.onActionSuccess();
                     } else {
-                        this.addUser();
+                        notifyTryAgain();
+                    }
+                } catch (e) {
+                    const {status} = e.response;
+
+                    if (status != 403) {
+                        notifyNoPermission();
                     }
                 }
-            });
-        },
-        onModalHidden() {
-            this.form = new Form(defaultForm);
-            this.isEdit = false;
-            this.$validator.reset();
-        },
-        async getRole() {
-            try {
-                const res = await axios.post("/admin/role/listing");
-                const { data } = res;
-
-                this.roleList = data.data;
-            } catch (e) {
-                console.log(e);
-            }
-        },
-        async loadingData() {
-            await this.getRole();
-
-            for (var i = 0; i < this.roleList.length; i++) {
-                this.roleOptions.options.push({
-                    id: this.roleList[i].id,
-                    text: this.roleList[i].name,
-                    // text: this.roleList[i].display_name,
-                    display_name: this.roleList[i].display_name
+            },
+            async editUser() {
+                this.form.role = this.form.role.map(e => {
+                    return e.id;
                 });
+                this.form.class_id = this.form.classes_result.id;
+
+                try {
+                    const res = await this.form.post("/admin/user/edit");
+                    const {data} = res;
+
+                    if (data.code === SUCCESS) {
+                        notifyUpdateSuccess();
+                        this.closeModal();
+                        this.onActionSuccess();
+                    } else {
+                        notifyTryAgain();
+                    }
+                } catch (e) {
+                    const {status} = e.response;
+
+                    if (status != 403) {
+                        notifyNoPermission();
+                    }
+                }
+            },
+            validateForm() {
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        if (this.isEdit) {
+                            this.editUser();
+                        } else {
+                            this.addUser();
+                        }
+                    }
+                });
+            },
+            onModalHidden() {
+                this.form = new Form(defaultForm);
+                this.isEdit = false;
+                this.$validator.reset();
+            },
+            async getRole() {
+                try {
+                    const res = await axios.post("/admin/role/listing");
+                    const {data} = res;
+
+                    this.roleList = data.data;
+                } catch (e) {
+                    console.log(e);
+                }
+            },
+            async loadingData() {
+                await this.getRole();
+
+                for (var i = 0; i < this.roleList.length; i++) {
+                    this.roleOptions.options.push({
+                        id: this.roleList[i].id,
+                        text: this.roleList[i].name,
+                        // text: this.roleList[i].display_name,
+                        display_name: this.roleList[i].display_name
+                    });
+                }
             }
         }
-    }
-};
+    };
 </script>

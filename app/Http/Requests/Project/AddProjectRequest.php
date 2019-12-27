@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Role;
+namespace App\Http\Requests\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddRoleRequest extends FormRequest
+class AddProjectRequest extends FormRequest
 {
     public function authorize()
     {
@@ -16,7 +16,13 @@ class AddRoleRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                'unique:roles',
+                'unique:projects',
+            ],
+            'user_id' => [
+                'required',
+            ],
+            'device_type_id' => [
+                'required',
             ],
             'description' => [
                 'required',

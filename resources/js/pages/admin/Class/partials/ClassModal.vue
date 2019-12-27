@@ -22,7 +22,10 @@
             </form-control>
             <faculty-chosen :multiple="false"
                             v-model="form.faculty_result"
-                            :required="true">
+                            :required="true"
+                            name="faculty"
+                            v-validate="'required'"
+                            :error="errors.first('faculty') || form.errors.get('faculty')">
             </faculty-chosen>
             <form-control
                     v-model="form.description"

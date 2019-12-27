@@ -12,5 +12,7 @@ return [
     'export' => [
         'filter' => 'Lọc theo',
         'name_file' => 'Kết quả tìm kiếm'
-    ]
+    ],
+    'name' => 'Tên',
+    'description' => 'Mô tả'
 ];

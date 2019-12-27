@@ -1,53 +1,57 @@
 <template>
     <modal
-            ref="modal"
-            :title="isEdit ? $t('device.device_group.edit') : $t('device.device_group.add')"
-            :on-hidden="onModalHidden"
+        ref="modal"
+        :title="isEdit ? $t('device.device_group.edit') : $t('device.device_group.add')"
+        :on-hidden="onModalHidden"
     >
         <form
-                class="m-form m-form--state m-form--label-align-right"
-                @submit.prevent="validateForm('form')"
+            class="m-form m-form--state m-form--label-align-right"
+            @submit.prevent="validateForm('form')"
         >
             <form-control
-                    v-model="form.name"
-                    v-validate="'required|max:100'"
-                    :label="$t('device.device_group.name')"
-                    name="name"
-                    autocomplete="off"
-                    :placeholder="$t('device.device_group.placeholder.name')"
-                    :error="errors.first('name') || form.errors.get('name')"
-                    :required="true"
-                    :data-vv-as="$t('device.device_group.placeholder.name')"
+                v-model="form.name"
+                v-validate="'required|max:100'"
+                :label="$t('device.device_group.name')"
+                name="name"
+                autocomplete="off"
+                :placeholder="$t('device.device_group.placeholder.name')"
+                :error="errors.first('name') || form.errors.get('name')"
+                :required="true"
+                :data-vv-as="$t('device.device_group.placeholder.name')"
             >
             </form-control>
             <form-control
-                    v-model="form.display_name"
-                    v-validate="'required|max:100'"
-                    :label="$t('device.device_group.display_name')"
-                    name="display_name"
-                    autocomplete="off"
-                    :placeholder="$t('device.device_group.placeholder.display_name')"
-                    :error="errors.first('display_name') || form.errors.get('display_name')"
-                    :required="true"
-                    :data-vv-as="$t('device.device_group.placeholder.display_name')"
+                v-model="form.display_name"
+                v-validate="'required|max:100'"
+                :label="$t('device.device_group.display_name')"
+                name="display_name"
+                autocomplete="off"
+                :placeholder="$t('device.device_group.placeholder.display_name')"
+                :error="errors.first('display_name') || form.errors.get('display_name')"
+                :required="true"
+                :data-vv-as="$t('device.device_group.placeholder.display_name')"
             >
             </form-control>
-            <provider-chosen :multiple="false" v-model="form.provider_result"
-                             :required="true"></provider-chosen>
+            <provider-chosen :multiple="false"
+                             v-model="form.provider_result"
+                             :required="true"
+                             name="provider"
+                             v-validate="'required'"
+                             :error="errors.first('provider') || form.errors.get('provider')"></provider-chosen>
             <form-control
-                    v-model="form.description"
-                    v-validate="'required|max:500'"
-                    :label="$t('device.device_group.description')"
-                    name="description"
-                    autocomplete="off"
-                    :placeholder="$t('device.device_group.placeholder.description')"
-                    :type="'area'"
-                    :data-vv-as="$t('device.device_group.placeholder.description')"
-                    :error="
+                v-model="form.description"
+                v-validate="'required|max:500'"
+                :label="$t('device.device_group.description')"
+                name="description"
+                autocomplete="off"
+                :placeholder="$t('device.device_group.placeholder.description')"
+                :type="'area'"
+                :data-vv-as="$t('device.device_group.placeholder.description')"
+                :error="
                     errors.first('description') ||
                         form.errors.get('description')
                 "
-                    :required="true"
+                :required="true"
             >
             </form-control>
         </form>

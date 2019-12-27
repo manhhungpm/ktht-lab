@@ -21,10 +21,21 @@
             >
             </form-control>
             <label>{{$t('project.user')}}<span class="text-danger"> (*)</span></label>
-            <user-chosen :multiple="true" v-model="form.user_result"
-                         :required="true"></user-chosen>
-            <device-type-chosen :multiple="true" v-model="form.device_type_result"
-                                :required="true"></device-type-chosen>
+            <user-chosen :multiple="true"
+                         v-model="form.user_result"
+                         :required="true"
+                         name="user"
+                         :data-vv-as="$t('project.user')"
+                         v-validate="'required'"
+                         :error="errors.first('user') || form.errors.get('user')"
+            ></user-chosen>
+            <device-type-chosen :multiple="true"
+                                v-model="form.device_type_result"
+                                :required="true"
+                                name="device_type"
+                                v-validate="'required'"
+                                :error="errors.first('device_type') || form.errors.get('device_type')"
+            ></device-type-chosen>
             <form-control
                     v-model="form.description"
                     v-validate="'required|max:500'"

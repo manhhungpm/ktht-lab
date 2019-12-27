@@ -10,6 +10,8 @@ namespace App\Http\Controllers\Device;
 
 use App\Exports\Device\DeviceGroup\DeviceGroupExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Device\DeviceGroup\AddDeviceGroupRequest;
+use App\Http\Requests\Device\DeviceGroup\EditDeviceGroupRequest;
 use App\Repositories\Device\DeviceGroupRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
@@ -55,14 +57,14 @@ class DeviceGroupController extends Controller
         return response()->json($arr);
     }
 
-    public function add(Request $request)
+    public function add(AddDeviceGroupRequest $request)
     {
         $result = $this->_deviceGroupRepository->addDeviceGroup($request->only('name', 'display_name', 'provider_id', 'description'),$request->ip());
 
         return processCommonResponse($result);
     }
 
-    public function edit(Request $request)
+    public function edit(EditDeviceGroupRequest $request)
     {
         $result = $this->_deviceGroupRepository->editDeviceGroup($request->only('name', 'display_name', 'provider_id', 'description', 'id'),$request->ip());
 

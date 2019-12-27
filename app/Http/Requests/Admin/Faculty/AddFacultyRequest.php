@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Manager;
+namespace App\Http\Requests\Admin\Faculty;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddManagerRequest extends FormRequest
+class AddFacultyRequest extends FormRequest
 {
     public function authorize()
     {
@@ -16,12 +16,18 @@ class AddManagerRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                'unique:managers',
+                'unique:faculty',
             ],
             'description' => [
                 'required',
-                'max:255'
             ],
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name' => trans('common.name'),
         ];
     }
 }
