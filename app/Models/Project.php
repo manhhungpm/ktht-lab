@@ -5,7 +5,6 @@
  * Date: 09/11/2019
  * Time: 23:12
  */
-
 namespace App\Models;
 
 use App\User;

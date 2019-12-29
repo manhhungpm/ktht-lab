@@ -58,14 +58,16 @@
 
                 try {
                     let $this = this;
-
+                    this.categories = [];
+                    this.series[0].data = [];
                     let data = await axios.post("/statistic/get-data-column-user-device", {
                         time_filter: time
                     })
 
                     let arr = data.data.data;
 
-                    if(arr != null) {
+                    console.log(arr.name)
+                    if(arr.name.length != 0 ) {
                         arr.name.forEach(function (e)  {
                             $this.categories.push(e)
                         })
@@ -74,9 +76,10 @@
                         arr.countDevice.forEach(function (e)  {
                             $this.series[0].data.push(e)
                         })
+                    } else {
+                        $this.categories.push("Không có")
+                        $this.series[0].data.push(0)
                     }
-
-                    console.log(arr);
 
                 }
                 catch (e) {

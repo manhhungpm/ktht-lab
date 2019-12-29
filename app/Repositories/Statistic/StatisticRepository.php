@@ -85,6 +85,7 @@ class StatisticRepository extends BaseRepository
     public function getDataColumnUserDevice($timeFilter)
     {
         $grid = [];
+//        dd($timeFilter);
 
         $queryName = Rent::select('id', 'user_id', 'due_date', 'status', 'created_at')
             ->where('status', ACTIVE)

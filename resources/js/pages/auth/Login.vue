@@ -135,7 +135,16 @@
                 await this.$store.dispatch("auth/fetchUser");
 
                 // Redirect home.
-                this.$router.push({name: "dashboard"});
+                // this.$router.push({name: "dashboard"});
+                // console.log(this.$hasRole("leader"));
+
+                if(this.$hasRole("admin")){
+                    this.$router.push({name: "dashboard"});
+                } else if (this.$hasRole("leader")){
+                    this.$router.push({name: "project"});
+                } else if (this.$hasRole("user")){
+                    this.$router.push({name: "rent"});
+                }
 
                 setTimeout(() => {
                     if (this.$store.getters["auth/check"]) {
