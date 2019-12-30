@@ -76,7 +76,10 @@ class ProjectRepository extends BaseRepository
         if ($query->save()) {
             if ($arr['user_id'] && $arr['device_type_id']) {
                 $query->user()->attach($arr['user_id']);
-                $query->deviceType()->attach($arr['device_type_id']);
+//                $query->deviceType()->attach($arr['device_type_id']);
+                foreach ($arr['device_type_id'] as $key => $id) {
+                    $query->deviceType()->attach($id, array('amount' => $arr['amount'][$key]));
+                }
                 fireEventActionLog(ADD, $query->getTable(), $query->id, $query->name, null, json_encode($query), $ip);
             }
             return true;
@@ -95,7 +98,10 @@ class ProjectRepository extends BaseRepository
                 $query->deviceType()->detach();
                 if ($arr['user_id'] && $arr['device_type_id']) {
                     $query->user()->attach($arr['user_id']);
-                    $query->deviceType()->attach($arr['device_type_id']);
+//                    $query->deviceType()->attach($arr['device_type_id']);
+                    foreach ($arr['device_type_id'] as $key => $id) {
+                        $query->deviceType()->attach($id, array('amount' => $arr['amount'][$key]));
+                    }
                     fireEventActionLog(UPDATE, $query->getTable(), $query->id, $query->name, $oldUser, json_encode($query), $ip);
                 }
                 return true;

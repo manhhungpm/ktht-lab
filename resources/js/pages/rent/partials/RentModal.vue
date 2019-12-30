@@ -240,7 +240,6 @@
                 this.form.amount = this.form.multi_device_details.map(function (e) {
                     return e.amount
                 })
-                // console.log(this.form)
             },
             async addRent() {
                 this.setupDataPost();

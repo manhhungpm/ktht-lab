@@ -24,6 +24,6 @@ class Project extends Model
     public function deviceType()
     {
         return $this->belongsToMany(DeviceType::class, 'project_device',
-            'project_id','device_id');
+            'project_id','device_id')->withPivot('amount');
     }
 }
