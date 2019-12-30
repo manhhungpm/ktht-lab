@@ -3,18 +3,18 @@
         <div class="col-md-12">
             <div class="m-portlet__body">
                 <div
-                        id="m_accordion_5"
-                        class="m-accordion m-accordion--default m-accordion--toggle-arrow"
-                        role="tablist"
+                    id="m_accordion_5"
+                    class="m-accordion m-accordion--default m-accordion--toggle-arrow"
+                    role="tablist"
                 >
                     <div class="m-accordion__item m-accordion__item--brand">
                         <div
-                                id="m_accordion_5_item_3_head"
-                                class="m-accordion__item-head collapsed"
-                                role="tab"
-                                data-toggle="collapse"
-                                href="#m_accordion_5_item_3_body"
-                                aria-expanded="true"
+                            id="m_accordion_5_item_3_head"
+                            class="m-accordion__item-head collapsed"
+                            role="tab"
+                            data-toggle="collapse"
+                            href="#m_accordion_5_item_3_body"
+                            aria-expanded="true"
                         >
                                 <span class="m-accordion__item-title">
                                     {{ $t("label.search_information") }}</span
@@ -22,19 +22,19 @@
                             <span class="m-accordion__item-mode"></span>
                         </div>
                         <div
-                                id="m_accordion_5_item_3_body"
-                                class="m-accordion__item-body collapse show"
-                                role="tabpanel"
-                                aria-labelledby="m_accordion_5_item_3_head"
-                                data-parent="#m_accordion_5"
+                            id="m_accordion_5_item_3_body"
+                            class="m-accordion__item-body collapse show"
+                            role="tabpanel"
+                            aria-labelledby="m_accordion_5_item_3_head"
+                            data-parent="#m_accordion_5"
                         >
                             <div class="m-accordion__item-content">
                                 <rent-filter
-                                        :is-required-to-export="
+                                    :is-required-to-export="
                                             isRequiredToExport
                                         "
-                                        @search="search"
-                                        @isExportFileSuccessfully="
+                                    @search="search"
+                                    @isExportFileSuccessfully="
                                             isExportFileSuccessfully
                                         "
                                 ></rent-filter>
@@ -47,11 +47,12 @@
         <div class="col-md-12">
             <portlet :title="$t('rent.title')">
                 <v-button
-                        slot="tool"
-                        color="primary"
-                        style-type="air"
-                        class="m-btn m-btn--icon"
-                        @click.native="addRent"
+                    v-if="role"
+                    slot="tool"
+                    color="primary"
+                    style-type="air"
+                    class="m-btn m-btn--icon"
+                    @click.native="addRent"
                 >
                 <span>
                     <i class="la la-plus"></i>
@@ -59,22 +60,22 @@
                 </span>
                 </v-button>
                 <data-table
-                        ref="table"
-                        :columns="columns"
-                        url="/rent/listing"
-                        :fixed-columns-left="2"
-                        :fixed-columns-right="3"
-                        :actions="actions"
-                        :search-placeholder="$t('rent.placeholder.search')"
-                        :order-column-index="2"
-                        :order-type="'desc'"
-                        :post-data="tableFilter"
+                    ref="table"
+                    :columns="columns"
+                    url="/rent/listing"
+                    :fixed-columns-left="2"
+                    :fixed-columns-right="3"
+                    :actions="actions"
+                    :search-placeholder="$t('rent.placeholder.search')"
+                    :order-column-index="2"
+                    :order-type="'desc'"
+                    :post-data="tableFilter"
                 >
                 </data-table>
             </portlet>
             <rent-modal
-                    ref="addModal"
-                    :on-action-success="updateItemSuccess"
+                ref="addModal"
+                :on-action-success="updateItemSuccess"
             ></rent-modal>
         </div>
     </div>
@@ -113,7 +114,11 @@
             };
         },
         computed: {
+            role() {
+                return this.$hasRole("admin");
+            },
             columns() {
+                let $this = this;
                 return [
                     {
                         data: "user.display_name",
@@ -197,16 +202,21 @@
                         className: "text-center",
                         responsivePriority: 1,
                         render(data) {
-                            if (data == 1) {
-                                return generateTableAction(
-                                    "disable",
-                                    "handleDisable"
-                                );
+                            if ($this.role) {
+                                if (data == 0) {
+                                    // return generateTableAction(
+                                    //     "disable",
+                                    //     "handleDisable",
+                                    // );
+                                    return "Không có hành động";
+                                } else {
+                                    return (
+                                        generateTableAction("edit", "handleEdit") +
+                                        generateTableAction("pay", "handleActive", "success", "la-angellist", "Trả đồ")
+                                    );
+                                }
                             } else {
-                                return (
-                                    generateTableAction("edit", "handleEdit") +
-                                    generateTableAction("active", "handleActive")
-                                );
+                                return "Không có quyền thực hiện hành động này"
                             }
                         }
                     }
