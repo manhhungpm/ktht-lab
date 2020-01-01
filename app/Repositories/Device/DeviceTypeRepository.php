@@ -9,6 +9,7 @@
 namespace App\Repositories\Device;
 
 use App\Models\DeviceType;
+use App\Models\Media;
 use App\Repositories\BaseRepository;
 
 class DeviceTypeRepository extends BaseRepository
@@ -22,7 +23,7 @@ class DeviceTypeRepository extends BaseRepository
     {
         $query = $this->model
             ->select('id', 'name', 'display_name', 'amount', 'status', 'description', 'updated_at', 'created_at',
-                'store_id', 'device_group_id')
+                'store_id', 'device_group_id', 'file')
             ->where('name', 'LIKE', "%$keyword%");
 
         collect($search)->each(function ($item, $key) use ($query) {
@@ -67,6 +68,19 @@ class DeviceTypeRepository extends BaseRepository
 
     public function addDeviceType($arr, $ip)
     {
+//        dd($arr);
+
+        if (isset($arr['file'])) {
+            $files = json_decode($arr['file']);
+            if ($files != null) {
+                foreach ($files as $key => $value) {
+                    $file = Media::find($value->id);
+                    $file->status = 1;
+                    $file->save();
+                }
+            }
+        }
+
         $query = $this->model;
         $arr['status'] = '1';
         $query->fill($arr);

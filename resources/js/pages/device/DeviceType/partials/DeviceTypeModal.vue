@@ -57,6 +57,56 @@
                           name="store"
                           v-validate="'required'"
                           :error="errors.first('store') || form.errors.get('store')"></store-chosen>
+
+            <div
+                v-if="!hidden"
+                class="form-group m-form__group"
+                :class="{
+                    'has-danger':
+                        errors.first('file') || form.errors.get('file')
+                }"
+            >
+                <label>Ảnh minh họa</label>
+                <div v-if="isEdit" class="file-list">
+                    <div
+                        v-for="(file, index) in form.oldFile"
+                        :key="'file' + index"
+                        class="row col"
+                    >
+                        {{ index + 1 }}.
+                        <a :href="`/storage/${file.path}`" target="_blank">{{
+                            file.name
+                            }}</a>
+                        <a
+                            href="javascript:;"
+                            style="margin: -6px 5px;"
+                            class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill table-action"
+                            title=" Xóa "
+                            @click="deleteFile(file, index)"
+                        >
+                            <i class="la la-trash"></i>
+                        </a>
+                    </div>
+                </div>
+                <file-upload
+                    v-model="form.newFile"
+                    :upload-multiple="false"
+                    :title="$t('component.dropzone.title')"
+                    :desc="$t('component.dropzone.desc')"
+                    :max-filesize="10"
+                    accepted-files="image/*"
+                >
+                </file-upload>
+                <div
+                    v-if="errors.first('file') || form.errors.get('file')"
+                    class="form-control-feedback"
+                >
+                    {{ errors.first("file") }}
+                    <br />
+                    {{ form.errors.get("file") }}
+                </div>
+            </div>
+
             <form-control
                     v-model="form.description"
                     v-validate="'required|max:500'"
@@ -105,7 +155,9 @@
         device_group_result: null,
         store_result: null,
         display_name: null,
-        description: ""
+        description: "",
+        newFile: [],
+        oldFile: []
     };
 
     export default {
@@ -122,11 +174,15 @@
             return {
                 form: new Form(defaultForm),
                 formLabelWidth: FORM_LABEL_WIDTH,
-                isEdit: false
+                isEdit: false,
+                hidden: false,
             };
         },
         computed: {},
         methods: {
+            deleteFile(file, index) {
+                this.form.oldFile.splice(index, 1);
+            },
             show(item = null) {
                 if (item != null) {
                     item.store_result = {
@@ -141,7 +197,12 @@
                     };
                     this.isEdit = true;
                     this.form = new Form(item);
+
+                    //File
+                    this.form.newFile = [];
+                    this.$set(this.form, "oldFile", JSON.parse(item.file));
                 }
+                this.hidden = false;
                 this.$refs.modal.show();
             },
             closeModal() {
@@ -161,11 +222,19 @@
             onModalHidden() {
                 this.form = new Form(defaultForm);
                 this.isEdit = false;
+                this.hidden = true;
                 this.$validator.reset();
             },
             async addDeviceType() {
                 this.form.store_id = this.form.store_result.id;
                 this.form.device_group_id = this.form.device_group_result.id;
+
+                //file
+                this.form.file = JSON.stringify(
+                    this.form.newFile.length > 0
+                        ? this.form.newFile
+                        : this.form.oldFile
+                );
 
                 try {
                     const res = await this.form.post("/device/device-type/add");
@@ -185,6 +254,12 @@
             async editDeviceType() {
                 this.form.store_id = this.form.store_result.id;
                 this.form.device_group_id = this.form.device_group_result.id;
+
+                this.form.file = JSON.stringify(
+                    this.form.newFile.length > 0
+                        ? this.form.newFile
+                        : this.form.oldFile
+                );
 
                 try {
                     const res = await this.form.post("/device/device-type/edit");

@@ -15,7 +15,7 @@ class DeviceType extends Model
     protected $table = 'devices';
 
     protected $fillable = ['id', 'name', 'display_name', 'description', 'status', 'created_at', 'updated_at',
-        'store_id', 'device_group_id', 'amount'];
+        'store_id', 'device_group_id', 'amount', 'file'];
 
     public function store()
     {

@@ -24,7 +24,7 @@ class DeviceTypeController extends Controller
     protected $_deviceTypeRepository;
     protected $_excel;
 
-    public function __construct(DeviceTypeRepository $deviceTypeRepository,Excel $excel)
+    public function __construct(DeviceTypeRepository $deviceTypeRepository, Excel $excel)
     {
         $this->middleware('auth');
         $this->_deviceTypeRepository = $deviceTypeRepository;
@@ -64,14 +64,14 @@ class DeviceTypeController extends Controller
 
     public function add(AddDeviceTypeRequest $request)
     {
-        $result = $this->_deviceTypeRepository->addDeviceType($request->only('name', 'display_name', 'amount', 'store_id', 'device_group_id', 'description'), $request->ip());
+        $result = $this->_deviceTypeRepository->addDeviceType($request->only('name', 'display_name', 'amount', 'store_id', 'device_group_id', 'description', 'file'), $request->ip());
 
         return processCommonResponse($result);
     }
 
     public function edit(EditDeviceTypeRequest $request)
     {
-        $result = $this->_deviceTypeRepository->editDeviceType($request->only('name', 'display_name', 'amount', 'store_id', 'device_group_id', 'description', 'id'), $request->ip());
+        $result = $this->_deviceTypeRepository->editDeviceType($request->only('name', 'display_name', 'amount', 'store_id', 'device_group_id', 'description', 'id', 'file'), $request->ip());
 
         return processCommonResponse($result);
     }
