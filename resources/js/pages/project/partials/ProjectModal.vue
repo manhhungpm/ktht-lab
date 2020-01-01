@@ -191,10 +191,12 @@
             deleteDetails(array, index) {
                 array.splice(index, 1);
             },
-            async show(item = null) {
+            async show1(item = null) {
                 if (item != null) {
                     // item.device_type_result = item.device_type;
 
+                    console.log(item)
+                    //
                     item.multi_device_details = [];
                     var arr = [];
                     item.device_type.forEach(function(value) {
@@ -208,13 +210,59 @@
                         });
                     });
                     await this.$nextTick();
-                    // console.log(arr);
                     item.multi_device_details = arr;
+                    //
+
 
                     item.user_result = item.user;
-
                     this.isEdit = true;
                     this.form = new Form(item);
+                }
+                this.$refs.modal.show();
+            },
+            async show(item = null) {
+                if (item != null) {
+                    this.isEdit = true;
+
+                    //Load user
+                    item.user_result = item.user;
+
+                    //Load thiết bị và số lượng
+                    let original = _.cloneDeep(item)
+                    if (original.device_type.length > 0) {
+                        original.multi_device_details = original.device_type.map((e) => {
+                            e.device_type = null
+                            e.amount = null
+                            return e
+                        })
+                    }
+                    else {
+                        original.multi_device_details = [
+                            {
+                                device_type: null,
+                                amount: null,
+                            }
+                        ]
+                    }
+                    this.form = new Form(_.cloneDeep(original))
+                    await this.$nextTick()
+                    item.device_type.forEach((e, index) => {
+                        this.form.multi_device_details[index].device_type = {
+                            id: e.id,
+                            name: e.name
+                        }
+                        this.form.multi_device_details[index].amount = e.pivot.amount
+                    })
+                    await this.$nextTick()
+                    item.device_type.forEach((e, index) => {
+                        this.form.multi_device_details[index].device_type = {
+                            id: e.id,
+                            name: e.name
+                        }
+                    })
+                    await this.$nextTick()
+                    //
+
                 }
                 this.$refs.modal.show();
             },

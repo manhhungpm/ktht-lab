@@ -9,6 +9,7 @@ use Artisaninweb\SoapWrapper\SoapWrapper;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use vendor\project\StatusTest;
+use Illuminate\Support\Facades\Mail;
 
 class UserRepository extends BaseRepository
 {
@@ -167,6 +168,12 @@ class UserRepository extends BaseRepository
 
     public function addUser($arr,$ip)
     {
+//        dd($arr);
+
+//        Mail::send('mailfb', array('name'=>$arr["name"]), function($message) use ($arr){
+//            $message->to($arr['email'], 'Visitor')->subject('Visitor Feedback!');
+//        });
+
         $role = $arr['role'];
         $user = new User();
         $arr['who_created'] = \auth()->user()->name;

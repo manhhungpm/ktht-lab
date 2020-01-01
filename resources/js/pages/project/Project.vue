@@ -196,6 +196,27 @@
                         }
                     },
                     {
+                        data: "device_type",
+                        title: "Số lượng",
+                        render(data) {
+                            let html = "";
+                            data.map(function (value) {
+                                if (html === "") {
+                                    html +=
+                                        "<li>" +
+                                        htmlEscapeEntities(value.pivot.amount) +
+                                        "</li>";
+                                } else {
+                                    html +=
+                                        "<li>" +
+                                        htmlEscapeEntities(value.pivot.amount) +
+                                        "</li>";
+                                }
+                            });
+                            return html;
+                        }
+                    },
+                    {
                         data: "status",
                         title: this.$t("common.status"),
                         render(data) {
