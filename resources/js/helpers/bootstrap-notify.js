@@ -136,3 +136,9 @@ export const notifyNoRecord = () =>
         i18n.t("notification.must_select_at_least_one_record"),
         "danger"
     );
+export const notifyGiveBackSuccess = () =>
+    notify(
+        i18n.t("label.notification"),
+        "Trả đồ thành cồng",
+        "success"
+    )

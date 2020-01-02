@@ -92,7 +92,8 @@
     import {
         notifyTryAgain,
         notifyActiveSuccess,
-        notifyDisableSuccess
+        notifyDisableSuccess,
+        notifyGiveBackSuccess
     } from "~/helpers/bootstrap-notify";
     import RentModal from "./partials/RentModal";
     import RentFilter from "./partials/RentFilter";
@@ -271,7 +272,7 @@
                 bootbox.confirm({
                     title: this.$t("label.notification"),
                     message:
-                        'Chuyển trạng thái mượn thiết bị ?',
+                        'Chuyển trạng thái trả thiết bị ?',
                     buttons: {
                         cancel: {
                             label: this.$t("button.cancel")
@@ -288,7 +289,7 @@
                             const {data} = res;
 
                             if (data.code == 0) {
-                                notifyActiveSuccess();
+                                notifyGiveBackSuccess();
                                 reloadIntelligently($this.$refs.table);
                             } else {
                                 notifyTryAgain();

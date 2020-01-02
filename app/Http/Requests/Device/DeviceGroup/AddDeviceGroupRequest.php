@@ -18,7 +18,7 @@ class AddDeviceGroupRequest extends FormRequest
                 'required',
                 'unique:group_devices',
             ],
-            'dipsplay_name' => [
+            'display_name' => [
                 'required'
             ],
             'description' => [
