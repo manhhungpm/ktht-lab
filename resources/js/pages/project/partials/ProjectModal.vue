@@ -1,23 +1,23 @@
 <template>
     <modal
-            ref="modal"
-            :title="isEdit ? $t('project.edit') : $t('project.add')"
-            :on-hidden="onModalHidden"
+        ref="modal"
+        :title="isEdit ? $t('project.edit') : $t('project.add')"
+        :on-hidden="onModalHidden"
     >
         <form
-                class="m-form m-form--state m-form--label-align-right"
-                @submit.prevent="validateForm('form')"
+            class="m-form m-form--state m-form--label-align-right"
+            @submit.prevent="validateForm('form')"
         >
             <form-control
-                    v-model="form.name"
-                    v-validate="'required|max:100'"
-                    :label="$t('project.name')"
-                    name="name"
-                    autocomplete="off"
-                    :placeholder="$t('project.placeholder.name')"
-                    :error="errors.first('name') || form.errors.get('name')"
-                    :required="true"
-                    :data-vv-as="$t('project.placeholder.name')"
+                v-model="form.name"
+                v-validate="'required|max:100'"
+                :label="$t('project.name')"
+                name="name"
+                autocomplete="off"
+                :placeholder="$t('project.placeholder.name')"
+                :error="errors.first('name') || form.errors.get('name')"
+                :required="true"
+                :data-vv-as="$t('project.placeholder.name')"
             >
             </form-control>
             <label>{{$t('project.user')}}<span class="text-danger"> (*)</span></label>
@@ -29,13 +29,13 @@
                          v-validate="'required'"
                          :error="errors.first('user') || form.errors.get('user')"
             ></user-chosen>
-<!--            <device-type-chosen :multiple="true"-->
-<!--                                v-model="form.device_type_result"-->
-<!--                                :required="true"-->
-<!--                                name="device_type"-->
-<!--                                v-validate="'required'"-->
-<!--                                :error="errors.first('device_type') || form.errors.get('device_type')"-->
-<!--            ></device-type-chosen>-->
+            <!--            <device-type-chosen :multiple="true"-->
+            <!--                                v-model="form.device_type_result"-->
+            <!--                                :required="true"-->
+            <!--                                name="device_type"-->
+            <!--                                v-validate="'required'"-->
+            <!--                                :error="errors.first('device_type') || form.errors.get('device_type')"-->
+            <!--            ></device-type-chosen>-->
 
             <div
                 class="multiple-input-wrap col-12"
@@ -56,7 +56,9 @@
                     >
                         <div class="col-md-4">
                             <device-type-chosen :multiple="false" v-model="input.device_type"
-                                                :required="true" ></device-type-chosen>
+                                                :required="true"
+                                                :error="errors.first('device_type_id'+index) ||
+                                                form.errors.get('multi_device_details.'+index)"></device-type-chosen>
                         </div>
 
                         <div class="col-md-4">
@@ -109,19 +111,19 @@
             </div>
 
             <form-control
-                    v-model="form.description"
-                    v-validate="'required|max:500'"
-                    :label="$t('project.description')"
-                    name="description"
-                    autocomplete="off"
-                    :placeholder="$t('project.placeholder.description')"
-                    :type="'area'"
-                    :data-vv-as="$t('project.placeholder.description')"
-                    :error="
+                v-model="form.description"
+                v-validate="'required|max:500'"
+                :label="$t('project.description')"
+                name="description"
+                autocomplete="off"
+                :placeholder="$t('project.placeholder.description')"
+                :type="'area'"
+                :data-vv-as="$t('project.placeholder.description')"
+                :error="
                     errors.first('description') ||
                         form.errors.get('description')
                 "
-                    :required="true"
+                :required="true"
             >
             </form-control>
         </form>
@@ -199,7 +201,7 @@
                     //
                     item.multi_device_details = [];
                     var arr = [];
-                    item.device_type.forEach(function(value) {
+                    item.device_type.forEach(function (value) {
                         arr.push({
                             device_type: {
                                 name: value.name,
@@ -235,8 +237,7 @@
                             e.amount = null
                             return e
                         })
-                    }
-                    else {
+                    } else {
                         original.multi_device_details = [
                             {
                                 device_type: null,
@@ -285,7 +286,7 @@
                 this.isEdit = false;
                 this.$validator.reset();
             },
-            setupDataPost(){
+            setupDataPost() {
                 this.form.device_type_id = this.form.multi_device_details.map(function (e) {
                     return e['device_type']['id'];
                 })

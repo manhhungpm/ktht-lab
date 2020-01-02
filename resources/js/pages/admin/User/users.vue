@@ -312,7 +312,7 @@ export default {
             bootbox.confirm({
                 title: this.$t("label.notification"),
                 message:
-                    'Bạn chắc chắn muốn vô hiệu "<span class="text-danger">' +
+                    'Bạn chắc chắn muốn vô hiệu người dùng có tài khoản "<span class="text-danger">' +
                     htmlEscapeEntities(rowData.name) +
                     '</span>"?',
                 buttons: {
@@ -346,7 +346,7 @@ export default {
             bootbox.confirm({
                 title: this.$t("label.notification"),
                 message:
-                    'Bạn chắc chắn muốn kích hoạt "<span class="text-danger">' +
+                    'Bạn chắc chắn muốn kích hoạt người dùng có tài khoản "<span class="text-danger">' +
                     htmlEscapeEntities(rowData.name) +
                     '</span>"?',
                 buttons: {

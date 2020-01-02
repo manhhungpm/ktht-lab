@@ -16,5 +16,6 @@ export default {
     lock_success: "Khóa thành công",
     unlock_success: "Mở khóa thành công",
     bypass_success: "Bỏ qua thành công",
-    delete_success: "Xóa thành công"
+    delete_success: "Xóa thành công",
+    give_back_success: "Trả đồ thành công"
 };

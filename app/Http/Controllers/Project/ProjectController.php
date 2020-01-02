@@ -60,7 +60,7 @@ class ProjectController extends Controller
 
     public function add(AddProjectRequest $request)
     {
-        $result = $this->_projectRepository->addProject($request->only('name', 'user_id', 'device_type_id', 'amount', 'description'), $request->ip());
+        $result = $this->_projectRepository->addProject($request->only('name', 'user_id', 'device_type_id', 'amount', 'description', 'multi_device_details'), $request->ip());
 
         return processCommonResponse($result);
     }

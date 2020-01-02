@@ -230,7 +230,7 @@
                 bootbox.confirm({
                     title: this.$t("label.notification"),
                     message:
-                        'Bạn chắc chắn muốn kích hoạt khoa "<span class="text-danger">' +
+                        'Bạn chắc chắn muốn kích hoạt lớp "<span class="text-danger">' +
                         htmlEscapeEntities(rowData.name) +
                         '</span>"?',
                     buttons: {
@@ -264,7 +264,7 @@
                 bootbox.confirm({
                     title: this.$t("label.notification"),
                     message:
-                        'Bạn chắc chắn muốn vô hiệu khoa "<span class="text-danger">' +
+                        'Bạn chắc chắn muốn vô hiệu lớp "<span class="text-danger">' +
                         htmlEscapeEntities(rowData.name) +
                         '</span>"?',
                     buttons: {

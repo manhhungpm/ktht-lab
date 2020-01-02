@@ -48,7 +48,7 @@
                     </span>
                 </v-button>
                 <v-button
-                    color="warning"
+                    color="accent"
                     style-type="air"
                     class="m-btn m-btn--icon"
                     @click.native="reset"

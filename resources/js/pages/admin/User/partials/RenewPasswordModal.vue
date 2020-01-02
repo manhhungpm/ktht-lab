@@ -10,7 +10,7 @@
             @submit.prevent="validateForm"
         >
             <form-control
-                v-model="form.display_name"
+                v-model="form.name"
                 v-validate="'required|max:255'"
                 :label="$t('admin.users.user_name')"
                 :data-vv-as="$t('admin.users.user_name')"

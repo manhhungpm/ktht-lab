@@ -139,6 +139,6 @@ export const notifyNoRecord = () =>
 export const notifyGiveBackSuccess = () =>
     notify(
         i18n.t("label.notification"),
-        "Trả đồ thành cồng",
+        i18n.t("notification.give_back_success"),
         "success"
     )

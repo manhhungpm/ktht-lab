@@ -13,5 +13,6 @@ export default {
     lock_success: "Successfully locked",
     unlock_success: "Successfully unlocked",
     bypass_success: "Successfully bypassed",
-    delete_success: "Delete Success"
+    delete_success: "Delete Success",
+    give_back_success: "Give back success"
 };
