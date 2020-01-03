@@ -55,9 +55,12 @@
                         class="form-group m-form__group row"
                     >
                         <div class="col-md-4">
-                            <device-type-chosen :multiple="false" v-model="input.device_type"
+                            <device-type-chosen :multiple="false"
+                                                v-model="input.device_type"
                                                 :required="true"
-                                                :error="errors.first('device_type_id'+index) ||
+                                                v-validate="'required'"
+                                                :name="'multi_device_details'+index"
+                                                :error="errors.first('multi_device_details'+index) ||
                                                 form.errors.get('multi_device_details.'+index)"></device-type-chosen>
                         </div>
 
