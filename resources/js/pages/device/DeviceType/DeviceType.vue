@@ -142,6 +142,10 @@
                         className: "wrap-text"
                     },
                     {
+                        data: "total",
+                        title: this.$t("device.device_type.total"),
+                    },
+                    {
                         data: "amount",
                         title: this.$t("device.device_type.amount"),
                     },

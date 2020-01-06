@@ -19,7 +19,7 @@ class AddRentRequest extends FormRequest
             'date_range' => [
                 'required',
             ],
-            'user_id' => [
+            'user' => [
                 'required',
             ],
             'device_type_id' => [

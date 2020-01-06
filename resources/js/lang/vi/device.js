@@ -34,7 +34,8 @@ export default {
         title: "Danh sách loại thiết bị",
         import: "Import loại thiết bị",
         name: "Tên loại",
-        amount: "Số lượng",
+        total: "Tổng số lượng",
+        amount: "Số lượng còn lại",
         store: "Nơi lưu trữ",
         device_group: "Nhóm thiết bị",
         display_name: "Tên hiển thị",
@@ -44,7 +45,7 @@ export default {
             name: "Nhập tên loại",
             display_name: "Nhập tên hiển thị",
             description: "Nhập mô tả",
-            amount: "Nhập số lượng"
+            total: "Nhập tổng số lượng"
         },
         import_modal: {
             error: "Lỗi",

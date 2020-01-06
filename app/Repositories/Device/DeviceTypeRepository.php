@@ -23,7 +23,7 @@ class DeviceTypeRepository extends BaseRepository
     {
         $query = $this->model
             ->select('id', 'name', 'display_name', 'amount', 'status', 'description', 'updated_at', 'created_at',
-                'store_id', 'device_group_id', 'file')
+                'store_id', 'device_group_id', 'file', 'total')
             ->where('name', 'LIKE', "%$keyword%");
 
         collect($search)->each(function ($item, $key) use ($query) {
@@ -80,9 +80,10 @@ class DeviceTypeRepository extends BaseRepository
                 }
             }
         }
-
+//        dd($arr);
         $query = $this->model;
         $arr['status'] = '1';
+        $arr['amount'] = $arr['total'];
         $query->fill($arr);
         fireEventActionLog(ADD, $query->getTable(), $query->id, $query->name, null, json_encode($query), $ip);
         return $query->save();

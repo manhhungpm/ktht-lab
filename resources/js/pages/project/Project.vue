@@ -96,6 +96,7 @@
     } from "~/helpers/bootstrap-notify";
     import ProjectModal from "./partials/ProjectModal";
     import ProjectFilter from "./partials/ProjectFilter";
+    import {formatDate, toNormalDate} from "../../helpers/formats";
 
     export default {
         name: "Project",
@@ -197,7 +198,7 @@
                     },
                     {
                         data: "device_type",
-                        title: "Số lượng",
+                        title: this.$t("project.amount"),
                         render(data) {
                             let html = "";
                             data.map(function (value) {
@@ -214,6 +215,13 @@
                                 }
                             });
                             return html;
+                        }
+                    },
+                    {
+                        data: "created_at",
+                        title: this.$t("project.start_project"),
+                        render(data) {
+                            return toNormalDate(data);
                         }
                     },
                     {

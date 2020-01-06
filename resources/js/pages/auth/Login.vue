@@ -142,7 +142,7 @@
                     this.$router.push({name: "dashboard"});
                 } else if (this.$hasRole("leader")){
                     this.$router.push({name: "project"});
-                } else if (this.$hasRole("user")){
+                } else if (this.$hasRole("user") || this.$hasRole("review")){
                     this.$router.push({name: "rent"});
                 }
 

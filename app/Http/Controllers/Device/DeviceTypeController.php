@@ -64,14 +64,14 @@ class DeviceTypeController extends Controller
 
     public function add(AddDeviceTypeRequest $request)
     {
-        $result = $this->_deviceTypeRepository->addDeviceType($request->only('name', 'display_name', 'amount', 'store_id', 'device_group_id', 'description', 'file'), $request->ip());
+        $result = $this->_deviceTypeRepository->addDeviceType($request->only('name', 'display_name', 'total', 'store_id', 'device_group_id', 'description', 'file'), $request->ip());
 
         return processCommonResponse($result);
     }
 
     public function edit(EditDeviceTypeRequest $request)
     {
-        $result = $this->_deviceTypeRepository->editDeviceType($request->only('name', 'display_name', 'amount', 'store_id', 'device_group_id', 'description', 'id', 'file'), $request->ip());
+        $result = $this->_deviceTypeRepository->editDeviceType($request->only('name', 'display_name', 'total', 'store_id', 'device_group_id', 'description', 'id', 'file'), $request->ip());
 
         return processCommonResponse($result);
     }

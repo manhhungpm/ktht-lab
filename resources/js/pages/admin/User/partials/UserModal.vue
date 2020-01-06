@@ -40,10 +40,8 @@
             </form-control>
             <class-chosen :multiple="false"
                           v-model="form.classes_result"
-                          :required="true"
+                          :required="false"
                           name="class"
-                          v-validate="'required'"
-                          :error="errors.first('class') || form.errors.get('class')"
             ></class-chosen>
             <form-control
                 v-model="form.email"

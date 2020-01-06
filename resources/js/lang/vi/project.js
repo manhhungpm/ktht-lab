@@ -6,6 +6,8 @@ export default {
     user: "Thành viên tham gia",
     device_type: "Thiết bị sử dụng",
     description: "Mô tả",
+    start_project: "Thời gian bắt đầu dự án",
+    amount: "Số lượng",
     placeholder: {
         search: "Tìm kiếm theo tên project",
         name: "Nhập tên dự án",

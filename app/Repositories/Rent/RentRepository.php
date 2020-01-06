@@ -65,7 +65,7 @@ class RentRepository extends BaseRepository
 //        dd($arr['amount']);
 
         $query = $this->model;
-        $arr['status'] = '1';
+        $arr['status'] = 2;
         $query->user_id = $arr['user']['id'];
         $query->start_date = $arr['date_range'][0];
         $query->due_date = $arr['date_range'][1];
@@ -127,6 +127,15 @@ class RentRepository extends BaseRepository
         $query = $this->model->where('id', $id);
         if ($query) {
             $query->update(['status' => INACTIVE]);
+            return $query;
+        }
+    }
+
+    public function setApproved($id)
+    {
+        $query = $this->model->where('id', $id);
+        if ($query) {
+            $query->update(['status' => ACTIVE]);
             return $query;
         }
     }

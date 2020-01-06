@@ -6,6 +6,8 @@ export default {
     user: "User",
     device_type: "Device",
     description: "Description",
+    start_date: "Start time",
+    amount: "Amount",
     placeholder: {
         search: "Enter project name",
         name: "Enter name project",

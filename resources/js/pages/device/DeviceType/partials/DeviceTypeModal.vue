@@ -33,15 +33,15 @@
             >
             </form-control>
             <form-control
-                    v-model="form.amount"
+                    v-model="form.total"
                     v-validate="'required|max:100|numeric'"
-                    :label="$t('device.device_type.amount')"
-                    name="amount"
+                    :label="$t('device.device_type.total')"
+                    name="total"
                     autocomplete="off"
-                    :placeholder="$t('device.device_type.placeholder.amount')"
-                    :error="errors.first('amount') || form.errors.get('amount')"
+                    :placeholder="$t('device.device_type.placeholder.total')"
+                    :error="errors.first('total') || form.errors.get('total')"
                     :required="true"
-                    :data-vv-as="$t('device.device_type.placeholder.amount')"
+                    :data-vv-as="$t('device.device_type.placeholder.total')"
             >
             </form-control>
             <device-group-chosen :multiple="false"
@@ -151,7 +151,7 @@
     const defaultForm = {
         id: "",
         name: "",
-        amount: null,
+        total: null,
         device_group_result: null,
         store_result: null,
         display_name: null,

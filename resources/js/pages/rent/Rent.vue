@@ -47,7 +47,6 @@
         <div class="col-md-12">
             <portlet :title="$t('rent.title')">
                 <v-button
-                    v-if="role"
                     slot="tool"
                     color="primary"
                     style-type="air"
@@ -117,6 +116,9 @@
         computed: {
             role() {
                 return this.$hasRole("admin");
+            },
+            roleReview() {
+                return this.$hasRole("review");
             },
             columns() {
                 let $this = this;
@@ -188,8 +190,10 @@
                             if (data != null) {
                                 if (data == 1) {
                                     return `<span class='text-danger'>Đang mượn</span>`;
-                                } else {
+                                } else if (data == 0) {
                                     return `<span class='text-success'>Đã trả</span>`;
+                                } else if (data == 2) {
+                                    return `<span class='text-warning'>Chờ duyệt</span>`;
                                 }
                             } else {
                                 return "-";
@@ -205,16 +209,22 @@
                         render(data) {
                             if ($this.role) {
                                 if (data == 0) {
-                                    // return generateTableAction(
-                                    //     "disable",
-                                    //     "handleDisable",
-                                    // );
                                     return "Không có hành động";
+                                } else if (data == 2) {
+                                    return "Chờ phê duyệt";
                                 } else {
                                     return (
                                         generateTableAction("edit", "handleEdit") +
                                         generateTableAction("pay", "handleActive", "success", "la-angellist", "Trả đồ")
                                     );
+                                }
+                            } else if ($this.roleReview) {
+                                if (data == 0) {
+                                    return "Không có hành động";
+                                } else if (data == 2) {
+                                    return generateTableAction("approved", "handleApproved", "warning", "la-check", "Phê duyệt mượn đồ")
+                                } else {
+                                    return "Không có quyền thực hiện hành động này"
                                 }
                             } else {
                                 return "Không có quyền thực hiện hành động này"
@@ -239,11 +249,48 @@
                         type: "click",
                         name: "handleDisable",
                         action: this.handleDisable
-                    }
+                    },
+                    {
+                        type: "click",
+                        name: "handleApproved",
+                        action: this.handleApproved
+                    },
                 ];
             }
         },
         methods: {
+            handleApproved(table, rowData) {
+                let $this = this;
+
+                bootbox.confirm({
+                    title: this.$t("label.notification"),
+                    message:
+                        'Phê duyệt đơn mượn ?',
+                    buttons: {
+                        cancel: {
+                            label: this.$t("button.cancel")
+                        },
+                        confirm: {
+                            label: this.$t("button.accept")
+                        }
+                    },
+                    callback: async function (result) {
+                        if (result) {
+                            let res = await axios.post("/rent/approved", {
+                                id: rowData.id
+                            });
+                            const {data} = res;
+
+                            if (data.code == 0) {
+                                notifyActiveSuccess();
+                                reloadIntelligently($this.$refs.table);
+                            } else {
+                                notifyTryAgain();
+                            }
+                        }
+                    }
+                });
+            },
             async search(value) {
                 this.tableFilter = value;
                 await this.$nextTick();

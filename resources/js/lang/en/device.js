@@ -35,6 +35,7 @@ export default {
         import: "Import device type",
         name: "Name",
         amount: "Amount",
+        total: "Total",
         store: "Store",
         device_group: "Device group",
         description: "Description",
@@ -44,7 +45,7 @@ export default {
             name: "Enter name",
             display_name: "Enter display name",
             description: "Enter description",
-            amount: "Enter amount"
+            total: "Enter total amount"
         },
         import_modal: {
             error: "Error",

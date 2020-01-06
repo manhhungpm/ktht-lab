@@ -79,6 +79,13 @@ class RentController extends Controller
         return processCommonResponse($result);
     }
 
+    public function approved(IdRequest $request)
+    {
+        $result = $this->_rentRepository->setApproved($request->only('id'));
+
+        return processCommonResponse($result);
+    }
+
     public function export(Request $request, Excel $excel)
     {
         $searchParams = $request->only('status', 'device_type', 'device_type_name', 'start_date', 'due_date');

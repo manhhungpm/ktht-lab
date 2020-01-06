@@ -25,7 +25,7 @@ class EditDeviceTypeRequest extends FormRequest
             'display_name'=> [
                 'required',
             ],
-            'amount' => [
+            'total' => [
                 'required',
             ],
             'store_id' => [

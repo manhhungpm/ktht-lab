@@ -35,9 +35,6 @@ class AddUserRequest extends FormRequest
             'role' => [
                 'required'
             ],
-            'class_id' => [
-                'required'
-            ],
             'expired_at'=> [
                 'required'
             ]
