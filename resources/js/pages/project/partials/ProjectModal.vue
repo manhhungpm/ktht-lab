@@ -194,6 +194,7 @@
                 array.push(item);
             },
             deleteDetails(array, index) {
+                this.$validator.reset();
                 array.splice(index, 1);
             },
             async show1(item = null) {

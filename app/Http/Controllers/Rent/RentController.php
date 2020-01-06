@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Rent;
 
 use App\Exports\Rent\RentExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Rent\EditRentRequest;
+use App\Http\Requests\Rent\AddRentRequest;
 use App\Repositories\Rent\RentRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
@@ -49,16 +51,16 @@ class RentController extends Controller
         return response()->json($arr);
     }
 
-    public function add(Request $request)
+    public function add(AddRentRequest $request)
     {
-        $result = $this->_rentRepository->addRent($request->only('user', 'description', 'date_range', 'device_type_id', 'amount'), $request->ip());
+        $result = $this->_rentRepository->addRent($request->only('user', 'description', 'date_range', 'device_type_id', 'amount', 'multi_device_details'), $request->ip());
 
         return processCommonResponse($result);
     }
 
-    public function edit(Request $request)
+    public function edit(EditRentRequest $request)
     {
-        $result = $this->_rentRepository->editRent($request->only('user', 'description', 'date_range', 'device_type_id', 'id', 'amount'), $request->ip());
+        $result = $this->_rentRepository->editRent($request->only('user', 'description', 'date_range', 'device_type_id', 'id', 'amount', 'multi_device_details'), $request->ip());
 
         return processCommonResponse($result);
     }

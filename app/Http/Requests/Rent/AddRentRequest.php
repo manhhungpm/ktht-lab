@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Project;
+namespace App\Http\Requests\Rent;
 
 use App\Models\DeviceRent;
 use App\Models\DeviceType;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddProjectRequest extends FormRequest
+class AddRentRequest extends FormRequest
 {
     public function authorize()
     {
@@ -16,9 +16,8 @@ class AddProjectRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => [
+            'date_range' => [
                 'required',
-                'unique:projects',
             ],
             'user_id' => [
                 'required',

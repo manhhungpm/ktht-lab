@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Project;
+namespace App\Http\Requests\Rent;
 
 use App\Models\DeviceType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class EditProjectRequest extends FormRequest
+class EditRentRequest extends FormRequest
 {
     public function authorize()
     {
@@ -19,9 +19,8 @@ class EditProjectRequest extends FormRequest
             'id' => [
                 'required'
             ],
-            'name' => [
+            'date_range' => [
                 'required',
-                Rule::unique('projects', 'name')->ignore($this->input('id'))
             ],
             'user_id' => [
                 'required',
@@ -80,4 +79,3 @@ class EditProjectRequest extends FormRequest
         ];
     }
 }
-

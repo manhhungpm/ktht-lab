@@ -1,41 +1,51 @@
 <template>
     <modal
-            ref="modal"
-            :title="isEdit ? $t('rent.edit') : $t('rent.add')"
-            :on-hidden="onModalHidden"
+        ref="modal"
+        :title="isEdit ? $t('rent.edit') : $t('rent.add')"
+        :on-hidden="onModalHidden"
     >
         <form
-                class="m-form m-form--state m-form--label-align-right"
-                @submit.prevent="validateForm('form')"
+            class="m-form m-form--state m-form--label-align-right"
+            @submit.prevent="validateForm('form')"
         >
             <label>{{$t('rent.user')}}<span class="text-danger"> (*)</span></label>
             <user-chosen :multiple="false" v-model="form.user"
-                         :required="true"></user-chosen>
+                         :required="true"
+                         name="user"
+                         :data-vv-as="$t('rent.user')"
+                         v-validate="'required'"
+                         :error="errors.first('user') || form.errors.get('user')"
+            ></user-chosen>
 
             <!--<device-type-chosen :multiple="true" v-model="form.device_type"-->
             <!--:required="true"></device-type-chosen>-->
 
 
             <div
-                    class="multiple-input-wrap col-12"
-                    :class="{ 'error-repeat-form-wrap': noMultiple }"
+                class="multiple-input-wrap col-12"
+                :class="{ 'error-repeat-form-wrap': noMultiple }"
             >
                 <label
-                        class="multiple-input-heading"
-                        :class="{ 'error-repeat-form-title': noMultiple }"
+                    class="multiple-input-heading"
+                    :class="{ 'error-repeat-form-title': noMultiple }"
                 >
                     <span>Chọn loại và số lượng thiết bị mượn</span>
                 </label>
                 <div class="m--margin-left-20">
                     <div
-                            v-for="(input,
+                        v-for="(input,
                             index) in form.multi_device_details"
-                            :key="index"
-                            class="form-group m-form__group row"
+                        :key="index"
+                        class="form-group m-form__group row"
                     >
                         <div class="col-md-4">
-                            <device-type-chosen :multiple="false" v-model="input.device_type"
-                                                :required="true" ></device-type-chosen>
+                            <device-type-chosen :multiple="false"
+                                                v-model="input.device_type"
+                                                :required="true"
+                                                v-validate="'required'"
+                                                :name="'multi_device_details'+index"
+                                                :error="errors.first('multi_device_details'+index) ||
+                                                form.errors.get('multi_device_details.'+index)"></device-type-chosen>
                         </div>
 
                         <div class="col-md-4">
@@ -44,13 +54,13 @@
                         </div>
 
                         <div
-                                class="col-2 form-group m-form__group full-height-col" style="margin-top: 28px"
+                            class="col-2 form-group m-form__group full-height-col" style="margin-top: 28px"
                         >
                             <div class="delete-button-wrap">
                                 <a
-                                        href="javascript:;"
-                                        class="text-danger"
-                                        @click="
+                                    href="javascript:;"
+                                    class="text-danger"
+                                    @click="
                                             deleteDetails(
                                                 form.multi_device_details,
                                                 index
@@ -63,12 +73,12 @@
                         </div>
                     </div>
                     <div
-                            class="m-form__group form-group m--margin-bottom-10"
+                        class="m-form__group form-group m--margin-bottom-10"
                     >
                         <a
-                                href="javascript:;"
-                                class=""
-                                @click="
+                            href="javascript:;"
+                            class=""
+                            @click="
                                     addDetails(form.multi_device_details, {
                                         device_type: null,
                                         amount: null
@@ -79,9 +89,9 @@
                     </div>
                 </div>
                 <div
-                        v-if="noMultiple"
-                        class="form-control-feedback error-repeat-form error-repeat-form-title"
-                        style="margin-left:15px;"
+                    v-if="noMultiple"
+                    class="form-control-feedback error-repeat-form error-repeat-form-title"
+                    style="margin-left:15px;"
                 >
                     Loại và số lượng thiết bị không được để trống
                 </div>
@@ -89,27 +99,33 @@
 
 
             <the-date-range
-                    style="margin-top: 15px"
-                    :inline="false"
-                    :label="$t('rent.date_range')"
-                    v-model="form.date_range"
-                    :format="'dd/MM/yyyy'"
+                style="margin-top: 15px"
+                :inline="false"
+                :label="$t('rent.date_range')"
+                v-model="form.date_range"
+                :format="'dd/MM/yyyy'"
+                :required="true"
+                v-validate="'required'"
+                :data-vv-as="$t('rent.date_range')"
+                name="date_range"
+                :error="errors.first('date_range') ||
+                        form.errors.get('date_range')"
             ></the-date-range>
 
             <form-control
-                    v-model="form.description"
-                    v-validate="'required|max:500'"
-                    :label="$t('common.description')"
-                    name="description"
-                    autocomplete="off"
-                    :placeholder="$t('rent.placeholder.description')"
-                    :type="'area'"
-                    :data-vv-as="$t('rent.placeholder.description')"
-                    :error="
+                v-model="form.description"
+                v-validate="'required|max:500'"
+                :label="$t('common.description')"
+                name="description"
+                autocomplete="off"
+                :placeholder="$t('rent.placeholder.description')"
+                :type="'area'"
+                :data-vv-as="$t('rent.placeholder.description')"
+                :error="
                     errors.first('description') ||
                         form.errors.get('description')
                 "
-                    :required="true"
+                :required="true"
             >
             </form-control>
 
@@ -188,7 +204,7 @@
                     //
                     item.multi_device_details = [];
                     var arr = [];
-                    item.device_type.forEach(function(value) {
+                    item.device_type.forEach(function (value) {
                         arr.push({
                             device_type: {
                                 name: value.name,
@@ -228,8 +244,7 @@
                             e.amount = null
                             return e
                         })
-                    }
-                    else {
+                    } else {
                         original.multi_device_details = [
                             {
                                 device_type: null,
@@ -278,7 +293,7 @@
                 this.isEdit = false;
                 this.$validator.reset();
             },
-            setupDataPost(){
+            setupDataPost() {
                 this.form.device_type_id = this.form.multi_device_details.map(function (e) {
                     return e['device_type']['id'];
                 })

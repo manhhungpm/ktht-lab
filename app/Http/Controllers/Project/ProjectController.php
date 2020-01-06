@@ -67,7 +67,7 @@ class ProjectController extends Controller
 
     public function edit(EditProjectRequest $request)
     {
-        $result = $this->_projectRepository->editProject($request->only('name', 'description', 'user_id', 'device_type_id', 'amount', 'id'), $request->ip());
+        $result = $this->_projectRepository->editProject($request->only('name', 'description', 'user_id', 'device_type_id', 'amount', 'id', 'multi_device_details'), $request->ip());
 
         return processCommonResponse($result);
     }
