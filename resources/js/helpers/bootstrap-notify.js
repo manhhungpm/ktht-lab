@@ -136,9 +136,27 @@ export const notifyNoRecord = () =>
         i18n.t("notification.must_select_at_least_one_record"),
         "danger"
     );
-export const notifyGiveBackSuccess = () =>
+export const notifyPaySuccess = () =>
     notify(
         i18n.t("label.notification"),
-        i18n.t("notification.give_back_success"),
+        i18n.t("notification.pay_success"),
         "success"
-    )
+    );
+export const notifyBorrowSuccess = () =>
+    notify(
+        i18n.t("label.notification"),
+        i18n.t("notification.borrow_success"),
+        "success"
+    );
+export const notifyDenySuccess = () =>
+    notify(
+        i18n.t("label.notification"),
+        i18n.t("notification.deny_success"),
+        "success"
+    );
+export const notifyApprovedSuccess = () =>
+    notify(
+        i18n.t("label.notification"),
+        i18n.t("notification.approved_success"),
+        "success"
+    );

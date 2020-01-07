@@ -41,3 +41,10 @@ export const BYPASSED = 3;
 export const NO = 0;
 export const YES = 1;
 export const NO_RESPONSE = 2;
+
+//Rent status
+export const PAY = 0;
+export const BORROW = 1;
+export const WAIT_APPROVED = 2;
+export const DENY = 3;
+export const APPROVED = 4;

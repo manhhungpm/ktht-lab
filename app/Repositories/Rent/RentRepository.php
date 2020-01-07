@@ -14,7 +14,9 @@ class RentRepository extends BaseRepository
 
     public function getList($keyword = null, $search = [], $counting = false, $limit = 10, $offset = 0, $orderBy = 'id', $orderType = 'asc')
     {
-        $query = $this->model->select('id', 'user_id', 'description', 'status', 'due_date', 'updated_at', 'created_at', 'start_date')
+        $query = $this->model
+            ->select('id', 'user_id', 'description', 'status', 'due_date', 'updated_at', 'created_at', 'start_date','priority',
+                'leader_id','project_id')
             ->where('description', 'LIKE', "%$keyword%");
 
         collect($search)->each(function ($item, $key) use ($query) {
@@ -31,11 +33,24 @@ class RentRepository extends BaseRepository
                     break;
                 case 'device_type':
                     if(isset($item)) {
+                        $query = $query->whereHas('deviceType', function ($q) use ($item) {
+                            $q->whereIn('device_type_id', $item);
+                        });
                     }
                     break;
                 case 'status':
                     if (isset($item)) {
                         $query->whereIn('status', $item);
+                    }
+                    break;
+                case 'project':
+                    if (isset($item)) {
+                        $query->whereIn('project_id', $item);
+                    }
+                    break;
+                case 'leader':
+                    if (isset($item)) {
+                        $query->whereIn('leader_id', $item);
                     }
                     break;
                 default:
@@ -44,7 +59,7 @@ class RentRepository extends BaseRepository
         });
 
         if (!$counting) {
-            $query->with('user')->with('deviceType');
+            $query->with('user')->with('deviceType')->with('project')->with('leader');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);
@@ -62,10 +77,10 @@ class RentRepository extends BaseRepository
 
     public function addRent($arr, $ip)
     {
-//        dd($arr['amount']);
-
+//        dd($arr);
         $query = $this->model;
-        $arr['status'] = 2;
+        $arr['status'] = WAIT_APPROVED;
+        $query->priority = $arr['priority']['id'];
         $query->user_id = $arr['user']['id'];
         $query->start_date = $arr['date_range'][0];
         $query->due_date = $arr['date_range'][1];
@@ -91,6 +106,7 @@ class RentRepository extends BaseRepository
         $query = $this->model->find($arr['id']);
         $oldUser = json_encode($query);
         if ($query != null) {
+            $query->priority = $arr['priority']['id'];
             $query->user_id = $arr['user']['id'];
             $query->start_date = $arr['date_range'][0];
             $query->due_date = $arr['date_range'][1];
@@ -113,20 +129,20 @@ class RentRepository extends BaseRepository
         return false;
     }
 
-    public function setActive($id)
+    public function setPay($id)
     {
         $query = $this->model->where('id', $id);
         if ($query) {
-            $query->update(['status' => ACTIVE]);
+            $query->update(['status' => PAY]);
             return $query;
         }
     }
 
-    public function setDisable($id)
+    public function setBorrow($id)
     {
         $query = $this->model->where('id', $id);
         if ($query) {
-            $query->update(['status' => INACTIVE]);
+            $query->update(['status' => BORROW]);
             return $query;
         }
     }
@@ -135,7 +151,16 @@ class RentRepository extends BaseRepository
     {
         $query = $this->model->where('id', $id);
         if ($query) {
-            $query->update(['status' => ACTIVE]);
+            $query->update(['status' => APPROVED]);
+            return $query;
+        }
+    }
+
+    public function setDeny($id)
+    {
+        $query = $this->model->where('id', $id);
+        if ($query) {
+            $query->update(['status' => DENY]);
             return $query;
         }
     }

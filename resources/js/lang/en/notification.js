@@ -14,5 +14,8 @@ export default {
     unlock_success: "Successfully unlocked",
     bypass_success: "Successfully bypassed",
     delete_success: "Delete Success",
-    give_back_success: "Give back success"
+    pay_success: "Give back success",
+    borrow_success: "Borrow success",
+    approved_success: "Approved success",
+    deny_success: "Deny success"
 };

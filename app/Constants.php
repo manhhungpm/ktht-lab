@@ -36,3 +36,10 @@ define('ADD', 'Add');
 define('UPDATE', 'Update');
 define('DELETE', 'Delete');
 define('STATISTIC','Statistic');
+
+//Rent status
+define("PAY",0);
+define("BORROW",1);
+define("WAIT_APPROVED",2);
+define("DENY",3);
+define("APPROVED",4);

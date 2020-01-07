@@ -25,5 +25,7 @@ export default {
     device_group: "Nhóm thiết bị",
     store: "Nơi lưu trữ",
     device_type: "Loại thiết bị",
-    status: "Trạng thái"
+    status: "Trạng thái",
+    project: "Dự án",
+    leader: "Người phê duyệt"
 };

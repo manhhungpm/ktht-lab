@@ -8,6 +8,7 @@ export default {
     description: "Mô tả",
     start_project: "Thời gian bắt đầu dự án",
     amount: "Số lượng",
+    leader: "Trưởng nhóm",
     placeholder: {
         search: "Tìm kiếm theo tên project",
         name: "Nhập tên dự án",

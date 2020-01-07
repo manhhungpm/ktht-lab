@@ -45,6 +45,22 @@
                 ></the-date-range>
             </div>
 
+            <div class="col-md-6">
+                <project-chosen
+                    v-model="form.project"
+                    :multiple="true"
+                    :required="false"
+                ></project-chosen>
+            </div>
+
+            <div class="col-md-6">
+                <leader-chosen
+                    v-model="form.leader"
+                    :multiple="true"
+                    :required="false"
+                ></leader-chosen>
+            </div>
+
 
             <div class="col-md-12 d-flex justify-content-center">
                 <v-button
@@ -94,15 +110,19 @@ import { downloadFile } from "~/helpers/downloadFile";
 import { notify, notifyTryAgain } from "~/helpers/bootstrap-notify";
 import TheDateRange from "~/components/common/TheDateRange";
 import DeviceTypeChosen from "../../../components/elements/chosens/DeviceTypeChosen";
+import ProjectChosen from "../../../components/elements/chosens/ProjectChosen";
+import LeaderChosen from "../../../components/elements/chosens/LeaderChosen";
 const defaultForm = {
     start_date: null,
     due_date: null,
     device_type: null,
-    status: null
+    status: null,
+    project: null,
+    leader: null
 };
 export default {
     name: "RentFilter",
-    components: {DeviceTypeChosen, TheDateRange },
+    components: {LeaderChosen, ProjectChosen, DeviceTypeChosen, TheDateRange },
     props: {
         onActionSuccess: {
             type: Function,
@@ -128,6 +148,18 @@ export default {
                     {
                         id: 0,
                         text: "Đã trả"
+                    },
+                    {
+                        id: 2,
+                        text: "Chờ phê duyệt"
+                    },
+                    {
+                        id: 3,
+                        text: "Bị từ chối"
+                    },
+                    {
+                        id: 4,
+                        text: "Đã phê duyệt"
                     }
                 ]
             }
@@ -166,6 +198,18 @@ export default {
             }
             if (this.form.device_type) {
                 searchParams.device_type = this.form.device_type.map(e => {
+                    return e.id;
+                });
+            }
+
+            if (this.form.project) {
+                searchParams.project = this.form.project.map(e => {
+                    return e.id;
+                });
+            }
+
+            if (this.form.leader) {
+                searchParams.leader = this.form.leader.map(e => {
                     return e.id;
                 });
             }

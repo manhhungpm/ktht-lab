@@ -21,7 +21,7 @@ class Role extends Model
 
     //new
     public const LEADER = 'leader';
-    public const REVIEW = 'review';
+    public const STOCKER = 'stocker';
 
 //    public function userRole()
 //    {

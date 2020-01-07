@@ -20,6 +20,12 @@
                 :data-vv-as="$t('project.placeholder.name')"
             >
             </form-control>
+
+            <leader-chosen v-model="form.leader_result" :multiple="false" :required="true" name="leader"
+                           :data-vv-as="$t('project.leader')"
+                           v-validate="'required'"
+                           :error="errors.first('leader') || form.errors.get('leader')"></leader-chosen>
+
             <label>{{$t('project.user')}}<span class="text-danger"> (*)</span></label>
             <user-chosen :multiple="true"
                          v-model="form.user_result"
@@ -153,11 +159,13 @@
     } from "~/helpers/bootstrap-notify";
     import UserChosen from "../../../components/elements/chosens/UserChosen";
     import DeviceTypeChosen from "../../../components/elements/chosens/DeviceTypeChosen";
+    import LeaderChosen from "../../../components/elements/chosens/LeaderChosen";
 
     const defaultForm = {
         id: "",
         name: "",
         description: "",
+        leader_result: null,
         user_result: null,
         device_type_result: null,
         multi_device_details: [
@@ -169,7 +177,7 @@
     };
     export default {
         name: "ProjectModal",
-        components: {DeviceTypeChosen, UserChosen, FormControl},
+        components: {LeaderChosen, DeviceTypeChosen, UserChosen, FormControl},
         props: {
             onActionSuccess: {
                 type: Function,
@@ -201,6 +209,12 @@
                 if (item != null) {
                     // item.device_type_result = item.device_type;
 
+                    item.leader_result = {
+                        id: item.leader.id,
+                        text: item.leader.name,
+                        name: item.leader.name
+                    };
+
                     console.log(item)
                     //
                     item.multi_device_details = [];
@@ -229,6 +243,12 @@
             async show(item = null) {
                 if (item != null) {
                     this.isEdit = true;
+
+                    item.leader_result = {
+                        id: item.leader.id,
+                        text: item.leader.name,
+                        name: item.leader.name
+                    };
 
                     //Load user
                     item.user_result = item.user;
@@ -301,6 +321,9 @@
             async addProject() {
                 this.setupDataPost();
 
+                this.form.leader_id = this.form.leader_result.id;
+
+
                 // this.form.device_type_id = this.form.device_type_result.map(function (e) {
                 //     return e['id'];
                 // })
@@ -334,6 +357,9 @@
                 this.form.user_id = this.form.user_result.map(function (e) {
                     return e['id'];
                 })
+
+                this.form.leader_id = this.form.leader_result.id;
+
 
                 try {
                     const res = await this.form.post("/project/edit");

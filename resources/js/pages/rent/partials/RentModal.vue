@@ -17,6 +17,24 @@
                          :error="errors.first('user') || form.errors.get('user')"
             ></user-chosen>
 
+            <project-chosen v-model="form.project_result" :multiple="false"></project-chosen>
+
+            <leader-chosen v-model="form.leader_result" :multiple="false"></leader-chosen>
+
+            <form-control
+                v-model="form.priorityId"
+                v-validate="'required'"
+                :label="'Độ ưu tiên'"
+                :data-vv-as="'Độ ưu tiên'"
+                :required="true"
+                name="priority"
+                :type="'select'"
+                :select-options="priorityOptions"
+                :error="
+                    errors.first('priority') || form.errors.get('priority')
+                "
+            ></form-control>
+
             <!--<device-type-chosen :multiple="true" v-model="form.device_type"-->
             <!--:required="true"></device-type-chosen>-->
 
@@ -154,6 +172,8 @@
     import UserChosen from "../../../components/elements/chosens/UserChosen";
     import DeviceTypeChosen from "../../../components/elements/chosens/DeviceTypeChosen";
     import TheDateRange from "../../../components/common/TheDateRange";
+    import ProjectChosen from "../../../components/elements/chosens/ProjectChosen";
+    import LeaderChosen from "../../../components/elements/chosens/LeaderChosen";
 
     const defaultForm = {
         id: null,
@@ -161,6 +181,9 @@
         description: null,
         date_range: null,
         device_type: null,
+        project_result: null,
+        leader_result: null,
+        priorityId: null,
         multi_device_details: [
             {
                 device_type: null,
@@ -170,7 +193,9 @@
     };
     export default {
         name: "RentModal",
-        components: {TheDateRange, DeviceTypeChosen, UserChosen, FormControl},
+        components: {
+            LeaderChosen, ProjectChosen, TheDateRange, DeviceTypeChosen, UserChosen, FormControl
+        },
         props: {
             onActionSuccess: {
                 type: Function,
@@ -182,7 +207,26 @@
             return {
                 form: new Form(defaultForm),
                 formLabelWidth: FORM_LABEL_WIDTH,
-                isEdit: false
+                isEdit: false,
+                priorityOptions: {
+                    placeholder: 'Chọn mức độ ưu tiên',
+                    multiple: false,
+                    searchable: false,
+                    options: [
+                        {
+                            id: 1,
+                            text: "Cao"
+                        },
+                        {
+                            id: 2,
+                            text: "Trung bình"
+                        },
+                        {
+                            id: 3,
+                            text: "Thấp"
+                        },
+                    ]
+                }
             };
         },
         computed: {
@@ -234,7 +278,6 @@
                 if (item != null) {
                     this.isEdit = true;
                     item.date_range = [item.start_date, item.due_date];
-
 
                     //Load thiết bị và số lượng
                     let original = _.cloneDeep(item)
@@ -303,7 +346,9 @@
             },
             async addRent() {
                 this.setupDataPost();
-
+                this.form.project_id = this.form.project_result.id;
+                this.form.leader_id = this.form.leader_result.id;
+                this.form.priority = this.form.priorityId.id;
                 // this.form.device_type_id = this.form.device_type.map(function (e) {
                 //     return e['id'];
                 // })
@@ -329,6 +374,9 @@
             },
             async editRent() {
                 this.setupDataPost();
+                this.form.project_id = this.form.project_result.id;
+                this.form.leader_id = this.form.leader_result.id;
+                this.form.priority = this.form.priorityId.id;
                 // this.form.device_type_id = this.form.device_type.map(function (e) {
                 //     return e['id'];
                 // })

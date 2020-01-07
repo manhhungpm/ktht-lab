@@ -69,7 +69,7 @@ export default [
     {
         title: "menu.rent",
         icon: "flaticon-calendar-with-a-clock-time-tools",
-        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN, ROLE.ROLE_LEADER, ROLE.ROLE_USER, ROLE.ROLE_REVIEW],
+        roles: [ROLE.ROLE_ROOT, ROLE.ROLE_ADMIN, ROLE.ROLE_LEADER, ROLE.ROLE_USER, ROLE.ROLE_STOCKER],
         route: "/rent"
     }
 ];

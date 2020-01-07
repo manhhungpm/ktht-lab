@@ -20,7 +20,7 @@ class ProjectRepository extends BaseRepository
 
     public function getList($keyword = null, $search = [], $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
     {
-        $query = $this->model->select('id', 'name', 'description', 'status', 'created_at', 'updated_at')
+        $query = $this->model->select('id', 'name', 'description', 'status', 'created_at', 'updated_at','leader_id')
             ->where('name', 'LIKE', "%$keyword%");
 
 //        dd($search);
@@ -51,7 +51,7 @@ class ProjectRepository extends BaseRepository
         });
 
         if (!$counting) {
-            $query->with('user')->with('deviceType');
+            $query->with('user')->with('deviceType')->with('leader');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);

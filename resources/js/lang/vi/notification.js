@@ -17,5 +17,8 @@ export default {
     unlock_success: "Mở khóa thành công",
     bypass_success: "Bỏ qua thành công",
     delete_success: "Xóa thành công",
-    give_back_success: "Trả đồ thành công"
+    pay_success: "Trả đồ thành công",
+    borrow_success: "Cho mượn thành công",
+    approved_success: "Phê duyệt thành công",
+    deny_success: "Từ chối thành công"
 };

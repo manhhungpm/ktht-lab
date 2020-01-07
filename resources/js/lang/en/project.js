@@ -8,6 +8,7 @@ export default {
     description: "Description",
     start_date: "Start time",
     amount: "Amount",
+    leader: "Leader",
     placeholder: {
         search: "Enter project name",
         name: "Enter name project",

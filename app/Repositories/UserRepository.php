@@ -95,8 +95,8 @@ class UserRepository extends BaseRepository
     public function getList($keyword = null, $search = [], $counting = false, $limit = 10, $offset = 0, $orderBy = 'when_updated', $orderType = 'desc')
     {
 
-        $query = User::select('id', 'name', 'display_name','email',
-            'active', 'expired_at', 'who_updated', 'updated_at', 'expired_at', 'mobile_phone', 'version','created_at','who_created','class_id');
+        $query = User::select('id', 'name', 'display_name', 'email',
+            'active', 'expired_at', 'who_updated', 'updated_at', 'expired_at', 'mobile_phone', 'version', 'created_at', 'who_created', 'class_id');
 
 
         //OK
@@ -166,7 +166,7 @@ class UserRepository extends BaseRepository
         }
     }
 
-    public function addUser($arr,$ip)
+    public function addUser($arr, $ip)
     {
 //        dd($arr);
 
@@ -191,7 +191,7 @@ class UserRepository extends BaseRepository
 
     }
 
-    public function editUser($arr,$ip)
+    public function editUser($arr, $ip)
     {
         $role = $arr['role'];
         $user = User::find($arr['id']);
@@ -226,11 +226,33 @@ class UserRepository extends BaseRepository
 
     public function listingAll($isCounting = false, $keyword = null, $limit = 10, $offset = 0)
     {
-        $query = User::where('name', 'LIKE', "%$keyword%")
-            ->orWhere('display_name', 'LIKE', "%$keyword%");
+        $query = User::where('name', 'LIKE', "%$keyword%")->where('active',ACTIVE)
+            ->whereHas('userRole', function ($q) {
+                $q->where('role_id', 3);
+            });
 
         if (!$isCounting) {
             $query->select('id', 'name', 'display_name')
+                ->skip($offset)
+                ->take($limit)
+                ->orderBy('name', 'asc');
+        } else {
+            return $query->count();
+        }
+
+        return $query->get();
+    }
+
+    public function listingLeaderAll($isCounting = false, $keyword = null, $limit = 10, $offset = 0)
+    {
+        $query = User::where('name', 'LIKE', "%$keyword%")
+            ->where('active', ACTIVE)
+            ->whereHas('userRole', function ($q) {
+                $q->where('role_id', 24);
+            })
+        ;
+        if (!$isCounting) {
+            $query->select('id', 'name')
                 ->skip($offset)
                 ->take($limit)
                 ->orderBy('name', 'asc');

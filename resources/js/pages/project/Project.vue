@@ -134,6 +134,10 @@
                         className: "wrap-text"
                     },
                     {
+                        data: "leader.name",
+                        title: "Leader",
+                    },
+                    {
                         data: "user",
                         title: "Tài khoản thành viên",
                         render(data) {

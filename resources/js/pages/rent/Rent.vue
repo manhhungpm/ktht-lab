@@ -90,12 +90,14 @@
     } from "~/helpers/tableHelper";
     import {
         notifyTryAgain,
-        notifyActiveSuccess,
-        notifyDisableSuccess,
-        notifyGiveBackSuccess
+        notifyBorrowSuccess,
+        notifyApprovedSuccess,
+        notifyDenySuccess,
+        notifyPaySuccess
     } from "~/helpers/bootstrap-notify";
     import RentModal from "./partials/RentModal";
     import RentFilter from "./partials/RentFilter";
+    import {APPROVED, BORROW, DENY, PAY, WAIT_APPROVED} from "../../constants/constant";
 
     export default {
         name: "Rent",
@@ -114,11 +116,14 @@
             };
         },
         computed: {
-            role() {
+            roleAdmin() {
                 return this.$hasRole("admin");
             },
-            roleReview() {
-                return this.$hasRole("review");
+            roleLeader() {
+                return this.$hasRole("leader");
+            },
+            roleStocker() {
+                return this.$hasRole("stocker");
             },
             columns() {
                 let $this = this;
@@ -188,17 +193,43 @@
                         title: this.$t("common.status"),
                         render(data) {
                             if (data != null) {
-                                if (data == 1) {
-                                    return `<span class='text-danger'>Đang mượn</span>`;
-                                } else if (data == 0) {
-                                    return `<span class='text-success'>Đã trả</span>`;
-                                } else if (data == 2) {
-                                    return `<span class='text-warning'>Chờ duyệt</span>`;
+                                if (data == BORROW) {
+                                    return `<span class='text-warning'>Đang mượn</span>`;
+                                } else if (data == PAY) {
+                                    return `<span class='text-primary'>Đã trả</span>`;
+                                } else if (data == WAIT_APPROVED) {
+                                    return `<span class='text-accent'>Chờ duyệt</span>`;
+                                } else if (data == DENY) {
+                                    return `<span class='text-danger'>Từ chối duyệt</span>`;
+                                } else if (data == APPROVED) {
+                                    return `<span class='text-success'>Được phê duyệt</span>`;
                                 }
                             } else {
                                 return "-";
                             }
                         }
+                    },
+                    {
+                        data: "project.name",
+                        title: "Dự án"
+                    },
+                    {
+                        data: "priority",
+                        title: "Độ ưu tiên",
+                        render(data) {
+                            switch (data) {
+                                case 1:
+                                    return "Cao";
+                                case 2:
+                                    return "Trung bình";
+                                case 3:
+                                    return "Thấp;"
+                            }
+                        }
+                    },
+                    {
+                        data: "leader.name",
+                        title: "Người phê duyệt"
                     },
                     {
                         data: "status",
@@ -207,27 +238,61 @@
                         className: "text-center",
                         responsivePriority: 1,
                         render(data) {
-                            if ($this.role) {
-                                if (data == 0) {
-                                    return "Không có hành động";
-                                } else if (data == 2) {
-                                    return "Chờ phê duyệt";
-                                } else {
-                                    return (
-                                        generateTableAction("edit", "handleEdit") +
-                                        generateTableAction("pay", "handleActive", "success", "la-angellist", "Trả đồ")
-                                    );
+                            if ($this.roleAdmin) { //Quyền admin
+                                switch (data) {
+                                    case PAY: //đã trả -> không có hành động nào khác
+                                        return "Không có hành động sau khi đã trả thiết bị";
+                                    case WAIT_APPROVED: //chờ duyệt -> có thể duyệt hoặc từ chối
+                                        return (
+                                            generateTableAction("deny", "handleDeny","danger","la-meh-o","Từ chối") +
+                                            generateTableAction("approved", "handleApproved", "success", "la-smile-o", "Phê duyệt")
+                                        );
+                                    case BORROW: //đang mượn -> có thể edit hoặc trả
+                                        return (
+                                            generateTableAction("edit", "handleEdit") +
+                                            generateTableAction("pay", "handlePay", "success", "la-check", "Trả đồ")
+                                        );
+                                    case DENY: //từ chối
+                                        return "Bị từ chối phê duyệt";
+                                    case APPROVED: //đã được phê duyệt ->  cho mượn
+                                        return (generateTableAction("edit", "handleEdit") +
+                                            generateTableAction("borrow", "handleBorrow", "success", "la-cart-plus", "Cho mượn"))
                                 }
-                            } else if ($this.roleReview) {
-                                if (data == 0) {
-                                    return "Không có hành động";
-                                } else if (data == 2) {
-                                    return generateTableAction("approved", "handleApproved", "warning", "la-check", "Phê duyệt mượn đồ")
-                                } else {
-                                    return "Không có quyền thực hiện hành động này"
+                            } else if ($this.roleLeader) {
+                                switch (data) {
+                                    case PAY: //đã trả -> không có hành động nào khác
+                                        return "Không có hành động sau khi đã trả thiết bị";
+                                    case WAIT_APPROVED: //chờ duyệt -> có thể duyệt hoặc từ chối
+                                        return (
+                                            generateTableAction("deny", "handleDeny","danger","la-meh-o","Từ chối") +
+                                            generateTableAction("approved", "handleApproved", "success", "la-smile-o", "Phê duyệt")
+                                        );
+                                    case BORROW: //đang mượn -> có thể edit hoặc trả
+                                        return "Không có quyền thực hiện hành động này vì bạn chỉ có quyền Trưởng nhóm"
+                                    case DENY: //từ chối
+                                        return "Bị từ chối phê duyệt";
+                                    case APPROVED: //đã được phê duyệt ->  cho mượn
+                                        return "Không có quyền thực hiện hành động này vì bạn chỉ có quyền Trưởng nhóm"
+                                }
+                            } else if ($this.roleStocker) {
+                                switch (data) {
+                                    case PAY: //đã trả -> không có hành động nào khác
+                                        return "Không có hành động sau khi đã trả thiết bị";
+                                    case WAIT_APPROVED: //chờ duyệt -> có thể duyệt hoặc từ chối
+                                        return "Không có quyền thực hiện hành động này vì bạn chỉ có quyền Thủ kho"
+                                    case BORROW: //đang mượn -> có thể edit hoặc trả
+                                        return (
+                                            generateTableAction("edit", "handleEdit") +
+                                            generateTableAction("pay", "handlePay", "success", "la-check", "Trả đồ")
+                                        );
+                                    case DENY: //từ chối
+                                        return "Bị từ chối phê duyệt";
+                                    case APPROVED: //đã được phê duyệt ->  cho mượn
+                                        return (generateTableAction("edit", "handleEdit") +
+                                            generateTableAction("borrow", "handleBorrow", "success", "la-cart-plus", "Cho mượn"))
                                 }
                             } else {
-                                return "Không có quyền thực hiện hành động này"
+                                return "Không có quyền thực hiện hành động này vì bạn chỉ có quyền Người dùng"
                             }
                         }
                     }
@@ -242,23 +307,60 @@
                     },
                     {
                         type: "click",
-                        name: "handleActive",
-                        action: this.handleActive
+                        name: "handleBorrow",
+                        action: this.handleBorrow
                     },
                     {
                         type: "click",
-                        name: "handleDisable",
-                        action: this.handleDisable
+                        name: "handlePay",
+                        action: this.handlePay
                     },
                     {
                         type: "click",
                         name: "handleApproved",
                         action: this.handleApproved
                     },
+                    {
+                        type: "click",
+                        name: "handleDeny",
+                        action: this.handleDeny
+                    },
                 ];
             }
         },
         methods: {
+            handleDeny(table, rowData) {
+                let $this = this;
+
+                bootbox.confirm({
+                    title: this.$t("label.notification"),
+                    message:
+                        'Từ chối phê duyệt đơn mượn ?',
+                    buttons: {
+                        cancel: {
+                            label: this.$t("button.cancel")
+                        },
+                        confirm: {
+                            label: this.$t("button.accept")
+                        }
+                    },
+                    callback: async function (result) {
+                        if (result) {
+                            let res = await axios.post("/rent/deny", {
+                                id: rowData.id
+                            });
+                            const {data} = res;
+
+                            if (data.code == 0) {
+                                notifyDenySuccess();
+                                reloadIntelligently($this.$refs.table);
+                            } else {
+                                notifyTryAgain();
+                            }
+                        }
+                    }
+                });
+            },
             handleApproved(table, rowData) {
                 let $this = this;
 
@@ -282,7 +384,7 @@
                             const {data} = res;
 
                             if (data.code == 0) {
-                                notifyActiveSuccess();
+                                notifyApprovedSuccess();
                                 reloadIntelligently($this.$refs.table);
                             } else {
                                 notifyTryAgain();
@@ -313,7 +415,7 @@
             handleEdit(table, rowData) {
                 this.$refs.addModal.show(rowData);
             },
-            async handleActive(table, rowData) {
+            async handlePay(table, rowData) {
                 let $this = this;
 
                 bootbox.confirm({
@@ -330,13 +432,13 @@
                     },
                     callback: async function (result) {
                         if (result) {
-                            let res = await axios.post("/rent/active", {
+                            let res = await axios.post("/rent/pay", {
                                 id: rowData.id
                             });
                             const {data} = res;
 
                             if (data.code == 0) {
-                                notifyGiveBackSuccess();
+                                notifyPaySuccess();
                                 reloadIntelligently($this.$refs.table);
                             } else {
                                 notifyTryAgain();
@@ -345,13 +447,13 @@
                     }
                 });
             },
-            async handleDisable(table, rowData) {
+            async handleBorrow(table, rowData) {
                 let $this = this;
 
                 bootbox.confirm({
                     title: this.$t("label.notification"),
                     message:
-                        'Chuyển trạng thái trả thiết bị?',
+                        'Chuyển trạng thái cho mượn thiết bị?',
                     buttons: {
                         cancel: {
                             label: this.$t("button.cancel")
@@ -362,13 +464,13 @@
                     },
                     callback: async function (result) {
                         if (result) {
-                            let res = await axios.post("/rent/disable", {
+                            let res = await axios.post("/rent/borrow", {
                                 id: rowData.id
                             });
                             const {data} = res;
 
                             if (data.code == 0) {
-                                notifyDisableSuccess();
+                                notifyBorrowSuccess();
                                 reloadIntelligently($this.$refs.table);
                             } else {
                                 notifyTryAgain();

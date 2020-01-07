@@ -109,4 +109,21 @@ class UserController extends Controller
             'total' => $total
         ]);
     }
+
+    public function listingLeaderAll(Request $request)
+    {
+        $length = 10;
+
+        $page = $request->input('page');
+        $search = $request->input('search');
+
+
+        $data = $this->userRepository->listingLeaderAll(false, $search, $length, $page * $length);
+        $total = $this->userRepository->listingLeaderAll(true, $search);
+
+        return response()->json([
+            'results' => $data,
+            'total' => $total
+        ]);
+    }
 }

@@ -25,7 +25,7 @@ class RentController extends Controller
     {
         $params = getDataTableRequestParams($request);
 
-        $searchParams = $request->only('status', 'due_date', 'start_date', 'device_type');
+        $searchParams = $request->only('status', 'due_date', 'start_date', 'device_type', 'project', 'leader');
 
         $total = $this->_rentRepository->getList(
             $params['keyword'],
@@ -53,28 +53,30 @@ class RentController extends Controller
 
     public function add(AddRentRequest $request)
     {
-        $result = $this->_rentRepository->addRent($request->only('user', 'description', 'date_range', 'device_type_id', 'amount', 'multi_device_details'), $request->ip());
+        $result = $this->_rentRepository->addRent($request->only('user', 'description', 'date_range', 'device_type_id', 'amount', 'multi_device_details', 'project_id',
+            'leader_id', 'priority'), $request->ip());
 
         return processCommonResponse($result);
     }
 
     public function edit(EditRentRequest $request)
     {
-        $result = $this->_rentRepository->editRent($request->only('user', 'description', 'date_range', 'device_type_id', 'id', 'amount', 'multi_device_details'), $request->ip());
+        $result = $this->_rentRepository->editRent($request->only('user', 'description', 'date_range', 'device_type_id', 'id', 'amount', 'multi_device_details', 'project_id',
+            'leader_id', 'priority'), $request->ip());
 
         return processCommonResponse($result);
     }
 
-    public function active(IdRequest $request)
+    public function pay(IdRequest $request)
     {
-        $result = $this->_rentRepository->setActive($request->only('id'));
+        $result = $this->_rentRepository->setPay($request->only('id'));
 
         return processCommonResponse($result);
     }
 
-    public function disable(IdRequest $request)
+    public function borrow(IdRequest $request)
     {
-        $result = $this->_rentRepository->setDisable($request->only('id'));
+        $result = $this->_rentRepository->setBorrow($request->only('id'));
 
         return processCommonResponse($result);
     }
@@ -82,6 +84,13 @@ class RentController extends Controller
     public function approved(IdRequest $request)
     {
         $result = $this->_rentRepository->setApproved($request->only('id'));
+
+        return processCommonResponse($result);
+    }
+
+    public function deny(IdRequest $request)
+    {
+        $result = $this->_rentRepository->setDeny($request->only('id'));
 
         return processCommonResponse($result);
     }

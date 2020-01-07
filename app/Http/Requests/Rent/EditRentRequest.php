@@ -41,13 +41,13 @@ class EditRentRequest extends FormRequest
                     for ($i = 0; $i < count($details); $i++) {
                         $amountDevice = DeviceType::select('id', 'amount')->where('id', $value1['device_type']['id'])->get()->toArray();
                         if ($value1['amount'] > $amountDevice[0]['amount']) {
-                            return $fail('Không đủ thiết bị trong kho');
+                            return $fail('Không đủ thiết bị trong kho. Thiết bị chỉ còn: ' . $amountDevice[0]['amount']);
                         } else {
                             $amountDeviceRent = $value1['pivot']['amount']; //Đang mượn bao nhiêu
                             if ($amountDeviceRent < $value1['amount']) {     //Nếu mượn thêm thiết bị
 
                                 //Tính chênh lệch
-                                $offset= $value1['amount'] - $amountDeviceRent ;
+                                $offset = $value1['amount'] - $amountDeviceRent;
 
                                 $newAmount = $amountDevice[0]['amount'] - $offset;
                                 $query = DeviceType::select('id', 'amount')
@@ -56,7 +56,7 @@ class EditRentRequest extends FormRequest
                             } else {   //Nếu trả bớt thiết bị đi
 
                                 //Tính chênh lệch
-                                $offset= $amountDeviceRent - $value1['amount'] ;
+                                $offset = $amountDeviceRent - $value1['amount'];
 
                                 $newAmount = $amountDevice[0]['amount'] + $offset;
                                 $query = DeviceType::select('id', 'amount')
