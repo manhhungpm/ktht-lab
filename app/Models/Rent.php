@@ -10,7 +10,7 @@ class Rent extends Model
     protected $table = 'rent';
 
     protected $fillable = ['id', 'user_id', 'description', 'status', 'start_date', 'dua_date',
-        'created_at', 'updated_at', 'project_id', 'leader_id', 'priority'];
+        'created_at', 'updated_at', 'project_id', 'leader_id', 'priority', 'number_of_email'];
 
     public function user()
     {
@@ -23,11 +23,13 @@ class Rent extends Model
             'device_type_id')->withPivot('amount');
     }
 
-    public function project(){
-        return $this->hasOne(Project::class,'id','project_id');
+    public function project()
+    {
+        return $this->hasOne(Project::class, 'id', 'project_id');
     }
 
-    public function leader(){
-        return $this->hasOne(User::class,'id','leader_id');
+    public function leader()
+    {
+        return $this->hasOne(User::class, 'id', 'leader_id');
     }
 }

@@ -6,6 +6,7 @@ use App\Exports\Rent\RentExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Rent\EditRentRequest;
 use App\Http\Requests\Rent\AddRentRequest;
+use App\Models\Rent;
 use App\Repositories\Rent\RentRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
@@ -101,12 +102,15 @@ class RentController extends Controller
 
     public function sendEmail(Request $request)
     {
-        $email = $request->only('email');
-//        dd($email);
-        $name = 'Hung';
-        Mail::to('hungnm.nuce60@gmail.com')->send(new SendMailable($name));
+        $arr = $request->only('data');
+        $email = $arr['data']['user']['email'];
+        $numberOfEmail = $arr['data']['number_of_email'];
+        $id = $arr['data']['id'];
+        $name = $numberOfEmail + 1;
+        Mail::to($email)->send(new SendMailable($name));
+        $query = Rent::select('id', 'number_of_email')->where('id', $id)->update(['number_of_email' => $name]);
 
-        return processCommonResponse(true,null);
+        return processCommonResponse(true, null);
     }
 
     public function export(Request $request, Excel $excel)

@@ -2,8 +2,11 @@
 
 namespace App\Repositories\Rent;
 
+use App\Mail\SendMailAddRent;
 use App\Models\Rent;
 use App\Repositories\BaseRepository;
+use App\User;
+use Illuminate\Support\Facades\Mail;
 
 class RentRepository extends BaseRepository
 {
@@ -16,7 +19,7 @@ class RentRepository extends BaseRepository
     {
         $query = $this->model
             ->select('id', 'user_id', 'description', 'status', 'due_date', 'updated_at', 'created_at', 'start_date','priority',
-                'leader_id','project_id')
+                'leader_id','project_id','number_of_email')
             ->where('description', 'LIKE', "%$keyword%");
 
         collect($search)->each(function ($item, $key) use ($query) {
@@ -77,13 +80,19 @@ class RentRepository extends BaseRepository
 
     public function addRent($arr, $ip)
     {
-//        dd($arr);
+        //mail
+        $leader = User::select('id','email')->where('id',$arr['leader_id'])->get()->toArray();
+        $email = $leader[0]['email'];
+        $param = $arr['user']['name'];
+        //
+
         $query = $this->model;
         $arr['status'] = WAIT_APPROVED;
         $query->priority = $arr['priority']['id'];
         $query->user_id = $arr['user']['id'];
         $query->start_date = $arr['date_range'][0];
         $query->due_date = $arr['date_range'][1];
+        $query->number_of_email = 0;
         $query->fill($arr);
         if ($query->save()) {
             if ($arr['device_type_id']) {
@@ -95,6 +104,9 @@ class RentRepository extends BaseRepository
                 }
 
                 fireEventActionLog(ADD, $query->getTable(), $query->id, $arr['user']['name'], null, json_encode($query), $ip);
+
+                //Gửi email
+                Mail::to($email)->send(new SendMailAddRent($param));
             }
             return true;
         }

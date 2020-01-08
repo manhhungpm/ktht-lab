@@ -239,6 +239,11 @@
                         title: "Người phê duyệt"
                     },
                     {
+                        data: "number_of_email",
+                        title: "Số lần gửi mail cảnh báo",
+                        className: "wrap-text"
+                    },
+                    {
                         data: "status",
                         title: this.$t("common.action"),
                         orderable: false,
@@ -368,7 +373,7 @@
                     callback: async function (result) {
                         if (result) {
                             let res = await axios.post("/rent/send-email", {
-                                email: rowData.user.email
+                                data: rowData
                             });
                             const {data} = res;
 

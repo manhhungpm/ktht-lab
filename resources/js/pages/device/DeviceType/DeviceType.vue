@@ -3,18 +3,18 @@
         <div class="col-md-12">
             <div class="m-portlet__body">
                 <div
-                        id="m_accordion_5"
-                        class="m-accordion m-accordion--default m-accordion--toggle-arrow"
-                        role="tablist"
+                    id="m_accordion_5"
+                    class="m-accordion m-accordion--default m-accordion--toggle-arrow"
+                    role="tablist"
                 >
                     <div class="m-accordion__item m-accordion__item--brand">
                         <div
-                                id="m_accordion_5_item_3_head"
-                                class="m-accordion__item-head collapsed"
-                                role="tab"
-                                data-toggle="collapse"
-                                href="#m_accordion_5_item_3_body"
-                                aria-expanded="true"
+                            id="m_accordion_5_item_3_head"
+                            class="m-accordion__item-head collapsed"
+                            role="tab"
+                            data-toggle="collapse"
+                            href="#m_accordion_5_item_3_body"
+                            aria-expanded="true"
                         >
                                 <span class="m-accordion__item-title">
                                     {{ $t("label.search_information") }}</span
@@ -22,19 +22,19 @@
                             <span class="m-accordion__item-mode"></span>
                         </div>
                         <div
-                                id="m_accordion_5_item_3_body"
-                                class="m-accordion__item-body collapse show"
-                                role="tabpanel"
-                                aria-labelledby="m_accordion_5_item_3_head"
-                                data-parent="#m_accordion_5"
+                            id="m_accordion_5_item_3_body"
+                            class="m-accordion__item-body collapse show"
+                            role="tabpanel"
+                            aria-labelledby="m_accordion_5_item_3_head"
+                            data-parent="#m_accordion_5"
                         >
                             <div class="m-accordion__item-content">
                                 <device-type-filter
-                                        :is-required-to-export="
+                                    :is-required-to-export="
                                             isRequiredToExport
                                         "
-                                        @search="search"
-                                        @isExportFileSuccessfully="
+                                    @search="search"
+                                    @isExportFileSuccessfully="
                                             isExportFileSuccessfully
                                         "
                                 ></device-type-filter>
@@ -47,12 +47,12 @@
         <div class="col-md-12">
             <portlet :title="$t('device.device_type.title')">
                 <v-button
-                        slot="tool"
-                        color="success"
-                        style-type="air"
-                        class="m-btn m-btn--icon"
-                        @click.native="importDeviceType"
-                        style="margin-right: 5px"
+                    slot="tool"
+                    color="success"
+                    style-type="air"
+                    class="m-btn m-btn--icon"
+                    @click.native="importDeviceType"
+                    style="margin-right: 5px"
                 >
                         <span>
                             <i class="la la-cloud-upload"></i>
@@ -60,11 +60,11 @@
                         </span>
                 </v-button>
                 <v-button
-                        slot="tool"
-                        color="primary"
-                        style-type="air"
-                        class="m-btn m-btn--icon"
-                        @click.native="addDeviceType"
+                    slot="tool"
+                    color="primary"
+                    style-type="air"
+                    class="m-btn m-btn--icon"
+                    @click.native="addDeviceType"
                 >
                 <span>
                     <i class="la la-plus"></i>
@@ -72,22 +72,22 @@
                 </span>
                 </v-button>
                 <data-table
-                        ref="table"
-                        :columns="columns"
-                        url="/device/device-type/listing"
-                        :fixed-columns-left="1"
-                        :fixed-columns-right="1"
-                        :actions="actions"
-                        :search-placeholder="$t('device.device_type.placeholder.search')"
-                        :order-column-index="1"
-                        :order-type="'desc'"
-                        :post-data="tableFilter"
+                    ref="table"
+                    :columns="columns"
+                    url="/device/device-type/listing"
+                    :fixed-columns-left="1"
+                    :fixed-columns-right="2"
+                    :actions="actions"
+                    :search-placeholder="$t('device.device_type.placeholder.search')"
+                    :order-column-index="1"
+                    :order-type="'desc'"
+                    :post-data="tableFilter"
                 >
                 </data-table>
             </portlet>
             <device-type-modal
-                    ref="addModal"
-                    :on-action-success="updateItemSuccess"
+                ref="addModal"
+                :on-action-success="updateItemSuccess"
             ></device-type-modal>
             <device-type-import-modal ref="importModal"
                                       :on-action-success="updateItemSuccess"></device-type-import-modal>
@@ -175,6 +175,28 @@
                         }
                     },
                     {
+                        data: "file",
+                        title: "File",
+                        className: "tb-actions",
+                        width: "150px",
+                        render(data) {
+                            if (data == null || data == "[]") {
+                                return "-";
+                            } else {
+                                let files = JSON.parse(data);
+                                if (files != null) {
+                                    let filenameList = "";
+                                    for (let i = 0; i < files.length; i++) {
+                                        filenameList =
+                                            filenameList +
+                                            `<a href="/storage/${files[i].path}" target="_blank">${files[i].name}</a>`;
+                                    }
+                                    return filenameList;
+                                }
+                            }
+                        }
+                    },
+                    {
                         data: "status",
                         title: this.$t("common.action"),
                         orderable: false,
@@ -182,13 +204,12 @@
                         responsivePriority: 1,
                         render(data) {
                             if (data == 1) {
-                                return generateTableAction(
+                                return (generateTableAction("edit", "handleEdit") + generateTableAction(
                                     "disable",
                                     "handleDisable"
-                                );
+                                ));
                             } else {
                                 return (
-                                    generateTableAction("edit", "handleEdit") +
                                     generateTableAction("active", "handleActive")
                                 );
                             }

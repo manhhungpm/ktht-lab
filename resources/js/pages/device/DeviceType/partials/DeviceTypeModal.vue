@@ -10,7 +10,7 @@
         >
             <form-control
                     v-model="form.name"
-                    v-validate="'required|max:100'"
+                    v-validate="'required|max:255'"
                     :label="$t('device.device_type.name')"
                     name="name"
                     autocomplete="off"
@@ -22,7 +22,7 @@
             </form-control>
             <form-control
                     v-model="form.display_name"
-                    v-validate="'required|max:100'"
+                    v-validate="'required|max:255'"
                     :label="$t('device.device_type.display_name')"
                     name="display_name"
                     autocomplete="off"

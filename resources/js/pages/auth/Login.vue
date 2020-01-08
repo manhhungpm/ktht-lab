@@ -144,6 +144,8 @@
                     this.$router.push({name: "project"});
                 } else if (this.$hasRole("user") || this.$hasRole("stocker")){
                     this.$router.push({name: "rent"});
+                } else if (this.$hasRole("root")){
+                    this.$router.push({name: "dashboard"});
                 }
 
                 setTimeout(() => {
