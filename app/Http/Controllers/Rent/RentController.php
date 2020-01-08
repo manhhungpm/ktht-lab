@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Common\IdRequest;
 use Maatwebsite\Excel\Excel;
 
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMailable;
+
 class RentController extends Controller
 {
     protected $_rentRepository;
@@ -93,6 +97,16 @@ class RentController extends Controller
         $result = $this->_rentRepository->setDeny($request->only('id'));
 
         return processCommonResponse($result);
+    }
+
+    public function sendEmail(Request $request)
+    {
+        $email = $request->only('email');
+//        dd($email);
+        $name = 'Hung';
+        Mail::to('hungnm.nuce60@gmail.com')->send(new SendMailable($name));
+
+        return processCommonResponse(true,null);
     }
 
     public function export(Request $request, Excel $excel)

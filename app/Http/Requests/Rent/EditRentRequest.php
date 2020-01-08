@@ -43,7 +43,7 @@ class EditRentRequest extends FormRequest
                         if ($value1['amount'] > $amountDevice[0]['amount']) {
                             return $fail('Không đủ thiết bị trong kho. Thiết bị chỉ còn: ' . $amountDevice[0]['amount']);
                         } else {
-                            $amountDeviceRent = $value1['pivot']['amount']; //Đang mượn bao nhiêu
+                            $amountDeviceRent = $value1['pivot']['amount']; //Đang mượn bao nhiêu //???
                             if ($amountDeviceRent < $value1['amount']) {     //Nếu mượn thêm thiết bị
 
                                 //Tính chênh lệch

@@ -136,14 +136,14 @@
                     {
                         data: "start_date",
                         title: this.$t("rent.start_date"),
-                        render(data){
+                        render(data) {
                             return toNormalDate(data)
                         }
                     },
                     {
                         data: "due_date",
                         title: this.$t("rent.due_date"),
-                        render(data){
+                        render(data) {
                             return toNormalDate(data)
                         }
                     },
@@ -252,13 +252,14 @@
                                         return "Không có hành động sau khi đã trả thiết bị";
                                     case WAIT_APPROVED: //chờ duyệt -> có thể duyệt hoặc từ chối
                                         return (
-                                            generateTableAction("deny", "handleDeny", "danger", "la-meh-o", "Từ chối") +
+                                            generateTableAction("deny", "handleDeny", "danger", "la-frown-o", "Từ chối") +
                                             generateTableAction("approved", "handleApproved", "success", "la-smile-o", "Phê duyệt")
                                         );
                                     case BORROW: //đang mượn -> có thể edit hoặc trả
                                         return (
                                             generateTableAction("edit", "handleEdit") +
-                                            generateTableAction("pay", "handlePay", "success", "la-check", "Trả đồ")
+                                            generateTableAction("pay", "handlePay", "success", "la-check", "Trả đồ") +
+                                            generateTableAction("sendMail", "sendMail", "danger", "la-send-o", "Gửi mail")
                                         );
                                     case DENY: //từ chối
                                         return "Bị từ chối phê duyệt";
@@ -267,13 +268,13 @@
                                             generateTableAction("borrow", "handleBorrow", "success", "la-cart-plus", "Cho mượn"))
                                 }
                             } else if ($this.roleLeader) {
-                                if(row['leader']['name'] == $this.$store.state.auth.user.info.name) {
+                                if (row['leader']['name'] == $this.$store.state.auth.user.info.name) {
                                     switch (data) {
                                         case PAY: //đã trả -> không có hành động nào khác
                                             return "Không có hành động sau khi đã trả thiết bị";
                                         case WAIT_APPROVED: //chờ duyệt -> có thể duyệt hoặc từ chối
                                             return (
-                                                generateTableAction("deny", "handleDeny", "danger", "la-meh-o", "Từ chối") +
+                                                generateTableAction("deny", "handleDeny", "danger", "la-frown-o", "Từ chối") +
                                                 generateTableAction("approved", "handleApproved", "success", "la-smile-o", "Phê duyệt")
                                             );
                                         case BORROW: //đang mượn -> có thể edit hoặc trả
@@ -283,8 +284,7 @@
                                         case APPROVED: //đã được phê duyệt ->  cho mượn
                                             return "Không có quyền thực hiện hành động này vì bạn chỉ có quyền Trưởng nhóm"
                                     }
-                                }
-                                else {
+                                } else {
                                     return "Không có quyền Từ chối hoặc Phê duyệt đơn này"
                                 }
                             } else if ($this.roleStocker) {
@@ -338,6 +338,11 @@
                         name: "handleDeny",
                         action: this.handleDeny
                     },
+                    {
+                        type: "click",
+                        name: "sendMail",
+                        action: this.sendMail
+                    }
                 ];
             }
         },
@@ -345,6 +350,38 @@
             // console.log(this.$store.state.auth.user.info.name);
         },
         methods: {
+            sendMail(table, rowData) {
+                let $this = this;
+                console.log(rowData)
+                bootbox.confirm({
+                    title: this.$t("label.notification"),
+                    message:
+                        'Bạn muốn gửi mail cảnh báo',
+                    buttons: {
+                        cancel: {
+                            label: this.$t("button.cancel")
+                        },
+                        confirm: {
+                            label: this.$t("button.accept")
+                        }
+                    },
+                    callback: async function (result) {
+                        if (result) {
+                            let res = await axios.post("/rent/send-email", {
+                                email: rowData.user.email
+                            });
+                            const {data} = res;
+
+                            if (data.code == 0) {
+                                notifyDenySuccess();
+                                reloadIntelligently($this.$refs.table);
+                            } else {
+                                notifyTryAgain();
+                            }
+                        }
+                    }
+                });
+            },
             handleDeny(table, rowData) {
                 let $this = this;
 

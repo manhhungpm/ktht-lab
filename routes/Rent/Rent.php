@@ -10,4 +10,5 @@ Route::group(['prefix' => '/rent', 'as' => 'rent.', 'middleware' => 'role:' . \A
     Route::post('borrow', 'RentController@borrow')->name('borrow');
     Route::post('approved', 'RentController@approved')->name('approved');
     Route::post('deny', 'RentController@deny')->name('deny');
+    Route::post('send-email', 'RentController@sendEmail')->name('send-email');
 });
