@@ -55,7 +55,7 @@
                     }}:</strong
                 >
                 <a
-                        href="example/Mau_import_loai_thiet_bi.xlsx"
+                        href="/example/tbphonglab.xlsx"
                         download="Mau_them_loai_thiet_bi.xlsx"
                 ><i
                 ><u>{{ $t("device.device_type.import_modal.file") }}</u></i

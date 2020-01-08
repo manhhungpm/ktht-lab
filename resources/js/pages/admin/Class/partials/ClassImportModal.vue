@@ -55,7 +55,7 @@
                     }}:</strong
                 >
                 <a
-                        href="example/Mau_import_lop.xlsx"
+                        href="/example/Mau_import_lop.xlsx"
                         download="Mau_them_lop.xlsx"
                 ><i
                 ><u>{{ $t("admin.class.import_modal.file") }}</u></i

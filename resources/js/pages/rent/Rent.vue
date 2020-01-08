@@ -62,8 +62,8 @@
                     ref="table"
                     :columns="columns"
                     url="/rent/listing"
-                    :fixed-columns-left="2"
-                    :fixed-columns-right="3"
+                    :fixed-columns-left="1"
+                    :fixed-columns-right="1"
                     :actions="actions"
                     :search-placeholder="$t('rent.placeholder.search')"
                     :order-column-index="2"
@@ -98,6 +98,7 @@
     import RentModal from "./partials/RentModal";
     import RentFilter from "./partials/RentFilter";
     import {APPROVED, BORROW, DENY, PAY, WAIT_APPROVED} from "../../constants/constant";
+    import {toNormalDate} from "../../helpers/formats";
 
     export default {
         name: "Rent",
@@ -135,10 +136,16 @@
                     {
                         data: "start_date",
                         title: this.$t("rent.start_date"),
+                        render(data){
+                            return toNormalDate(data)
+                        }
                     },
                     {
                         data: "due_date",
                         title: this.$t("rent.due_date"),
+                        render(data){
+                            return toNormalDate(data)
+                        }
                     },
                     {
                         data: "device_type",
@@ -237,14 +244,15 @@
                         orderable: false,
                         className: "text-center",
                         responsivePriority: 1,
-                        render(data) {
+                        render(data, type, row) {
+                            // console.log(row['leader']['name'])
                             if ($this.roleAdmin) { //Quyền admin
                                 switch (data) {
                                     case PAY: //đã trả -> không có hành động nào khác
                                         return "Không có hành động sau khi đã trả thiết bị";
                                     case WAIT_APPROVED: //chờ duyệt -> có thể duyệt hoặc từ chối
                                         return (
-                                            generateTableAction("deny", "handleDeny","danger","la-meh-o","Từ chối") +
+                                            generateTableAction("deny", "handleDeny", "danger", "la-meh-o", "Từ chối") +
                                             generateTableAction("approved", "handleApproved", "success", "la-smile-o", "Phê duyệt")
                                         );
                                     case BORROW: //đang mượn -> có thể edit hoặc trả
@@ -259,20 +267,25 @@
                                             generateTableAction("borrow", "handleBorrow", "success", "la-cart-plus", "Cho mượn"))
                                 }
                             } else if ($this.roleLeader) {
-                                switch (data) {
-                                    case PAY: //đã trả -> không có hành động nào khác
-                                        return "Không có hành động sau khi đã trả thiết bị";
-                                    case WAIT_APPROVED: //chờ duyệt -> có thể duyệt hoặc từ chối
-                                        return (
-                                            generateTableAction("deny", "handleDeny","danger","la-meh-o","Từ chối") +
-                                            generateTableAction("approved", "handleApproved", "success", "la-smile-o", "Phê duyệt")
-                                        );
-                                    case BORROW: //đang mượn -> có thể edit hoặc trả
-                                        return "Không có quyền thực hiện hành động này vì bạn chỉ có quyền Trưởng nhóm"
-                                    case DENY: //từ chối
-                                        return "Bị từ chối phê duyệt";
-                                    case APPROVED: //đã được phê duyệt ->  cho mượn
-                                        return "Không có quyền thực hiện hành động này vì bạn chỉ có quyền Trưởng nhóm"
+                                if(row['leader']['name'] == $this.$store.state.auth.user.info.name) {
+                                    switch (data) {
+                                        case PAY: //đã trả -> không có hành động nào khác
+                                            return "Không có hành động sau khi đã trả thiết bị";
+                                        case WAIT_APPROVED: //chờ duyệt -> có thể duyệt hoặc từ chối
+                                            return (
+                                                generateTableAction("deny", "handleDeny", "danger", "la-meh-o", "Từ chối") +
+                                                generateTableAction("approved", "handleApproved", "success", "la-smile-o", "Phê duyệt")
+                                            );
+                                        case BORROW: //đang mượn -> có thể edit hoặc trả
+                                            return "Không có quyền thực hiện hành động này vì bạn chỉ có quyền Trưởng nhóm"
+                                        case DENY: //từ chối
+                                            return "Bị từ chối phê duyệt";
+                                        case APPROVED: //đã được phê duyệt ->  cho mượn
+                                            return "Không có quyền thực hiện hành động này vì bạn chỉ có quyền Trưởng nhóm"
+                                    }
+                                }
+                                else {
+                                    return "Không có quyền Từ chối hoặc Phê duyệt đơn này"
                                 }
                             } else if ($this.roleStocker) {
                                 switch (data) {
@@ -327,6 +340,9 @@
                     },
                 ];
             }
+        },
+        mounted() {
+            // console.log(this.$store.state.auth.user.info.name);
         },
         methods: {
             handleDeny(table, rowData) {

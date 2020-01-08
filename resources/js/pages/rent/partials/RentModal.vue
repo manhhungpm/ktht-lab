@@ -279,6 +279,22 @@
                     this.isEdit = true;
                     item.date_range = [item.start_date, item.due_date];
 
+                    item.project_result = {
+                        id: item.project.id,
+                        text: item.project.name,
+                        name: item.project.name
+                    };
+
+                    item.leader_result = {
+                        id: item.leader.id,
+                        text: item.leader.name,
+                        name: item.leader.name
+                    };
+
+                    item.priorityId = {
+                        id: item.priority
+                    };
+
                     //Load thiết bị và số lượng
                     let original = _.cloneDeep(item)
                     if (original.device_type.length > 0) {

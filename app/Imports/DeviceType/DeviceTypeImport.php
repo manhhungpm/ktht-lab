@@ -23,7 +23,7 @@ class DeviceTypeImport implements ToCollection, WithHeadingRow, WithChunkReading
     protected $store = [];
     protected $count = 0;
     protected $errors = [];
-    protected $statusDefault = INACTIVE;
+    protected $statusDefault = ACTIVE;
 
     public function __construct()
     {
@@ -53,6 +53,7 @@ class DeviceTypeImport implements ToCollection, WithHeadingRow, WithChunkReading
                 'name' => $rowData['ten_loai'],
                 'display_name' => $rowData['ten_hien_thi'],
                 'amount' => (int)($rowData['so_luong']),
+                'total' => (int)($rowData['so_luong']),
                 'status' => $this->statusDefault,
                 'description' => $rowData['mo_ta'],
                 'store_id' => $this->store[spaceRemove($rowData['noi_luu_tru'])],

@@ -133,7 +133,8 @@
                 return [
                     {
                         data: "name",
-                        title: this.$t("device.device_type.name")
+                        title: this.$t("device.device_type.name"),
+                        className: "wrap-text"
                     },
                     {
                         data: "description",
@@ -156,6 +157,7 @@
                     {
                         data: "device_group.display_name",
                         title: this.$t("device.device_type.device_group"),
+                        className: "wrap-text"
                     },
                     {
                         data: "status",

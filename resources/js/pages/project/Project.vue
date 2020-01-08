@@ -249,7 +249,7 @@
                         orderable: false,
                         className: "text-center",
                         responsivePriority: 1,
-                        render(data) {
+                        render(data, type, row) {
                             if ($this.roleAdmin) {
                                 if (data == 1) {
                                     return generateTableAction(
@@ -262,7 +262,24 @@
                                         generateTableAction("active", "handleActive")
                                     );
                                 }
-                            } else {
+                            } else if ($this.roleLeader) {
+                                if (row['leader']['name'] == $this.$store.state.auth.user.info.name) {
+                                    if (data == 1) {
+                                        return generateTableAction(
+                                            "disable",
+                                            "handleDisable"
+                                        );
+                                    } else {
+                                        return (
+                                            generateTableAction("edit", "handleEdit") +
+                                            generateTableAction("active", "handleActive")
+                                        );
+                                    }
+                                } else {
+                                    return "Không có quyền thực hiện hành động"
+                                }
+                            }
+                            {
                                 return "Không có quyền thực hiện hành động"
                             }
                         }
