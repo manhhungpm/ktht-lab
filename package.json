@@ -25,7 +25,7 @@
     "datatables.net-responsive-bs4": "^2.2.3",
     "dropzone": "^5.5.1",
     "element-ui": "^2.4.11",
-    "highcharts": "^7.0.1",
+    "highcharts": "^7.2.2",
     "jquery": "^3.4.1",
     "jquery-ui-dist": "^1.12.1",
     "js-cookie": "^2.2.0",
